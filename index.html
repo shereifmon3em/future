@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام إدارة المدرسة المصغرة - المنهج المصري</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Cairo', sans-serif; background-color: #f4f6f9; }
+    .sidebar { background: #1e3a8a; min-height: 100vh; color: white; }
+    .sidebar a { color: #cbd5e1; text-decoration: none; padding: 12px 15px; display: block; border-radius: 8px; margin-bottom: 5px; cursor: pointer; }
+    .sidebar a:hover, .sidebar a.active { background: #2563eb; color: white; font-weight: bold; }
+    .card-stat { border: none; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .section { display: none; }
+    .section.active { display: block; }
+    #loginOverlay { position: fixed; inset: 0; background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 15px; }
+
+    @media print {
+      body * { visibility: hidden; }
+      body.printing-certificate #certificatePrintArea,
+      body.printing-certificate #certificatePrintArea * { visibility: visible; }
+      body.printing-certificate #certificatePrintArea {
+        position: absolute; left: 0; top: 0; width: 100%;
+        border: 3px double #1e3a8a; padding: 30px; background: #fff;
+      }
+      body.printing-receipt #receiptPrintArea,
+      body.printing-receipt #receiptPrintArea * { visibility: visible; }
+      body.printing-receipt #receiptPrintArea {
+        position: absolute; left: 0; top: 0; width: 100%;
+        border: 2px solid #0f766e; border-radius: 10px; padding: 25px; background: #fff;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- شاشة تسجيل الدخول -->
+<div id="loginOverlay">
+  <div class="card p-4 shadow-lg" style="max-width: 430px; width: 100%; border-radius: 14px;">
+    <div class="text-center mb-3">
+      <h4 class="fw-bold text-primary mb-1">🏫 نظام إدارة المدرسة المصغرة</h4>
+      <small class="text-muted">تسجيل الدخول حسب الصلاحية (مالك / مدير / مشرف)</small>
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label small fw-bold">رابط Google Apps Script Web App</label>
+      <input type="text" id="loginApiUrl" class="form-control form-control-sm" placeholder="https://script.google.com/macros/s/XXXXX/exec">
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label small fw-bold">اسم المستخدم</label>
+      <input type="text" id="loginUsername" class="form-control" placeholder="مثال: owner أو admin أو supervisor">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label small fw-bold">كلمة المرور</label>
+      <input type="password" id="loginPassword" class="form-control" placeholder="••••••••">
+    </div>
+
+    <button class="btn btn-primary w-100 fw-bold" onclick="loginUser()">دخول إلى النظام</button>
+    <div class="alert alert-light border mt-3 mb-0 small text-muted">
+      <strong>حسابات افتراضية بعد التهيئة:</strong><br>
+      مالك: <code>owner</code> / <code>owner123</code><br>
+      مدير: <code>admin</code> / <code>admin123</code><br>
+      مشرف: <code>supervisor</code> / <code>sup123</code>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid" id="mainApp" style="display:none;">
+  <div class="row">
+    <div class="col-md-3 col-lg-2 sidebar p-3">
+      <h5 class="text-center fw-bold mb-2 border-bottom pb-2">🏫 مدرسة المستقبل<br><small class="fs-6 fw-normal">المنهج المصري المطور</small></h5>
+      <div class="bg-primary bg-opacity-50 p-2 rounded mb-3 small text-center">
+        <div class="fw-bold" id="currentUserName">مستخدم</div>
+        <span class="badge bg-warning text-dark mt-1" id="currentUserRole">الدور</span>
+      </div>
+
+      <a onclick="showSection('dashboard')" class="active" id="nav-dashboard" data-perm="dashboard">📊 لوحة القيادة</a>
+      <a onclick="showSection('students')" id="nav-students" data-perm="students">👨‍🎓 الطلاب والمصروفات</a>
+      <a onclick="showSection('grades')" id="nav-grades" data-perm="grades">📝 الدرجات والشهادات</a>
+      <a onclick="showSection('teachers')" id="nav-teachers" data-perm="teachers">👨‍🏫 المدرسين والرواتب</a>
+      <a onclick="showSection('attendance')" id="nav-attendance" data-perm="attendance">⏱️ الحضور والانصراف</a>
+      <a onclick="showSection('buses')" id="nav-buses" data-perm="buses">🚌 إدارة الباصات</a>
+      <a onclick="showSection('finance')" id="nav-finance" data-perm="finance">💰 المالية (إيجار/صيانة)</a>
+      <a onclick="showSection('users')" id="nav-users" data-perm="users">👥 المستخدمين والصلاحيات</a>
+      <a onclick="showSection('settings')" id="nav-settings" data-perm="settings" class="mt-3 bg-dark text-warning">⚙️ ربط Google Script</a>
+      <button class="btn btn-outline-light btn-sm w-100 mt-3" onclick="logoutUser()">🚪 تسجيل خروج</button>
+    </div>
+
+    <div class="col-md-9 col-lg-10 p-4">
+
+      <div id="dashboard" class="section active">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3 class="fw-bold">ملخص أداء المدرسة</h3>
+          <button class="btn btn-primary btn-sm" onclick="loadDashboard()">🔄 تحديث البيانات</button>
+        </div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-3"><div class="card card-stat p-3 bg-white"><small class="text-muted">إجمالي الطلاب</small><h2 class="fw-bold text-primary" id="stat-students">0</h2></div></div>
+          <div class="col-md-3"><div class="card card-stat p-3 bg-white"><small class="text-muted">هيئة التدريس</small><h2 class="fw-bold text-success" id="stat-teachers">0</h2></div></div>
+          <div class="col-md-3"><div class="card card-stat p-3 bg-white"><small class="text-muted">الباصات العاملة</small><h2 class="fw-bold text-warning" id="stat-buses">0</h2></div></div>
+          <div class="col-md-3"><div class="card card-stat p-3 bg-white"><small class="text-muted">رواتب الشهر</small><h2 class="fw-bold text-danger" id="stat-salaries">0 ج.م</h2></div></div>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-4"><div class="card card-stat p-3 border-start border-success border-4"><h6>إجمالي الإيرادات</h6><h4 class="text-success fw-bold" id="stat-income">0 ج.م</h4></div></div>
+          <div class="col-md-4"><div class="card card-stat p-3 border-start border-danger border-4"><h6>إجمالي المصروفات (إيجار/صيانة)</h6><h4 class="text-danger fw-bold" id="stat-expense">0 ج.م</h4></div></div>
+          <div class="col-md-4"><div class="card card-stat p-3 border-start border-primary border-4"><h6>صافي الخزينة</h6><h4 class="text-primary fw-bold" id="stat-balance">0 ج.م</h4></div></div>
+        </div>
+      </div>
+
+      <div id="students" class="section">
+        <h3 class="fw-bold mb-3">إدارة الطلاب، المصروفات، وإيصالات السداد</h3>
+
+        <div class="card p-3 mb-4">
+          <h6 class="fw-bold text-primary">تسجيل طالب جديد</h6>
+          <div class="row g-2">
+            <div class="col-md-3"><input type="text" id="std-name" class="form-control" placeholder="اسم الطالب رباعي"></div>
+            <div class="col-md-2">
+              <select id="std-grade" class="form-select">
+                <option value="KG1">KG 1</option><option value="KG2">KG 2</option>
+                <option value="الأول الابتدائي">الأول الابتدائي</option><option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                <option value="الثالث الابتدائي">الثالث الابتدائي</option><option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                <option value="الخامس الابتدائي">الخامس الابتدائي</option><option value="السادس الابتدائي">السادس الابتدائي</option>
+                <option value="الأول الإعدادي">الأول الإعدادي</option><option value="الثاني الإعدادي">الثاني الإعدادي</option>
+                <option value="الثالث الإعدادي">الثالث الإعدادي</option>
+              </select>
+            </div>
+            <div class="col-md-2"><input type="text" id="std-parent" class="form-control" placeholder="اسم ولي الأمر"></div>
+            <div class="col-md-2"><input type="text" id="std-phone" class="form-control" placeholder="رقم الهاتف"></div>
+            <div class="col-md-3"><input type="text" id="std-bus" class="form-control" placeholder="خط الباص (أو بدون)"></div>
+            <div class="col-md-3"><input type="number" id="std-totalFees" class="form-control" placeholder="إجمالي المصروفات (ج.م)"></div>
+            <div class="col-md-3"><input type="number" id="std-paidFees" class="form-control" placeholder="الدفعة المسددة الآن (ج.م)"></div>
+            <div class="col-md-3">
+              <select id="std-payMethod" class="form-select">
+                <option value="نقدي">نقدي</option>
+                <option value="تحويل بنكي">تحويل بنكي</option>
+                <option value="إنستا باي">إنستا باي</option>
+                <option value="بطاقة / فوري">بطاقة / فوري</option>
+              </select>
+            </div>
+            <div class="col-md-3"><button class="btn btn-success w-100" onclick="submitStudent()">حفظ وإصدار إيصال</button></div>
+          </div>
+        </div>
+
+        <div class="card p-3 mb-4 border">
+          <h6 class="fw-bold text-success">تحصيل دفعة جديدة / قسط لطالب</h6>
+          <div class="row g-2">
+            <div class="col-md-3"><input type="text" id="inst-studentId" class="form-control" placeholder="كود الطالب (مثال: STD-1234)"></div>
+            <div class="col-md-2"><input type="number" id="inst-amount" class="form-control" placeholder="قيمة الدفعة (ج.م)"></div>
+            <div class="col-md-2">
+              <select id="inst-method" class="form-select">
+                <option value="نقدي">نقدي</option>
+                <option value="تحويل بنكي">تحويل بنكي</option>
+                <option value="إنستا باي">إنستا باي</option>
+                <option value="بطاقة / فوري">بطاقة / فوري</option>
+              </select>
+            </div>
+            <div class="col-md-3"><input type="text" id="inst-notes" class="form-control" placeholder="ملاحظات (مثال: القسط الثاني)"></div>
+            <div class="col-md-2"><button class="btn btn-primary w-100" onclick="submitInstallment()">تأكيد وطباعة الإيصال</button></div>
+          </div>
+        </div>
+
+        <div id="receiptPrintArea" class="card p-4 mb-4 border-success border-2 d-none bg-white">
+          <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+            <div>
+              <h5 class="fw-bold text-primary mb-0">🏫 مدرسة المستقبل - المنهج المصري</h5>
+              <small class="text-muted">إيصال استلام نقدية / سداد مصروفات دراسية</small>
+            </div>
+            <div class="text-end">
+              <div><strong>رقم الإيصال:</strong> <span id="r-no" class="text-danger fw-bold"></span></div>
+              <div><strong>التاريخ:</strong> <span id="r-date"></span></div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6"><strong>اسم الطالب:</strong> <span id="r-name"></span></div>
+            <div class="col-md-3"><strong>كود الطالب:</strong> <span id="r-id"></span></div>
+            <div class="col-md-3"><strong>الصف الدراسي:</strong> <span id="r-grade"></span></div>
+          </div>
+          <table class="table table-bordered text-center mb-3">
+            <thead class="table-light">
+              <tr><th>طريقة الدفع</th><th>البيان</th><th>المبلغ المدفوع</th><th>المتبقي على الطالب</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="r-method"></td>
+                <td id="r-notes"></td>
+                <td class="fw-bold text-success" id="r-paid"></td>
+                <td class="fw-bold text-danger" id="r-rem"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-between align-items-center mt-4 pt-2 border-top">
+            <small class="text-muted">توقيع المستلم / الحسابات: .........................</small>
+            <div>
+              <button class="btn btn-dark btn-sm d-print-none" onclick="printReceipt()">🖨️ طباعة الإيصال الآن</button>
+              <button class="btn btn-outline-secondary btn-sm d-print-none" onclick="closeReceipt()">إغلاق</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <button class="btn btn-outline-primary btn-sm" onclick="loadTable('STUDENTS', 'studentsTable')">عرض قائمة الطلاب والمصروفات</button>
+          <button class="btn btn-outline-success btn-sm" onclick="loadTable('RECEIPTS', 'receiptsTable')">سجل الإيصالات الصادرة</button>
+        </div>
+        <div class="table-responsive bg-white p-2 rounded mb-3"><table class="table table-bordered table-sm" id="studentsTable"></table></div>
+        <div class="table-responsive bg-white p-2 rounded"><table class="table table-bordered table-sm" id="receiptsTable"></table></div>
+      </div>
+
+      <div id="grades" class="section">
+        <h3 class="fw-bold mb-3">رصد الدرجات وإصدار الشهادات الشهرية (المنهج المصري)</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card p-3 mb-3">
+              <h6 class="fw-bold text-primary">إدخال درجات التقييم الشهري (من 100 لكل مادة)</h6>
+              <div class="row g-2">
+                <div class="col-md-4"><input type="text" id="grd-id" class="form-control" placeholder="كود الطالب (STD-XXXX)"></div>
+                <div class="col-md-5"><input type="text" id="grd-name" class="form-control" placeholder="اسم الطالب"></div>
+                <div class="col-md-3"><input type="text" id="grd-grade" class="form-control" placeholder="الصف"></div>
+                <div class="col-md-4">
+                  <select id="grd-month" class="form-select">
+                    <option>أكتوبر</option><option>نوفمبر</option><option>ديسمبر</option>
+                    <option>فبراير</option><option>مارس</option><option>أبريل</option>
+                  </select>
+                </div>
+                <div class="col-md-4"><input type="number" id="grd-ar" class="form-control" placeholder="اللغة العربية"></div>
+                <div class="col-md-4"><input type="number" id="grd-en" class="form-control" placeholder="اللغة الإنجليزية"></div>
+                <div class="col-md-4"><input type="number" id="grd-math" class="form-control" placeholder="الرياضيات"></div>
+                <div class="col-md-4"><input type="number" id="grd-sci" class="form-control" placeholder="العلوم / اكتشف"></div>
+                <div class="col-md-4"><input type="number" id="grd-soc" class="form-control" placeholder="الدراسات الاجتماعية"></div>
+                <div class="col-12"><button class="btn btn-primary w-100" onclick="submitGrades()">رصد الدرجات وحساب التقدير</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card p-3 mb-3">
+              <h6 class="fw-bold text-success">استخراج شهادة شهرية للطباعة</h6>
+              <div class="input-group mb-3">
+                <input type="text" id="cert-id" class="form-control" placeholder="كود الطالب">
+                <select id="cert-month" class="form-select">
+                  <option>أكتوبر</option><option>نوفمبر</option><option>ديسمبر</option>
+                  <option>فبراير</option><option>مارس</option><option>أبريل</option>
+                </select>
+                <button class="btn btn-success" onclick="fetchCertificate()">عرض الشهادة</button>
+              </div>
+
+              <div id="certificatePrintArea" class="bg-white p-3 border rounded d-none">
+                <div class="text-center border-bottom pb-2 mb-3">
+                  <h5 class="fw-bold mb-0">جمهورية مصر العربية - وزارة التربية والتعليم</h5>
+                  <small>إدارة المدرسة المصغرة - بيان تقييم شهري</small>
+                </div>
+                <p><strong>اسم الطالب:</strong> <span id="c-name"></span> | <strong>الكود:</strong> <span id="c-id"></span></p>
+                <p><strong>الصف الدراسي:</strong> <span id="c-grade"></span> | <strong>شهر التقييم:</strong> <span id="c-month"></span></p>
+                <table class="table table-bordered text-center table-sm">
+                  <thead class="table-light"><tr><th>اللغة العربية</th><th>الإنجليزية</th><th>الرياضيات</th><th>العلوم/اكتشف</th><th>الدراسات</th><th>المجموع</th></tr></thead>
+                  <tbody><tr><td id="c-ar"></td><td id="c-en"></td><td id="c-math"></td><td id="c-sci"></td><td id="c-soc"></td><td class="fw-bold" id="c-tot"></td></tr></tbody>
+                </table>
+                <div class="alert alert-info text-center fw-bold" id="c-eval"></div>
+                <button class="btn btn-dark btn-sm d-print-none" onclick="printCertificate()">🖨️ طباعة الشهادة</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="teachers" class="section">
+        <h3 class="fw-bold mb-3">إدارة المدرسين والرواتب</h3>
+        <div class="card p-3 mb-3">
+          <div class="row g-2">
+            <div class="col-md-3"><input type="text" id="tch-name" class="form-control" placeholder="اسم المدرس"></div>
+            <div class="col-md-2"><input type="text" id="tch-sub" class="form-control" placeholder="المادة"></div>
+            <div class="col-md-2"><input type="text" id="tch-grd" class="form-control" placeholder="الصفوف"></div>
+            <div class="col-md-2"><input type="number" id="tch-sal" class="form-control" placeholder="الراتب الأساسي"></div>
+            <div class="col-md-1"><input type="number" id="tch-all" class="form-control" placeholder="بدلات"></div>
+            <div class="col-md-1"><input type="number" id="tch-ded" class="form-control" placeholder="خصم"></div>
+            <div class="col-md-1"><button class="btn btn-primary w-100" onclick="submitTeacher()">حفظ</button></div>
+          </div>
+        </div>
+        <button class="btn btn-outline-primary btn-sm mb-2" onclick="loadTable('TEACHERS', 'teachersTable')">عرض كشف الرواتب</button>
+        <div class="table-responsive bg-white p-2 rounded"><table class="table table-bordered table-sm" id="teachersTable"></table></div>
+      </div>
+
+      <div id="attendance" class="section">
+        <h3 class="fw-bold mb-3">تسجيل الحضور والانصراف اليومي</h3>
+        <div class="card p-3 mb-3">
+          <div class="row g-2">
+            <div class="col-md-2">
+              <select id="att-type" class="form-select"><option value="طالب">طالب</option><option value="مدرس">مدرس</option></select>
+            </div>
+            <div class="col-md-2"><input type="text" id="att-code" class="form-control" placeholder="الكود"></div>
+            <div class="col-md-3"><input type="text" id="att-name" class="form-control" placeholder="الاسم"></div>
+            <div class="col-md-2">
+              <select id="att-status" class="form-select"><option value="حاضر">حاضر</option><option value="غائب">غائب</option><option value="متأخر">متأخر</option></select>
+            </div>
+            <div class="col-md-3"><button class="btn btn-success w-100" onclick="submitAttendance()">تسجيل الحركة</button></div>
+          </div>
+        </div>
+        <button class="btn btn-outline-primary btn-sm mb-2" onclick="loadTable('ATTENDANCE', 'attTable')">سجل الحضور</button>
+        <div class="table-responsive bg-white p-2 rounded"><table class="table table-bordered table-sm" id="attTable"></table></div>
+      </div>
+
+      <div id="buses" class="section">
+        <h3 class="fw-bold mb-3">إدارة خطوط الباصات</h3>
+        <div class="card p-3 mb-3">
+          <div class="row g-2">
+            <div class="col-md-2"><input type="text" id="bus-num" class="form-control" placeholder="رقم الباص"></div>
+            <div class="col-md-2"><input type="text" id="bus-drv" class="form-control" placeholder="اسم السائق"></div>
+            <div class="col-md-2"><input type="text" id="bus-phn" class="form-control" placeholder="هاتف السائق"></div>
+            <div class="col-md-3"><input type="text" id="bus-rt" class="form-control" placeholder="خط السير"></div>
+            <div class="col-md-1"><input type="number" id="bus-cap" class="form-control" placeholder="السعة"></div>
+            <div class="col-md-2"><input type="number" id="bus-cost" class="form-control" placeholder="التكلفة الشهرية"></div>
+            <div class="col-md-12 mt-2"><button class="btn btn-primary" onclick="submitBus()">إضافة خط الباص</button></div>
+          </div>
+        </div>
+        <button class="btn btn-outline-primary btn-sm mb-2" onclick="loadTable('BUSES', 'busesTable')">عرض الباصات</button>
+        <div class="table-responsive bg-white p-2 rounded"><table class="table table-bordered table-sm" id="busesTable"></table></div>
+      </div>
+
+      <div id="finance" class="section">
+        <h3 class="fw-bold mb-3">الإدارة المالية (الإيجار، الصيانة، الإيرادات)</h3>
+        <div class="card p-3 mb-3">
+          <div class="row g-2">
+            <div class="col-md-2">
+              <select id="fin-type" class="form-select"><option value="مصروف">مصروف</option><option value="إيراد">إيراد</option></select>
+            </div>
+            <div class="col-md-3">
+              <select id="fin-cat" class="form-select">
+                <option value="إيجار مقر المدرسة">إيجار مقر المدرسة</option>
+                <option value="صيانة ومرافق">صيانة ومرافق</option>
+                <option value="رواتب وأجور">رواتب وأجور</option>
+                <option value="مستلزمات تعليمية">مستلزمات تعليمية</option>
+                <option value="مصروفات دراسية">مصروفات دراسية</option>
+              </select>
+            </div>
+            <div class="col-md-2"><input type="number" id="fin-amt" class="form-control" placeholder="المبلغ (ج.م)"></div>
+            <div class="col-md-3"><input type="text" id="fin-note" class="form-control" placeholder="بيان / تفاصيل العملية"></div>
+            <div class="col-md-2"><button class="btn btn-danger w-100" onclick="submitFinance()">تسجيل العملية</button></div>
+          </div>
+        </div>
+        <button class="btn btn-outline-primary btn-sm mb-2" onclick="loadTable('FINANCE', 'finTable')">سجل الخزينة</button>
+        <div class="table-responsive bg-white p-2 rounded"><table class="table table-bordered table-sm" id="finTable"></table></div>
+      </div>
+
+      <!-- إدارة المستخدمين والصلاحيات (للمالك فقط) -->
+      <div id="users" class="section">
+        <h3 class="fw-bold mb-3">إدارة المستخدمين وترتيب الصلاحيات</h3>
+        <div class="card p-3 mb-3">
+          <h6 class="fw-bold text-primary">إضافة مستخدم جديد</h6>
+          <div class="row g-2">
+            <div class="col-md-2"><input type="text" id="usr-username" class="form-control" placeholder="اسم المستخدم"></div>
+            <div class="col-md-2"><input type="password" id="usr-password" class="form-control" placeholder="كلمة المرور"></div>
+            <div class="col-md-3"><input type="text" id="usr-fullname" class="form-control" placeholder="الاسم الكامل"></div>
+            <div class="col-md-2">
+              <select id="usr-role" class="form-select">
+                <option value="OWNER">مالك (OWNER)</option>
+                <option value="ADMIN">مدير (ADMIN)</option>
+                <option value="SUPERVISOR">مشرف (SUPERVISOR)</option>
+              </select>
+            </div>
+            <div class="col-md-1">
+              <select id="usr-status" class="form-select">
+                <option value="نشط">نشط</option>
+                <option value="موقوف">موقوف</option>
+              </select>
+            </div>
+            <div class="col-md-2"><button class="btn btn-success w-100" onclick="submitUser()">حفظ المستخدم</button></div>
+          </div>
+        </div>
+        <button class="btn btn-outline-primary btn-sm mb-2" onclick="loadTable('USERS', 'usersTable')">عرض قائمة المستخدمين</button>
+        <div class="table-responsive bg-white p-2 rounded"><table class="table table-bordered table-sm" id="usersTable"></table></div>
+      </div>
+
+      <div id="settings" class="section">
+        <h3 class="fw-bold mb-3">إعدادات الربط مع Google Apps Script</h3>
+        <div class="card p-4">
+          <label class="form-label fw-bold">رابط نشر Web App URL من Google Apps Script:</label>
+          <input type="text" id="apiUrlInput" class="form-control mb-3" placeholder="https://script.google.com/macros/s/XXXXX/exec">
+          <button class="btn btn-primary" onclick="saveApiUrl()">حفظ الرابط واختبار الاتصال</button>
+          <small class="text-muted mt-2 d-block">يجب أن ينتهي الرابط بـ /exec وأن يكون الوصول متاحاً لـ Anyone.</small>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  let API_URL = (localStorage.getItem('https://script.google.com/macros/s/AKfycbwGGUseSfhvjlJ0y7Nm1XFuTYG-K37loPhRo3kv-5VxnPOdt9B6swgJ0ZyeoGljbr6l/exec') || '').trim();
+  let currentSession = JSON.parse(sessionStorage.getItem('SCHOOL_SESSION') || 'null');
+
+  document.getElementById('loginApiUrl').value = API_URL;
+  document.getElementById('apiUrlInput').value = API_URL;
+
+  const ROLE_LABELS = {
+    OWNER: 'مالك النظام (كامل الصلاحيات)',
+    ADMIN: 'مدير المدرسة',
+    SUPERVISOR: 'مشرف'
+  };
+
+  function getValidApiUrl() {
+    const url = (localStorage.getItem('https://script.google.com/macros/s/AKfycbwGGUseSfhvjlJ0y7Nm1XFuTYG-K37loPhRo3kv-5VxnPOdt9B6swgJ0ZyeoGljbr6l/exec') || API_URL || '').trim();
+    if (!url || !url.includes('script.google.com')) {
+      alert('يرجى إدخال رابط Web App صحيح من Google Apps Script.');
+      return null;
+    }
+    return url;
+  }
+
+  async function loginUser() {
+    const enteredUrl = document.getElementById('loginApiUrl').value.trim();
+    if (enteredUrl) {
+      API_URL = enteredUrl;
+      localStorage.setItem('https://script.google.com/macros/s/AKfycbwGGUseSfhvjlJ0y7Nm1XFuTYG-K37loPhRo3kv-5VxnPOdt9B6swgJ0ZyeoGljbr6l/exec', enteredUrl);
+      document.getElementById('apiUrlInput').value = enteredUrl;
+    }
+
+    const url = getValidApiUrl();
+    if (!url) return;
+
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    if (!username || !password) {
+      alert('يرجى إدخال اسم المستخدم وكلمة المرور');
+      return;
+    }
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'login', payload: { username, password } })
+      });
+      if (!res.ok) throw new Error('حالة الشبكة: ' + res.status);
+      const data = await res.json();
+      if (data.status !== 'success' || !data.user) {
+        alert(data.message || 'فشل تسجيل الدخول');
+        return;
+      }
+
+      currentSession = {
+        username: data.user.username,
+        password: password,
+        fullName: data.user.fullName,
+        role: data.user.role,
+        permissions: data.user.permissions || []
+      };
+      sessionStorage.setItem('SCHOOL_SESSION', JSON.stringify(currentSession));
+      applySessionAndEnterApp();
+    } catch (err) {
+      alert('تعذر تسجيل الدخول: ' + err.message);
+    }
+  }
+
+  function logoutUser() {
+    currentSession = null;
+    sessionStorage.removeItem('SCHOOL_SESSION');
+    document.getElementById('mainApp').style.display = 'none';
+    document.getElementById('loginOverlay').style.display = 'flex';
+  }
+
+  function applySessionAndEnterApp() {
+    if (!currentSession) return;
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('currentUserName').innerText = currentSession.fullName;
+    document.getElementById('currentUserRole').innerText = ROLE_LABELS[currentSession.role] || currentSession.role;
+
+    const allowed = currentSession.permissions || [];
+    document.querySelectorAll('.sidebar a[data-perm]').forEach(link => {
+      const perm = link.getAttribute('data-perm');
+      link.style.display = allowed.includes(perm) ? 'block' : 'none';
+    });
+
+    const firstPerm = allowed[0] || 'dashboard';
+    showSection(firstPerm);
+    if (allowed.includes('dashboard')) loadDashboard();
+  }
+
+  async function saveApiUrl() {
+    const val = document.getElementById('apiUrlInput').value.trim();
+    API_URL = val;
+    localStorage.setItem('https://script.google.com/macros/s/AKfycbwGGUseSfhvjlJ0y7Nm1XFuTYG-K37loPhRo3kv-5VxnPOdt9B6swgJ0ZyeoGljbr6l/exec', val);
+    document.getElementById('loginApiUrl').value = val;
+    const url = getValidApiUrl();
+    if (!url || !currentSession) return;
+
+    try {
+      const q = `${url}?action=getDashboard&username=${encodeURIComponent(currentSession.username)}&password=${encodeURIComponent(currentSession.password)}`;
+      const res = await fetch(q, { redirect: 'follow' });
+      if (!res.ok) throw new Error('حالة الشبكة: ' + res.status);
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert('تم حفظ الرابط واختبار الاتصال بنجاح!');
+        renderDashboardStats(data);
+      } else {
+        alert(data.message || 'فشل التحقق');
+      }
+    } catch (err) {
+      alert('تعذر الاتصال بالرابط: ' + err.message);
+    }
+  }
+
+  function showSection(id) {
+    if (currentSession && Array.isArray(currentSession.permissions) && !currentSession.permissions.includes(id)) {
+      alert('ليس لديك صلاحية الوصول إلى هذا القسم');
+      return;
+    }
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+    const sec = document.getElementById(id);
+    const nav = document.getElementById('nav-' + id);
+    if (sec) sec.classList.add('active');
+    if (nav) nav.classList.add('active');
+  }
+
+  async function postData(action, payload) {
+    const url = getValidApiUrl();
+    if (!url) return null;
+    if (!currentSession) {
+      alert('يرجى تسجيل الدخول أولاً');
+      return null;
+    }
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action,
+          payload,
+          auth: {
+            username: currentSession.username,
+            password: currentSession.password
+          }
+        })
+      });
+      if (!res.ok) throw new Error('فشل الطلب برمز: ' + res.status);
+      const data = await res.json();
+      alert(data.message || 'تمت العملية');
+      return data;
+    } catch (err) {
+      alert('حدث خطأ أثناء إرسال البيانات: ' + err.message);
+      return null;
+    }
+  }
+
+  function renderDashboardStats(data) {
+    document.getElementById('stat-students').innerText = data.studentsCount ?? 0;
+    document.getElementById('stat-teachers').innerText = data.teachersCount ?? 0;
+    document.getElementById('stat-buses').innerText = data.busesCount ?? 0;
+    document.getElementById('stat-salaries').innerText = (data.totalSalaries ?? 0) + ' ج.م';
+    document.getElementById('stat-income').innerText = (data.totalIncome ?? 0) + ' ج.م';
+    document.getElementById('stat-expense').innerText = (data.totalExpense ?? 0) + ' ج.م';
+    document.getElementById('stat-balance').innerText = (data.netBalance ?? 0) + ' ج.م';
+  }
+
+  async function loadDashboard() {
+    const url = getValidApiUrl();
+    if (!url || !currentSession) return;
+
+    try {
+      const q = `${url}?action=getDashboard&username=${encodeURIComponent(currentSession.username)}&password=${encodeURIComponent(currentSession.password)}`;
+      const res = await fetch(q, { redirect: 'follow' });
+      if (!res.ok) throw new Error('حالة الشبكة: ' + res.status);
+      const data = await res.json();
+      if (data.status === 'success') {
+        renderDashboardStats(data);
+      } else {
+        alert(data.message || 'تعذر تحميل بيانات لوحة القيادة');
+      }
+    } catch (err) {
+      alert('خطأ في تحميل لوحة القيادة: ' + err.message);
+    }
+  }
+
+  async function loadTable(sheetName, tableId) {
+    const url = getValidApiUrl();
+    if (!url || !currentSession) return;
+
+    const table = document.getElementById(tableId);
+    table.innerHTML = '<tr><td class="text-center">جاري تحميل البيانات...</td></tr>';
+
+    try {
+      const q = `${url}?action=getData&sheet=${encodeURIComponent(sheetName)}&username=${encodeURIComponent(currentSession.username)}&password=${encodeURIComponent(currentSession.password)}`;
+      const res = await fetch(q, { redirect: 'follow' });
+      if (!res.ok) throw new Error('حالة الشبكة: ' + res.status);
+      const data = await res.json();
+      if (data.status === 'error') {
+        table.innerHTML = `<tr><td class="text-danger">${data.message}</td></tr>`;
+        return;
+      }
+
+      const rows = Array.isArray(data) ? data : (data.rows || []);
+      if (!rows.length) {
+        table.innerHTML = '<tr><td class="text-center text-muted">لا توجد بيانات مسجلة</td></tr>';
+        return;
+      }
+
+      const headers = Object.keys(rows[0]);
+      let html = `<thead class="table-dark"><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+      rows.forEach(r => {
+        html += `<tr>${headers.map(h => `<td>${r[h] ?? ''}</td>`).join('')}</tr>`;
+      });
+      html += '</tbody>';
+      table.innerHTML = html;
+    } catch (err) {
+      table.innerHTML = `<tr><td class="text-danger">خطأ في تحميل الجدول: ${err.message}</td></tr>`;
+    }
+  }
+
+  function renderAndOpenReceipt(receipt, autoPrint = true) {
+    if (!receipt) return;
+    document.getElementById('r-no').innerText = receipt.receiptNo;
+    document.getElementById('r-date').innerText = receipt.date;
+    document.getElementById('r-name').innerText = receipt.studentName;
+    document.getElementById('r-id').innerText = receipt.studentId;
+    document.getElementById('r-grade').innerText = receipt.grade;
+    document.getElementById('r-method').innerText = receipt.paymentMethod;
+    document.getElementById('r-notes').innerText = receipt.notes;
+    document.getElementById('r-paid').innerText = receipt.amountPaid + ' ج.م';
+    document.getElementById('r-rem').innerText = receipt.remaining + ' ج.م';
+    document.getElementById('receiptPrintArea').classList.remove('d-none');
+
+    if (autoPrint) {
+      setTimeout(() => printReceipt(), 350);
+    }
+  }
+
+  function printReceipt() {
+    document.body.classList.remove('printing-certificate');
+    document.body.classList.add('printing-receipt');
+    window.print();
+    setTimeout(() => document.body.classList.remove('printing-receipt'), 500);
+  }
+
+  function printCertificate() {
+    document.body.classList.remove('printing-receipt');
+    document.body.classList.add('printing-certificate');
+    window.print();
+    setTimeout(() => document.body.classList.remove('printing-certificate'), 500);
+  }
+
+  function closeReceipt() {
+    document.getElementById('receiptPrintArea').classList.add('d-none');
+  }
+
+  async function submitUser() {
+    const res = await postData('addUser', {
+      username: document.getElementById('usr-username').value,
+      password: document.getElementById('usr-password').value,
+      fullName: document.getElementById('usr-fullname').value,
+      role: document.getElementById('usr-role').value,
+      status: document.getElementById('usr-status').value
+    });
+    if (res && res.status === 'success') {
+      document.getElementById('usr-username').value = '';
+      document.getElementById('usr-password').value = '';
+      document.getElementById('usr-fullname').value = '';
+      loadTable('USERS', 'usersTable');
+    }
+  }
+
+  async function submitStudent() {
+    const res = await postData('addStudent', {
+      name: document.getElementById('std-name').value,
+      grade: document.getElementById('std-grade').value,
+      parentName: document.getElementById('std-parent').value,
+      phone: document.getElementById('std-phone').value,
+      busLine: document.getElementById('std-bus').value,
+      totalFees: document.getElementById('std-totalFees').value,
+      paidFees: document.getElementById('std-paidFees').value,
+      paymentMethod: document.getElementById('std-payMethod').value
+    });
+    if (res && res.status === 'success') {
+      document.getElementById('std-name').value = '';
+      document.getElementById('std-parent').value = '';
+      document.getElementById('std-phone').value = '';
+      document.getElementById('std-bus').value = '';
+      document.getElementById('std-totalFees').value = '';
+      document.getElementById('std-paidFees').value = '';
+      loadDashboard();
+      if (res.receipt) renderAndOpenReceipt(res.receipt, true);
+    }
+  }
+
+  async function submitInstallment() {
+    const res = await postData('payStudentInstallment', {
+      studentId: document.getElementById('inst-studentId').value,
+      amount: document.getElementById('inst-amount').value,
+      paymentMethod: document.getElementById('inst-method').value,
+      notes: document.getElementById('inst-notes').value
+    });
+    if (res && res.status === 'success') {
+      document.getElementById('inst-amount').value = '';
+      document.getElementById('inst-notes').value = '';
+      loadDashboard();
+      if (res.receipt) renderAndOpenReceipt(res.receipt, true);
+    }
+  }
+
+  async function submitGrades() {
+    const res = await postData('addGrades', {
+      studentId: document.getElementById('grd-id').value,
+      studentName: document.getElementById('grd-name').value,
+      grade: document.getElementById('grd-grade').value,
+      month: document.getElementById('grd-month').value,
+      arabic: document.getElementById('grd-ar').value,
+      english: document.getElementById('grd-en').value,
+      math: document.getElementById('grd-math').value,
+      science: document.getElementById('grd-sci').value,
+      social: document.getElementById('grd-soc').value
+    });
+    if (res && res.status === 'success') {
+      document.getElementById('grd-ar').value = '';
+      document.getElementById('grd-en').value = '';
+      document.getElementById('grd-math').value = '';
+      document.getElementById('grd-sci').value = '';
+      document.getElementById('grd-soc').value = '';
+    }
+  }
+
+  async function fetchCertificate() {
+    const url = getValidApiUrl();
+    if (!url || !currentSession) return;
+
+    const id = encodeURIComponent(document.getElementById('cert-id').value.trim());
+    const month = encodeURIComponent(document.getElementById('cert-month').value.trim());
+
+    try {
+      const q = `${url}?action=getStudentCertificate&studentId=${id}&month=${month}&username=${encodeURIComponent(currentSession.username)}&password=${encodeURIComponent(currentSession.password)}`;
+      const res = await fetch(q, { redirect: 'follow' });
+      if (!res.ok) throw new Error('حالة الشبكة: ' + res.status);
+      const data = await res.json();
+      if (data.status === 'error') {
+        alert(data.message);
+        return;
+      }
+
+      const c = data.certificate;
+      document.getElementById('c-name').innerText = c['اسم الطالب'];
+      document.getElementById('c-id').innerText = c['كود الطالب'];
+      document.getElementById('c-grade').innerText = c['الصف'];
+      document.getElementById('c-month').innerText = c['الشهر'];
+      document.getElementById('c-ar').innerText = c['اللغة العربية'];
+      document.getElementById('c-en').innerText = c['اللغة الإنجليزية'];
+      document.getElementById('c-math').innerText = c['الرياضيات'];
+      document.getElementById('c-sci').innerText = c['العلوم/اكتشف'];
+      document.getElementById('c-soc').innerText = c['الدراسات الاجتماعية'];
+      document.getElementById('c-tot').innerText = c['المجموع الكلي'] + ' / 500';
+      document.getElementById('c-eval').innerText = 'التقدير العام: ' + c['التقدير العام'];
+      document.getElementById('certificatePrintArea').classList.remove('d-none');
+    } catch (err) {
+      alert('خطأ في جلب الشهادة: ' + err.message);
+    }
+  }
+
+  async function submitTeacher() {
+    const res = await postData('addTeacher', {
+      name: document.getElementById('tch-name').value,
+      subject: document.getElementById('tch-sub').value,
+      grades: document.getElementById('tch-grd').value,
+      baseSalary: document.getElementById('tch-sal').value,
+      allowances: document.getElementById('tch-all').value,
+      deductions: document.getElementById('tch-ded').value
+    });
+    if (res && res.status === 'success') loadDashboard();
+  }
+
+  async function submitAttendance() {
+    await postData('recordAttendance', {
+      personType: document.getElementById('att-type').value,
+      code: document.getElementById('att-code').value,
+      name: document.getElementById('att-name').value,
+      status: document.getElementById('att-status').value
+    });
+  }
+
+  async function submitBus() {
+    const res = await postData('addBus', {
+      busNumber: document.getElementById('bus-num').value,
+      driverName: document.getElementById('bus-drv').value,
+      driverPhone: document.getElementById('bus-phn').value,
+      route: document.getElementById('bus-rt').value,
+      capacity: document.getElementById('bus-cap').value,
+      monthlyCost: document.getElementById('bus-cost').value
+    });
+    if (res && res.status === 'success') loadDashboard();
+  }
+
+  async function submitFinance() {
+    const res = await postData('addFinance', {
+      type: document.getElementById('fin-type').value,
+      category: document.getElementById('fin-cat').value,
+      amount: document.getElementById('fin-amt').value,
+      notes: document.getElementById('fin-note').value
+    });
+    if (res && res.status === 'success') loadDashboard();
+  }
+
+  window.onload = function () {
+    if (currentSession && currentSession.username && currentSession.password) {
+      applySessionAndEnterApp();
+    }
+  };
+</script>
+</body>
+</html>
