@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> نظام إدارة اكاديمية المستقبل </title>
+  <title>نظام إدارة المدرسة المصغرة | الدليل الذكي (د.ك)</title>
+  <!-- خط القاهرة / تجوال العربي الاحترافي -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome للأيقونات -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script>
     tailwind.config = {
@@ -37,14 +40,31 @@
       background-color: #f1f5f9;
       color: #0f172a;
     }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+    /* شريط تمرير أنيق */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* تنسيقات الطباعة النظيفة */
     @media print {
-      body * { visibility: hidden; }
-      #print-area, #print-area * { visibility: visible; }
+      body * {
+        visibility: hidden;
+      }
+      #print-area, #print-area * {
+        visibility: visible;
+      }
       #print-area {
         position: absolute;
         left: 0;
@@ -57,14 +77,18 @@
         box-shadow: none !important;
         border: none !important;
       }
-      .no-print { display: none !important; }
+      .no-print {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body class="antialiased selection:bg-blue-600 selection:text-white">
 
+  <!-- حاوية الإشعارات المنبثقة (Toasts) -->
   <div id="toast-container" class="fixed top-4 left-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
+  <!-- مؤشر التحميل العام -->
   <div id="global-loader" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center">
     <div class="bg-white rounded-2xl p-6 shadow-2xl flex flex-col items-center gap-3 border border-slate-100">
       <div class="w-11 h-11 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -72,25 +96,30 @@
     </div>
   </div>
 
+  <!-- منطقة الطباعة المخفية -->
   <div id="print-area" class="hidden"></div>
 
-  <!-- 1. شاشة تسجيل الدخول -->
+  <!-- ========================================================= -->
+  <!-- 1. شاشة تسجيل الدخول (LOGIN VIEW) -->
+  <!-- ========================================================= -->
   <div id="login-view" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
     <div class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200/20">
+      
+      <!-- الجانب التعريفي -->
       <div class="lg:col-span-5 bg-gradient-to-b from-blue-800 to-blue-950 text-white p-8 flex flex-col justify-between">
         <div>
           <div class="w-14 h-14 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center text-2xl mb-6 border border-white/20">
             <i class="fa-solid fa-graduation-cap text-amber-400"></i>
           </div>
-          <h1 class="text-2xl font-extrabold leading-snug mb-3">نظام إدارة اكاديمية المستقبل</h1>
+          <h1 class="text-2xl font-extrabold leading-snug mb-3">نظام إدارة المدرسة المصغرة</h1>
           <p class="text-blue-200 text-sm leading-relaxed mb-6">
             منصة إدارية ومالية وأكاديمية متكاملة بالعملة الكويتية (<span class="font-bold text-amber-300">د.ك</span>) تدعم مسارات الثانوية العامة (320) والبكالوريا المصرية (600) والحضور والباصات.
           </p>
         </div>
 
-        <div id="demo-hint-box" class="space-y-3 bg-white/10 rounded-2xl p-4 border border-white/10 text-xs">
+        <div class="space-y-3 bg-white/10 rounded-2xl p-4 border border-white/10 text-xs">
           <p class="font-bold text-amber-300 flex items-center gap-2">
-            <i class="fa-solid fa-bolt"></i> تعبئة سريعة (الوضع التجريبي المحلي فقط - بيانات وهمية):
+            <i class="fa-solid fa-bolt"></i> تعبئة سريعة لحسابات التجربة:
           </p>
           <div class="grid grid-cols-1 gap-2">
             <button type="button" onclick="quickFillLogin('owner', 'owner123')" class="w-full text-right px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition flex items-center justify-between">
@@ -109,6 +138,7 @@
         </div>
       </div>
 
+      <!-- نموذج الدخول وإعداد الخادم -->
       <div class="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
         <div class="flex items-center justify-between mb-6">
           <div>
@@ -139,6 +169,7 @@
             </div>
           </div>
 
+          <!-- إعداد رابط Google Apps Script -->
           <div class="pt-2 border-t border-slate-100">
             <div class="flex items-center justify-between mb-1.5">
               <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
@@ -163,7 +194,7 @@
             <button type="submit" class="flex-1 py-3 px-5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm shadow-lg shadow-blue-700/20 transition flex items-center justify-center gap-2">
               <i class="fa-solid fa-right-to-bracket"></i> دخول إلى النظام
             </button>
-            <button type="button" id="login-setup-btn" onclick="runSetupDatabase()" class="py-3 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition flex items-center justify-center gap-1.5">
+            <button type="button" onclick="runSetupDatabase()" class="py-3 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition flex items-center justify-center gap-1.5">
               <i class="fa-solid fa-database"></i> تهيئة قاعدة البيانات (setupDatabase)
             </button>
           </div>
@@ -172,11 +203,17 @@
     </div>
   </div>
 
-  <!-- 2. واجهة التطبيق الرئيسية -->
+  <!-- ========================================================= -->
+  <!-- 2. واجهة التطبيق الرئيسية (APP SHELL) -->
+  <!-- ========================================================= -->
   <div id="app-shell" class="hidden min-h-screen flex flex-col lg:flex-row">
+    
+    <!-- خلفية القائمة للموبايل -->
     <div id="sidebar-backdrop" onclick="toggleMobileSidebar(false)" class="hidden fixed inset-0 bg-slate-900/50 z-30 lg:hidden"></div>
 
+    <!-- القائمة الجانبية (Sidebar) -->
     <aside id="sidebar" class="fixed lg:static inset-y-0 right-0 z-40 w-72 bg-slate-900 text-slate-100 flex flex-col transition-transform duration-300 translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none">
+      <!-- شعار المدرسة -->
       <div class="p-5 border-b border-slate-800 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white text-lg shadow-lg shadow-blue-600/30">
@@ -192,6 +229,7 @@
         </button>
       </div>
 
+      <!-- بطاقة المستخدم الحالي -->
       <div class="p-4 mx-3 mt-4 rounded-2xl bg-slate-800/80 border border-slate-700/70">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-extrabold text-sm text-white">
@@ -206,19 +244,20 @@
         </div>
       </div>
 
+      <!-- روابط التنقل الديناميكية -->
       <nav id="sidebar-nav" class="flex-1 overflow-y-auto p-3 space-y-1 mt-2"></nav>
 
-      <div class="p-4 border-t border-slate-800 space-y-2">
-        <button onclick="openPasswordModal(false)" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-key"></i> تغيير كلمة المرور
-        </button>
+      <!-- زر تسجيل الخروج -->
+      <div class="p-4 border-t border-slate-800">
         <button onclick="logout()" class="w-full py-2.5 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/20 text-xs font-bold transition flex items-center justify-center gap-2">
           <i class="fa-solid fa-arrow-right-from-bracket"></i> تسجيل الخروج
         </button>
       </div>
     </aside>
 
+    <!-- المحتوى الرئيسي -->
     <div class="flex-1 flex flex-col min-w-0">
+      <!-- الشريط العلوي (Topbar) -->
       <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3.5 flex items-center justify-between sticky top-0 z-20">
         <div class="flex items-center gap-3">
           <button onclick="toggleMobileSidebar(true)" class="lg:hidden p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">
@@ -240,38 +279,10 @@
         </div>
       </header>
 
-      <main id="main-content" class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-6"></main>
-    </div>
-  </div>
-
-  <!-- نافذة تغيير كلمة المرور -->
-  <div id="password-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[70] flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="px-6 py-4 bg-slate-50 border-b border-slate-200">
-        <h3 id="pw-title" class="font-extrabold text-slate-800 text-base">تغيير كلمة المرور</h3>
-      </div>
-      <form id="password-form" class="p-6 space-y-3" autocomplete="off">
-        <p id="pw-forced-note" class="hidden text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">حسابك يستخدم كلمة مرور مؤقتة أو افتراضية. اختر كلمة مرور خاصة بك للمتابعة.</p>
-        <p id="pw-reset-note" class="hidden text-xs font-bold text-slate-600 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">ستكون كلمة مؤقتة: سيُطلب من المستخدم تغييرها عند أول دخول.</p>
-        <div id="pw-current-wrap">
-          <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور الحالية</label>
-          <input type="password" id="pw-current" autocomplete="current-password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-blue-600 outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور الجديدة</label>
-          <input type="password" id="pw-new" autocomplete="new-password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-blue-600 outline-none" />
-          <p class="text-[11px] text-slate-500 mt-1">8 أحرف على الأقل، تجمع أرقاماً وحروفاً، ولا تحتوي اسم المستخدم.</p>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">تأكيد كلمة المرور</label>
-          <input type="password" id="pw-confirm" autocomplete="new-password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-blue-600 outline-none" />
-        </div>
-        <p id="pw-error" class="hidden text-xs font-bold text-rose-700"></p>
-        <div class="flex justify-end gap-2 pt-1">
-          <button type="button" id="pw-cancel" onclick="closePasswordModal()" class="px-5 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold">إلغاء</button>
-          <button type="submit" class="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow">حفظ</button>
-        </div>
-      </form>
+      <!-- حاوية الأقسام -->
+      <main id="main-content" class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-6">
+        <!-- يتم حقن محتوى القسم النشط هنا -->
+      </main>
     </div>
   </div>
 
@@ -286,7 +297,9 @@
     </div>
   </div>
 
-  <!-- نافذة معاينة وطباعة الإيصال / الشهادة -->
+  <!-- ========================================================= -->
+  <!-- 3. نافذة منبثقة لعرض وطباعة الإيصال / الشهادة (MODAL) -->
+  <!-- ========================================================= -->
   <div id="preview-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden my-8">
       <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
@@ -305,6 +318,9 @@
   </div>
 
   <script>
+    // =========================================================================
+    // 1. الثوابت والصلاحيات وهيكل المواد (مطابق تماماً لكود Google Apps Script)
+    // =========================================================================
     const ROLE_PERMISSIONS = {
       OWNER: ['dashboard', 'students', 'student-fees', 'grades', 'staff', 'attendance', 'buses', 'bus-roster', 'revenues', 'expenses', 'users', 'settings'],
       ADMIN: ['dashboard', 'students', 'student-fees', 'grades', 'staff', 'attendance', 'buses', 'bus-roster', 'revenues', 'expenses'],
@@ -313,8 +329,8 @@
 
     const NAV_ITEMS = [
       { key: 'dashboard', label: 'لوحة القيادة', subtitle: 'ملخص الإحصائيات والمؤشرات المالية بالدينار الكويتي', icon: 'fa-chart-pie' },
-      { key: 'students', label: 'إدارة الطلاب', subtitle: 'تسجيل الطلاب والمسارات الدراسية والأقساط الشهرية', icon: 'fa-user-graduate' },
-      { key: 'student-fees', label: 'تحصيل المصروفات والإيصالات', subtitle: 'التحصيل الشهري المستقل وسجل الطلاب المسددين والإيصالات', icon: 'fa-file-invoice-dollar' },
+      { key: 'students', label: 'إدارة الطلاب', subtitle: 'تسجيل الطلاب والمسارات الدراسية والبيانات الأساسية', icon: 'fa-user-graduate' },
+      { key: 'student-fees', label: 'تحصيل المصروفات والإيصالات', subtitle: 'سداد الأقساط واستخراج إيصالات الدفع الرسمية', icon: 'fa-file-invoice-dollar' },
       { key: 'grades', label: 'الدرجات والشهادات', subtitle: 'رصد درجات المسارات واستخراج الشهادات الشهرية', icon: 'fa-award' },
       { key: 'staff', label: 'شؤون الموظفين والرواتب', subtitle: 'إدارة المعلمين والعاملين واحتساب صافي الرواتب', icon: 'fa-chalkboard-user' },
       { key: 'attendance', label: 'الحضور والانصراف', subtitle: 'تسجيل ومتابعة حضور الطلاب والموظفين بالكود', icon: 'fa-clipboard-check' },
@@ -341,36 +357,27 @@
       'بكالوريا مصرية': ['مسار الطب وعلوم الحياة', 'مسار الهندسة وعلوم الحاسب', 'مسار الأعمال', 'مسار الآداب والفنون']
     };
 
+    // المنهج الدراسي: كل صف له قسمان (عربي / لغات تجريبي)
     const CURRICULUM_LIST = ['عربي', 'لغات تجريبي'];
     const LANG_CURRICULUM = 'لغات تجريبي';
 
+    // مواد تُدرَّس بالإنجليزية في منهج اللغات:
+    // الابتدائي/الإعدادي: العلوم + الرياضيات | الثانوي: الرياضيات + الفيزياء + الكيمياء + الأحياء + العلوم المتكاملة
     const EN_SUBJECT_NAMES = {
       math: 'Mathematics', science: 'Science', physics: 'Physics', chemistry: 'Chemistry',
       biology: 'Biology', integrated_sci: 'Integrated Science',
       math_adv: 'Advanced Mathematics', phys_adv: 'Advanced Physics',
       chem_adv: 'Advanced Chemistry', bio_adv: 'Advanced Biology', math_bus: 'Mathematics'
     };
+    // مادة التخصص الاختيارية في البكالوريا تكون علمية (إنجليزي) فقط في هذين المسارين
     const EN_ELECTIVE_BRANCHES = ['مسار الطب وعلوم الحياة', 'مسار الهندسة وعلوم الحاسب'];
 
     function escapeHTML(v) {
       return String(v === undefined || v === null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
-    function round3(n) {
-      const v = Number(n || 0);
-      return Number.isFinite(v) ? Math.round(v * 1000) / 1000 : 0;
-    }
     function getStudentCurriculum(st) {
       const c = st && (st['المنهج'] || st.curriculum);
       return CURRICULUM_LIST.includes(c) ? c : 'عربي';
-    }
-    function getStudentNetMonthly(st) {
-      if (!st) return 0;
-      if (st['صافي القسط الشهري (د.ك)'] !== undefined && st['صافي القسط الشهري (د.ك)'] !== '') {
-        return Math.max(0, round3(st['صافي القسط الشهري (د.ك)']));
-      }
-      const agreed = Math.max(0, round3(st['القسط المتفق عليه (د.ك)'] || 0));
-      const disc = Math.max(0, Math.min(agreed, round3(st['مبلغ الخصم (د.ك)'] || 0)));
-      return Math.max(0, round3(agreed - disc));
     }
     function isOwnerUser() {
       return !!(state && state.session && state.session.user && state.session.user.role === 'OWNER');
@@ -392,6 +399,7 @@
       'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو'
     ];
 
+    // نفس دالة getTrackSubjectsConfig من الـ Backend لضمان التطابق الكامل
     function getTrackSubjectsConfig(grade, trackSystem, trackBranch, curriculum) {
       const base = getBaseTrackSubjectsConfig(grade, trackSystem, trackBranch);
       if (curriculum !== LANG_CURRICULUM) {
@@ -420,6 +428,7 @@
       const sys = String(trackSystem || '').trim();
       const br = String(trackBranch || '').trim();
 
+      // الصف الأول الثانوي: عام بلا تخصص، ويتضمن العلوم المتكاملة (توزيع الدرجات مبدئي - يُراجع مع لائحة المدرسة)
       if (g === 'الأول الثانوي') {
         return {
           maxTotal: 400,
@@ -550,32 +559,20 @@
       };
     }
 
+    // =========================================================================
+    // 2. حالة التطبيق والتخزين المحلي (STATE & DEMO ENGINE)
+    // =========================================================================
     const STORAGE_KEYS = {
       GAS_URL: 'mini_school_gas_url',
       DEMO_MODE: 'mini_school_demo_mode',
       SESSION: 'mini_school_session',
-      DEMO_DB: 'mini_school_demo_db_v2'
+      DEMO_DB: 'mini_school_demo_db_v1'
     };
-
-    localStorage.removeItem(STORAGE_KEYS.SESSION);
-    function loadSession_() {
-      try {
-        const s = JSON.parse(sessionStorage.getItem(STORAGE_KEYS.SESSION) || 'null');
-        return s && s.user && s.token ? { user: s.user, token: s.token, mustChangePassword: !!s.mustChangePassword } : null;
-      } catch (_) { return null; }
-    }
-    function saveSession_() {
-      if (state.session) {
-        sessionStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify({ user: state.session.user, token: state.session.token, mustChangePassword: !!state.session.mustChangePassword }));
-      } else {
-        sessionStorage.removeItem(STORAGE_KEYS.SESSION);
-      }
-    }
 
     let state = {
       gasUrl: localStorage.getItem(STORAGE_KEYS.GAS_URL) || '',
       demoMode: localStorage.getItem(STORAGE_KEYS.DEMO_MODE) !== 'false',
-      session: loadSession_(),
+      session: JSON.parse(localStorage.getItem(STORAGE_KEYS.SESSION) || 'null'),
       activeSection: 'dashboard',
       cache: {
         dashboard: null,
@@ -591,6 +588,7 @@
       }
     };
 
+    // تهيئة قاعدة بيانات تجريبية غنية بالبيانات الكويتية الواقعية
     function initDemoDatabase(forceReset = false) {
       const existing = localStorage.getItem(STORAGE_KEYS.DEMO_DB);
       if (existing && !forceReset) return JSON.parse(existing);
@@ -616,12 +614,9 @@
             'ولي الأمر': 'أحمد محمد العلي',
             'رقم الهاتف': '55112233',
             'رقم الباص': 'BUS-01',
-            'القسط المتفق عليه (د.ك)': 100,
-            'مبلغ الخصم (د.ك)': 10,
-            'صافي القسط الشهري (د.ك)': 90,
-            'إجمالي المصروفات (د.ك)': 810,
-            'المصروفات المدفوعة (د.ك)': 90,
-            'المتبقي (د.ك)': 720,
+            'إجمالي المصروفات (د.ك)': 850,
+            'المصروفات المدفوعة (د.ك)': 500,
+            'المتبقي (د.ك)': 350,
             'تاريخ التسجيل': '2026/09/01'
           },
           {
@@ -634,12 +629,9 @@
             'ولي الأمر': 'خالد إبراهيم الصباح',
             'رقم الهاتف': '99445566',
             'رقم الباص': 'BUS-01',
-            'القسط المتفق عليه (د.ك)': 120,
-            'مبلغ الخصم (د.ك)': 20,
-            'صافي القسط الشهري (د.ك)': 100,
-            'إجمالي المصروفات (د.ك)': 900,
-            'المصروفات المدفوعة (د.ك)': 100,
-            'المتبقي (د.ك)': 800,
+            'إجمالي المصروفات (د.ك)': 950,
+            'المصروفات المدفوعة (د.ك)': 950,
+            'المتبقي (د.ك)': 0,
             'تاريخ التسجيل': '2026/09/02'
           },
           {
@@ -652,12 +644,9 @@
             'ولي الأمر': 'طارق حسن المطيري',
             'رقم الهاتف': '66778899',
             'رقم الباص': 'BUS-02',
-            'القسط المتفق عليه (د.ك)': 110,
-            'مبلغ الخصم (د.ك)': 0,
-            'صافي القسط الشهري (د.ك)': 110,
-            'إجمالي المصروفات (د.ك)': 990,
-            'المصروفات المدفوعة (د.ك)': 110,
-            'المتبقي (د.ك)': 880,
+            'إجمالي المصروفات (د.ك)': 950,
+            'المصروفات المدفوعة (د.ك)': 450,
+            'المتبقي (د.ك)': 500,
             'تاريخ التسجيل': '2026/09/03'
           },
           {
@@ -669,13 +658,10 @@
             'المنهج': 'لغات تجريبي',
             'ولي الأمر': 'وليد عبد الرحمن',
             'رقم الهاتف': '50129834',
-            'رقم الباص': 'بدون باص',
-            'القسط المتفق عليه (د.ك)': 80,
-            'مبلغ الخصم (د.ك)': 5,
-            'صافي القسط الشهري (د.ك)': 75,
-            'إجمالي المصروفات (د.ك)': 675,
-            'المصروفات المدفوعة (د.ك)': 75,
-            'المتبقي (د.ك)': 600,
+            'رقم الباص': 'BUS-02',
+            'إجمالي المصروفات (د.ك)': 650,
+            'المصروفات المدفوعة (د.ك)': 400,
+            'المتبقي (د.ك)': 250,
             'تاريخ التسجيل': '2026/09/04'
           }
         ],
@@ -685,54 +671,8 @@
           { 'كود الموظف': 'STF-103', 'الاسم الكامل': 'سيد إبراهيم حسن', 'النوع (مدرس/عامل)': 'عامل', 'التخصص أو المسمى الوظيفي': 'مشرف خدمات وأمن', 'الصفوف/القسم': 'الخدمات الإدارية', 'الراتب الأساسي (د.ك)': 220, 'البدلات (د.ك)': 30, 'الخصومات (د.ك)': 0, 'صافي الراتب (د.ك)': 250, 'رقم الهاتف': '51223344' }
         ],
         RECEIPTS: [
-          {
-            'رقم الإيصال': 'RCP-841021',
-            'التاريخ': '2026/10/02',
-            'كود الطالب': 'STD-1001',
-            'اسم الطالب': 'يوسف أحمد محمد العلي',
-            'الصف': 'الثالث الثانوي',
-            'الشهر': 'أكتوبر',
-            'قسط الدراسة (د.ك)': 90,
-            'اشتراك الباص (د.ك)': 25,
-            'نوع السداد': 'سدد قسط + باص',
-            'بند الدفعة/الشهر': 'سدد قسط + باص - أكتوبر',
-            'طريقة الدفع': 'كي نت (K-NET)',
-            'المبلغ المدفوع (د.ك)': 115,
-            'المتبقي بعد السداد (د.ك)': 720,
-            'ملاحظات': 'تحصيل شهري أكتوبر'
-          },
-          {
-            'رقم الإيصال': 'RCP-841022',
-            'التاريخ': '2026/10/03',
-            'كود الطالب': 'STD-1002',
-            'اسم الطالب': 'مريم خالد إبراهيم الصباح',
-            'الصف': 'الثاني الثانوي',
-            'الشهر': 'أكتوبر',
-            'قسط الدراسة (د.ك)': 100,
-            'اشتراك الباص (د.ك)': 0,
-            'نوع السداد': 'سدد قسط دراسة',
-            'بند الدفعة/الشهر': 'سدد قسط دراسة - أكتوبر',
-            'طريقة الدفع': 'نقدي',
-            'المبلغ المدفوع (د.ك)': 100,
-            'المتبقي بعد السداد (د.ك)': 800,
-            'ملاحظات': 'تم تأجيل اشتراك الباص'
-          },
-          {
-            'رقم الإيصال': 'RCP-841023',
-            'التاريخ': '2026/10/04',
-            'كود الطالب': 'STD-1003',
-            'اسم الطالب': 'عمر طارق حسن المطيري',
-            'الصف': 'الثالث الثانوي',
-            'الشهر': 'أكتوبر',
-            'قسط الدراسة (د.ك)': 0,
-            'اشتراك الباص (د.ك)': 30,
-            'نوع السداد': 'سدد اشتراك باص',
-            'بند الدفعة/الشهر': 'سدد اشتراك باص - أكتوبر',
-            'طريقة الدفع': 'تحويل بنكي',
-            'المبلغ المدفوع (د.ك)': 30,
-            'المتبقي بعد السداد (د.ك)': 880,
-            'ملاحظات': 'سداد اشتراك الباص فقط'
-          }
+          { 'رقم الإيصال': 'RCP-841021', 'التاريخ': '2026/09/01', 'كود الطالب': 'STD-1001', 'اسم الطالب': 'يوسف أحمد محمد العلي', 'الصف': 'الثالث الثانوي', 'بند الدفعة/الشهر': 'دفعة قيد + قسط أول', 'طريقة الدفع': 'كي نت (K-NET)', 'المبلغ المدفوع (د.ك)': 500, 'المتبقي بعد السداد (د.ك)': 350, 'ملاحظات': 'سداد عبر رابط الدفع' },
+          { 'رقم الإيصال': 'RCP-841022', 'التاريخ': '2026/09/02', 'كود الطالب': 'STD-1002', 'اسم الطالب': 'مريم خالد إبراهيم الصباح', 'الصف': 'الثاني الثانوي', 'بند الدفعة/الشهر': 'سداد كامل الرسوم', 'طريقة الدفع': 'نقدي', 'المبلغ المدفوع (د.ك)': 950, 'المتبقي بعد السداد (د.ك)': 0, 'ملاحظات': 'خصم السداد المبكر مطبق' }
         ],
         GRADES: [
           {
@@ -753,15 +693,32 @@
               { key: 'chemistry', label: 'الكيمياء', score: 53, max: 60 },
               { key: 'biology', label: 'الأحياء', score: 55, max: 60 }
             ])
+          },
+          {
+            'كود الطالب': 'STD-1003',
+            'اسم الطالب': 'عمر طارق حسن المطيري',
+            'الصف': 'الثالث الثانوي',
+            'نظام الثانوي': 'بكالوريا مصرية',
+            'المسار / الشعبة': 'مسار الهندسة وعلوم الحاسب',
+            'الشهر': 'أكتوبر',
+            'المجموع الكلي': 184,
+            'النهاية العظمى': 200,
+            'النسبة %': '92%',
+            'التقدير العام': 'ممتاز / يفوق التوقعات',
+            'تفاصيل المواد (JSON)': JSON.stringify([
+              { key: 'math_adv', label: 'الرياضيات (مستوى متقدم)', score: 94, max: 100 },
+              { key: 'phys_adv', label: 'الفيزياء (مستوى متقدم)', score: 90, max: 100 }
+            ])
           }
         ],
         ATTENDANCE: [
-          { 'التاريخ': new Date().toLocaleDateString('ar-EG'), 'الوقت': '07:25 ص', 'النوع (طالب/مدرس/عامل)': 'طالب', 'الكود': 'STD-1001', 'الاسم': 'يوسف أحمد محمد العلي', 'الحالة (حضور/انصراف/غائب/متأخر)': 'حضور', 'ملاحظات': 'وصول مع باص 01' }
+          { 'التاريخ': new Date().toLocaleDateString('ar-EG'), 'الوقت': '07:25 ص', 'النوع (طالب/مدرس/عامل)': 'طالب', 'الكود': 'STD-1001', 'الاسم': 'يوسف أحمد محمد العلي', 'الحالة (حضور/انصراف/غائب/متأخر)': 'حضور', 'ملاحظات': 'وصول مع باص 01' },
+          { 'التاريخ': new Date().toLocaleDateString('ar-EG'), 'الوقت': '07:15 ص', 'النوع (طالب/مدرس/عامل)': 'مدرس', 'الكود': 'STF-101', 'الاسم': 'د. هاني عبد الفتاح', 'الحالة (حضور/انصراف/غائب/متأخر)': 'حضور', 'ملاحظات': 'طابور الصباح' }
         ],
         FINANCE: [
-          { 'رقم العملية': 'TRX-100101', 'التاريخ': '2026/10/02', 'النوع (إيراد/مصروف)': 'إيراد', 'البند': 'قسط دراسة', 'المبلغ (د.ك)': 90, 'التفاصيل': 'شهر أكتوبر - قسط دراسة - الطالب: يوسف أحمد محمد العلي (STD-1001)' },
-          { 'رقم العملية': 'TRX-100102', 'التاريخ': '2026/10/02', 'النوع (إيراد/مصروف)': 'إيراد', 'البند': 'اشتراك باص', 'المبلغ (د.ك)': 25, 'التفاصيل': 'شهر أكتوبر - اشتراك باص - الطالب: يوسف أحمد محمد العلي (STD-1001)' },
-          { 'رقم العملية': 'TRX-100103', 'التاريخ': '2026/09/15', 'النوع (إيراد/مصروف)': 'مصروف', 'البند': 'إيجار ومرافق', 'المبلغ (د.ك)': 650, 'التفاصيل': 'إيجار المبنى والكهرباء والإنترنت' }
+          { 'رقم العملية': 'TRX-100101', 'التاريخ': '2026/09/01', 'النوع (إيراد/مصروف)': 'إيراد', 'البند': 'مصروفات دراسية', 'المبلغ (د.ك)': 2300, 'التفاصيل': 'تحصيل أقساط الفصل الدراسي الأول' },
+          { 'رقم العملية': 'TRX-100102', 'التاريخ': '2026/09/15', 'النوع (إيراد/مصروف)': 'مصروف', 'البند': 'إيجار ومرافق المدرسة', 'المبلغ (د.ك)': 650, 'التفاصيل': 'إيجار المبنى والكهرباء والإنترنت' },
+          { 'رقم العملية': 'TRX-100103', 'التاريخ': '2026/09/25', 'النوع (إيراد/مصروف)': 'مصروف', 'البند': 'صيانة ووقود الباصات', 'المبلغ (د.ك)': 180, 'التفاصيل': 'صيانة دورية للحافلات' }
         ]
       };
 
@@ -775,12 +732,14 @@
       return db;
     }
 
+    // المستخدم المنفذ للعملية (في الوضع التجريبي يُستخرج من الجلسة؛ في الخادم الحقيقي يجب التحقق من كلمة المرور)
     function getDemoActor(db, customAuth) {
       const uname = String((customAuth && customAuth.username) || (state.session && state.session.user && state.session.user.username) || '').trim();
       const u = db.USERS.find(r => r['اسم المستخدم'] === uname && r['الحالة'] === 'نشط');
       return u ? { username: uname, fullName: u['الاسم الكامل'], role: u['الدور'] } : null;
     }
 
+    // التحقق من تعيين طالب على باص (وجود الباص + السعة)
     function validateBusAssignment(db, busNumber, excludeCode) {
       const bus = db.BUSES.find(b => b['رقم الباص'] === busNumber);
       if (!busNumber || !bus) return 'يرجى اختيار باص صحيح من القائمة';
@@ -794,32 +753,40 @@
       localStorage.setItem(STORAGE_KEYS.DEMO_DB, JSON.stringify(db));
     }
 
-    function isDemo_() { return state.demoMode || !state.gasUrl; }
-
-    async function callServer_(body) {
-      const res = await fetch(state.gasUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(body)
-      });
-      let json;
-      try { json = await res.json(); } catch (_) { throw new Error('رد غير صالح من الخادم'); }
-      if (json && json.code === 'AUTH_REQUIRED' && state.session) { logout('expired'); }
-      if (json && json.code === 'PASSWORD_CHANGE_REQUIRED' && state.session) { openPasswordModal(true); }
-      return json;
-    }
-
+    // =========================================================================
+    // 3. طبقة الاتصال بالخادم (API CLIENT - يدعم GAS و Demo Mode بسلاسة)
+    // =========================================================================
     async function apiGet(params = {}) {
-      if (isDemo_()) return handleDemoGet(params);
-      const { action, ...rest } = params;
-      return callServer_({ action, params: rest, token: state.session && state.session.token });
+      if (state.demoMode || !state.gasUrl) {
+        return handleDemoGet(params);
+      }
+      const url = new URL(state.gasUrl);
+      const authParams = state.session ? { username: state.session.user.username, password: state.session.password } : {};
+      const merged = Object.assign({}, authParams, params);
+      Object.keys(merged).forEach(k => {
+        if (merged[k] !== undefined && merged[k] !== null) {
+          url.searchParams.set(k, merged[k]);
+        }
+      });
+
+      const res = await fetch(url.toString(), { method: 'GET' });
+      return await res.json();
     }
 
     async function apiPost(action, payload = {}, customAuth = null) {
-      if (isDemo_()) return handleDemoPost(action, payload, customAuth);
-      return callServer_({ action, payload, token: state.session && state.session.token });
+      if (state.demoMode || !state.gasUrl) {
+        return handleDemoPost(action, payload, customAuth);
+      }
+      const auth = customAuth || (state.session ? { username: state.session.user.username, password: state.session.password } : {});
+      const res = await fetch(state.gasUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action, payload, auth })
+      });
+      return await res.json();
     }
 
+    // محاكاة كاملة لدوال doGet في Google Apps Script
     function handleDemoGet(params) {
       const db = getDemoDB();
       const action = params.action || 'getDashboard';
@@ -864,10 +831,6 @@
         const code = String(params.code || '').trim();
         const st = db.STUDENTS.find(s => String(s['كود الطالب']).trim() === code);
         if (st) {
-          const agreed = Math.max(0, round3(st['القسط المتفق عليه (د.ك)'] || 0));
-          const discount = Math.max(0, Math.min(agreed, round3(st['مبلغ الخصم (د.ك)'] || 0)));
-          const netMonthly = getStudentNetMonthly(st);
-          const busNumber = String(st['رقم الباص'] || '').trim() || 'بدون باص';
           return {
             status: 'success',
             foundType: 'طالب',
@@ -881,11 +844,7 @@
               trackConfig: getTrackSubjectsConfig(st['المرحلة/الصف'], st['نظام الثانوي'], st['المسار / الشعبة'], getStudentCurriculum(st)),
               parentName: st['ولي الأمر'],
               phone: st['رقم الهاتف'],
-              busNumber: busNumber,
-              ridesBus: busNumber !== 'بدون باص',
-              agreedInstallment: agreed,
-              discountAmount: discount,
-              netMonthlyInstallment: netMonthly,
+              busNumber: st['رقم الباص'],
               totalFees: Number(st['إجمالي المصروفات (د.ك)'] || 0),
               paidFees: Number(st['المصروفات المدفوعة (د.ك)'] || 0),
               remaining: Number(st['المتبقي (د.ك)'] || 0)
@@ -981,6 +940,7 @@
       return { status: 'error', message: 'إجراء غير معروف' };
     }
 
+    // محاكاة كاملة لدوال doPost في Google Apps Script
     function handleDemoPost(action, p, customAuth) {
       const db = getDemoDB();
 
@@ -1006,16 +966,10 @@
           if (busErr) return { status: 'error', message: busErr };
           busNumber = p.busNumber;
         }
-
-        const agreedInstallment = Math.max(0, round3(p.agreedInstallment || 0));
-        const discountAmount = Math.max(0, round3(p.discountAmount || 0));
-        if (discountAmount > agreedInstallment) {
-          return { status: 'error', message: 'مبلغ الخصم الممنوح لا يمكن أن يتجاوز القسط المتفق عليه' };
-        }
-        const netMonthly = Math.max(0, round3(agreedInstallment - discountAmount));
-        const annualEstimated = round3(netMonthly * 9);
-
         const id = 'STD-' + Math.floor(1000 + Math.random() * 9000);
+        const totalFees = Math.max(0, Number(p.totalFees || 0));
+        const paidFees = Math.max(0, Number(p.paidFees || 0));
+        const remaining = Math.max(0, totalFees - paidFees);
         const dateStr = new Date().toLocaleDateString('ar-EG');
 
         db.STUDENTS.unshift({
@@ -1028,25 +982,60 @@
           'ولي الأمر': p.parentName || '',
           'رقم الهاتف': p.phone || '',
           'رقم الباص': busNumber,
-          'القسط المتفق عليه (د.ك)': agreedInstallment,
-          'مبلغ الخصم (د.ك)': discountAmount,
-          'صافي القسط الشهري (د.ك)': netMonthly,
-          'إجمالي المصروفات (د.ك)': annualEstimated,
-          'المصروفات المدفوعة (د.ك)': 0,
-          'المتبقي (د.ك)': annualEstimated,
+          'إجمالي المصروفات (د.ك)': totalFees,
+          'المصروفات المدفوعة (د.ك)': paidFees,
+          'المتبقي (د.ك)': remaining,
           'تاريخ التسجيل': dateStr
         });
 
+        let receipt = null;
+        if (paidFees > 0) {
+          db.FINANCE.unshift({
+            'رقم العملية': 'TRX-' + Date.now().toString().slice(-6),
+            'التاريخ': dateStr,
+            'النوع (إيراد/مصروف)': 'إيراد',
+            'البند': 'مصروفات دراسية',
+            'المبلغ (د.ك)': paidFees,
+            'التفاصيل': 'دفعة قيد للطالب: ' + p.name + ' (' + id + ')'
+          });
+
+          const receiptNo = 'RCP-' + Date.now().toString().slice(-6);
+          receipt = {
+            receiptNo,
+            date: dateStr,
+            studentId: id,
+            studentName: p.name,
+            grade: p.grade,
+            installmentLabel: 'دفعة قيد',
+            paymentMethod: p.paymentMethod || 'نقدي',
+            amountPaid: paidFees,
+            remaining,
+            notes: 'دفعة قيد وسداد مصروفات دراسية'
+          };
+          db.RECEIPTS.unshift({
+            'رقم الإيصال': receiptNo,
+            'التاريخ': dateStr,
+            'كود الطالب': id,
+            'اسم الطالب': p.name,
+            'الصف': p.grade,
+            'بند الدفعة/الشهر': 'دفعة قيد',
+            'طريقة الدفع': receipt.paymentMethod,
+            'المبلغ المدفوع (د.ك)': paidFees,
+            'المتبقي بعد السداد (د.ك)': remaining,
+            'ملاحظات': receipt.notes
+          });
+        }
         saveDemoDB(db);
         return {
           status: 'success',
           id,
-          netMonthlyInstallment: netMonthly,
-          message: 'تم تسجيل الطالب وحساب صافي القسط الشهري (' + netMonthly.toFixed(3) + ' د.ك) بنجاح'
+          receipt,
+          message: paidFees > 0 ? 'تم تسجيل الطالب وإصدار إيصال السداد تلقائياً' : 'تم تسجيل بيانات الطالب بنجاح'
         };
       }
 
       if (action === 'updateStudent') {
+        // 1) الصلاحية (يجب تكرار نفس التحقق في Google Apps Script)
         const actor = getDemoActor(db, customAuth);
         if (!actor || !(ROLE_PERMISSIONS[actor.role] || []).includes('students')) {
           return { status: 'error', message: 'غير مصرح لك بتعديل بيانات الطلاب' };
@@ -1056,12 +1045,14 @@
         const st = db.STUDENTS[idx];
         const changes = [];
 
+        // 2) المنهج
         if (p.curriculum !== undefined && p.curriculum !== '') {
           if (!CURRICULUM_LIST.includes(p.curriculum)) return { status: 'error', message: 'قيمة المنهج غير صحيحة' };
           const oldC = getStudentCurriculum(st);
           if (p.curriculum !== oldC) changes.push({ field: 'المنهج', oldV: oldC, newV: p.curriculum, key: 'المنهج' });
         }
 
+        // 3) الباص
         if (p.ridesBus !== undefined) {
           const oldBus = st['رقم الباص'] || 'بدون باص';
           let newBus = 'بدون باص';
@@ -1073,6 +1064,7 @@
           if (newBus !== oldBus) changes.push({ field: 'رقم الباص', oldV: oldBus, newV: newBus, key: 'رقم الباص' });
         }
 
+        // 4) المبلغ - للمالك فقط (يُرفض الطلب كاملاً لغير المالك بدل تجاهل الحقل بصمت)
         let newTotal = null;
         const paid = Number(st['المصروفات المدفوعة (د.ك)'] || 0);
         const oldTotal = Number(st['إجمالي المصروفات (د.ك)'] || 0);
@@ -1083,18 +1075,19 @@
             if (actor.role !== 'OWNER') return { status: 'error', message: 'تعديل المبلغ متاح للمالك فقط' };
             if (t < paid) return { status: 'error', message: 'المبلغ الجديد (' + t.toFixed(3) + ') أقل من المدفوع فعلياً (' + paid.toFixed(3) + ' د.ك). عالج الاسترداد محاسبياً أولاً.' };
             if (!String(p.reason || '').trim()) return { status: 'error', message: 'يرجى كتابة سبب تعديل المبلغ (مطلوب للتدقيق)' };
-            newTotal = round3(t);
+            newTotal = Math.round(t * 1000) / 1000;
             changes.push({ field: 'إجمالي المصروفات (د.ك)', oldV: oldTotal.toFixed(3), newV: newTotal.toFixed(3), key: 'إجمالي المصروفات (د.ك)' });
           }
         }
 
         if (!changes.length) return { status: 'success', changed: [], message: 'لا توجد تغييرات لحفظها' };
 
+        // 5) التطبيق + سجل التدقيق (بعد نجاح كل التحققات فقط)
         const now = new Date().toLocaleString('ar-EG');
         changes.forEach(c => {
           if (c.key === 'إجمالي المصروفات (د.ك)') {
             st['إجمالي المصروفات (د.ك)'] = newTotal;
-            st['المتبقي (د.ك)'] = Math.max(0, round3(newTotal - paid));
+            st['المتبقي (د.ك)'] = Math.max(0, newTotal - paid);
           } else {
             st[c.key] = c.newV;
           }
@@ -1108,7 +1101,7 @@
             'الحقل': c.field,
             'القيمة القديمة': c.oldV,
             'القيمة الجديدة': c.newV,
-            'السبب': String(p.reason || '').trim()
+            'السبب': c.key === 'إجمالي المصروفات (د.ك)' ? String(p.reason).trim() : (String(p.reason || '').trim())
           });
         });
         saveDemoDB(db);
@@ -1118,53 +1111,25 @@
       if (action === 'payStudentInstallment') {
         const idx = db.STUDENTS.findIndex(s => String(s['كود الطالب']).trim() === String(p.studentId).trim());
         if (idx === -1) return { status: 'error', message: 'لم يتم العثور على طالب بالكود: ' + p.studentId };
-
-        const tuitionPaid = Math.max(0, round3(p.tuitionAmount !== undefined ? p.tuitionAmount : (p.busAmount === undefined ? p.amount : 0)));
-        const busPaid = Math.max(0, round3(p.busAmount || 0));
-        const totalPaidNow = round3(tuitionPaid + busPaid);
-
-        if (totalPaidNow <= 0) {
-          return { status: 'error', message: 'يرجى إدخال مبلغ صحيح في قسط الدراسة أو اشتراك الباص' };
-        }
+        const amt = Number(p.amount || 0);
+        if (amt <= 0) return { status: 'error', message: 'يرجى إدخال مبلغ صحيح أكبر من صفر' };
 
         const st = db.STUDENTS[idx];
-        const newPaid = round3(Number(st['المصروفات المدفوعة (د.ك)'] || 0) + tuitionPaid);
-        const newRem = Math.max(0, round3(Number(st['إجمالي المصروفات (د.ك)'] || 0) - newPaid));
+        const newPaid = Number(st['المصروفات المدفوعة (د.ك)'] || 0) + amt;
+        const newRem = Math.max(0, Number(st['إجمالي المصروفات (د.ك)'] || 0) - newPaid);
         st['المصروفات المدفوعة (د.ك)'] = newPaid;
         st['المتبقي (د.ك)'] = newRem;
 
         const dateStr = new Date().toLocaleDateString('ar-EG');
-        const month = String(p.month || '').trim();
-        const method = p.paymentMethod || 'نقدي';
-        const notes = String(p.notes || '').trim();
-
-        let paymentType = 'سدد قسط دراسة';
-        if (tuitionPaid > 0 && busPaid > 0) paymentType = 'سدد قسط + باص';
-        else if (busPaid > 0) paymentType = 'سدد اشتراك باص';
-
-        const label = p.installmentLabel || (month ? paymentType + ' - ' + month : paymentType);
-
-        if (tuitionPaid > 0) {
-          db.FINANCE.unshift({
-            'رقم العملية': 'TRX-' + Date.now().toString().slice(-6) + '1',
-            'التاريخ': dateStr,
-            'النوع (إيراد/مصروف)': 'إيراد',
-            'البند': 'قسط دراسة',
-            'المبلغ (د.ك)': tuitionPaid,
-            'التفاصيل': (month ? 'شهر ' + month + ' - ' : '') + 'قسط دراسة - الطالب: ' + st['الاسم رباعي'] + ' (' + st['كود الطالب'] + ')' + (notes ? ' - ' + notes : '')
-          });
-        }
-
-        if (busPaid > 0) {
-          db.FINANCE.unshift({
-            'رقم العملية': 'TRX-' + Date.now().toString().slice(-6) + '2',
-            'التاريخ': dateStr,
-            'النوع (إيراد/مصروف)': 'إيراد',
-            'البند': 'اشتراك باص',
-            'المبلغ (د.ك)': busPaid,
-            'التفاصيل': (month ? 'شهر ' + month + ' - ' : '') + 'اشتراك باص - الطالب: ' + st['الاسم رباعي'] + ' (' + st['كود الطالب'] + ')' + (notes ? ' - ' + notes : '')
-          });
-        }
+        const label = p.installmentLabel || 'دفعة شهرية';
+        db.FINANCE.unshift({
+          'رقم العملية': 'TRX-' + Date.now().toString().slice(-6),
+          'التاريخ': dateStr,
+          'النوع (إيراد/مصروف)': 'إيراد',
+          'البند': 'مصروفات دراسية',
+          'المبلغ (د.ك)': amt,
+          'التفاصيل': label + ' - الطالب: ' + st['الاسم رباعي'] + ' (' + st['كود الطالب'] + ')'
+        });
 
         const receiptNo = 'RCP-' + Date.now().toString().slice(-6);
         const receipt = {
@@ -1173,36 +1138,26 @@
           studentId: st['كود الطالب'],
           studentName: st['الاسم رباعي'],
           grade: st['المرحلة/الصف'],
-          month,
-          paymentType,
           installmentLabel: label,
-          paymentMethod: method,
-          tuitionAmount: tuitionPaid,
-          busAmount: busPaid,
-          amountPaid: totalPaidNow,
+          paymentMethod: p.paymentMethod || 'نقدي',
+          amountPaid: amt,
           remaining: newRem,
-          notes
+          notes: p.notes || label
         };
-
         db.RECEIPTS.unshift({
           'رقم الإيصال': receiptNo,
           'التاريخ': dateStr,
           'كود الطالب': receipt.studentId,
           'اسم الطالب': receipt.studentName,
           'الصف': receipt.grade,
-          'الشهر': month,
-          'قسط الدراسة (د.ك)': tuitionPaid,
-          'اشتراك الباص (د.ك)': busPaid,
-          'نوع السداد': paymentType,
-          'بند الدفعة/الشهر': label,
-          'طريقة الدفع': method,
-          'المبلغ المدفوع (د.ك)': totalPaidNow,
+          'بند الدفعة/الشهر': receipt.installmentLabel,
+          'طريقة الدفع': receipt.paymentMethod,
+          'المبلغ المدفوع (د.ك)': amt,
           'المتبقي بعد السداد (د.ك)': newRem,
-          'ملاحظات': notes
+          'ملاحظات': receipt.notes
         });
-
         saveDemoDB(db);
-        return { status: 'success', receipt, message: 'تم تسجيل السداد وتحديث السجل المالي وإصدار الإيصال تلقائياً' };
+        return { status: 'success', receipt, message: 'تم تسجيل الدفعة وتحديث الرصيد وإصدار الإيصال تلقائياً' };
       }
 
       if (action === 'addGrades') {
@@ -1323,30 +1278,6 @@
         return { status: 'success', message: type === 'إيراد' ? 'تم تسجيل الإيراد بنجاح' : 'تم تسجيل المصروف بنجاح' };
       }
 
-      if (action === 'changePassword') {
-        const actor = getDemoActor(db, customAuth);
-        const rec = actor && db.USERS.find(u => u['اسم المستخدم'] === actor.username);
-        if (!rec) return { status: 'error', message: 'الحساب غير موجود' };
-        if (rec['كلمة المرور'] !== String(p.currentPassword || '')) return { status: 'error', message: 'كلمة المرور الحالية غير صحيحة' };
-        const np = String(p.newPassword || '');
-        if (np.length < 8 || !/\d/.test(np) || !/[^\d]/.test(np)) return { status: 'error', message: 'كلمة المرور: 8 أحرف على الأقل وتجمع أرقاماً وحروفاً' };
-        rec['كلمة المرور'] = np;
-        saveDemoDB(db);
-        return { status: 'success', token: 'demo', message: 'تم تغيير كلمة المرور بنجاح' };
-      }
-
-      if (action === 'resetUserPassword') {
-        const actor = getDemoActor(db, customAuth);
-        if (!actor || actor.role !== 'OWNER') return { status: 'error', message: 'ليس لديك صلاحية تنفيذ هذا الإجراء' };
-        const rec = db.USERS.find(u => u['اسم المستخدم'] === String(p.username || ''));
-        if (!rec) return { status: 'error', message: 'المستخدم غير موجود' };
-        const np = String(p.newPassword || '');
-        if (np.length < 8 || !/\d/.test(np) || !/[^\d]/.test(np)) return { status: 'error', message: 'كلمة المرور: 8 أحرف على الأقل وتجمع أرقاماً وحروفاً' };
-        rec['كلمة المرور'] = np;
-        saveDemoDB(db);
-        return { status: 'success', message: 'تمت إعادة تعيين كلمة المرور' };
-      }
-
       if (action === 'addUser') {
         if (!p.username || !p.password || !p.fullName) return { status: 'error', message: 'يرجى إكمال بيانات المستخدم' };
         if (db.USERS.some(u => u['اسم المستخدم'] === p.username)) return { status: 'error', message: 'اسم المستخدم مستخدم مسبقاً' };
@@ -1364,6 +1295,9 @@
       return { status: 'error', message: 'عملية غير مدعومة' };
     }
 
+    // =========================================================================
+    // 4. أدوات واجهة المستخدم المساعدة (UI HELPERS)
+    // =========================================================================
     function showToast(message, type = 'success') {
       const container = document.getElementById('toast-container');
       const colors = {
@@ -1380,7 +1314,7 @@
       };
       const toast = document.createElement('div');
       toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3.5 rounded-2xl shadow-xl border text-xs font-bold transition-all duration-300 transform translate-y-0 ${colors[type] || colors.info}`;
-      toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info} text-base"></i><span class="flex-1 leading-relaxed">${escapeHTML(message)}</span>`;
+      toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info} text-base"></i><span class="flex-1 leading-relaxed">${message}</span>`;
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
@@ -1438,12 +1372,10 @@
       }, 300);
     }
 
+    // =========================================================================
+    // 5. إدارة تسجيل الدخول والجلسة
+    // =========================================================================
     function syncConnectionUI() {
-      const demoNow = state.demoMode || !state.gasUrl;
-      const hint = document.getElementById('demo-hint-box');
-      const setupBtn = document.getElementById('login-setup-btn');
-      if (hint) hint.classList.toggle('hidden', !demoNow);
-      if (setupBtn) setupBtn.classList.toggle('hidden', !demoNow);
       const urlInput = document.getElementById('gas-url-input');
       const demoToggle = document.getElementById('demo-mode-toggle');
       const badge = document.getElementById('connection-badge');
@@ -1490,10 +1422,6 @@
 
     async function runSetupDatabase() {
       saveGasUrlFromLogin();
-      if (!isDemo_()) {
-        showToast('تهيئة الخادم الحقيقي تتم من محرر Apps Script أو من حساب المالك داخل النظام', 'warning');
-        return;
-      }
       setLoading(true, 'جاري تهيئة الجداول وحسابات المستخدمين...');
       try {
         const res = await apiGet({ action: 'setupDatabase' });
@@ -1523,17 +1451,10 @@
 
       setLoading(true, 'جاري التحقق من بيانات الدخول...');
       try {
-        let res;
-        if (isDemo_()) {
-          res = handleDemoGet({ action: 'login', username, password });
-          if (res.status === 'success') res.token = 'demo';
-        } else {
-          res = await callServer_({ action: 'login', payload: { username, password } });
-        }
-        document.getElementById('login-password').value = '';
-        if (res.status === 'success' && res.user && res.token) {
-          state.session = { user: res.user, token: res.token, mustChangePassword: !!res.mustChangePassword };
-          saveSession_();
+        const res = await apiGet({ action: 'login', username, password });
+        if (res.status === 'success' && res.user) {
+          state.session = { user: res.user, password };
+          localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(state.session));
           showToast('أهلاً بك، ' + res.user.fullName, 'success');
           enterApp();
         } else {
@@ -1546,24 +1467,12 @@
       }
     });
 
-    function logout(reason) {
-      const tok = state.session && state.session.token;
-      if (tok && !isDemo_()) {
-        try {
-          fetch(state.gasUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'logout', token: tok }) }).catch(() => {});
-        } catch (_) {}
-      }
+    function logout() {
       state.session = null;
-      saveSession_();
-      Object.keys(state.cache).forEach(k => { state.cache[k] = Array.isArray(state.cache[k]) ? [] : null; });
-      document.getElementById('main-content').innerHTML = '';
-      closeEditStudent();
-      document.getElementById('password-modal').classList.add('hidden');
-      passwordModalForced_ = false;
+      localStorage.removeItem(STORAGE_KEYS.SESSION);
       document.getElementById('app-shell').classList.add('hidden');
       document.getElementById('login-view').classList.remove('hidden');
-      if (reason === 'expired') showToast('انتهت الجلسة، يرجى تسجيل الدخول مجدداً', 'warning');
-      else showToast('تم تسجيل الخروج بنجاح', 'info');
+      showToast('تم تسجيل الخروج بنجاح', 'info');
     }
 
     function enterApp() {
@@ -1576,83 +1485,10 @@
       document.getElementById('sidebar-user-role').textContent = user.role;
 
       buildSidebarMenu();
-      if (state.session.mustChangePassword) {
-        openPasswordModal(true);
-        return;
-      }
-      goToInitialSection_();
+      const allowed = user.permissions || [];
+      const initialSection = allowed.includes('dashboard') ? 'dashboard' : (allowed[0] || 'dashboard');
+      navigateTo(initialSection);
     }
-
-    function goToInitialSection_() {
-      const allowed = (state.session.user.permissions) || [];
-      navigateTo(allowed.includes('dashboard') ? 'dashboard' : (allowed[0] || 'dashboard'));
-    }
-
-    let passwordModalForced_ = false;
-    let passwordResetTarget_ = null;
-
-    function openPasswordModal(forced, resetUser) {
-      passwordModalForced_ = !!forced;
-      passwordResetTarget_ = resetUser || null;
-      const reset = !!passwordResetTarget_;
-      document.getElementById('pw-title').textContent = reset ? 'إعادة تعيين كلمة مرور: ' + resetUser : (forced ? 'يجب تغيير كلمة المرور المؤقتة' : 'تغيير كلمة المرور');
-      document.getElementById('pw-forced-note').classList.toggle('hidden', !forced);
-      document.getElementById('pw-current-wrap').classList.toggle('hidden', reset);
-      document.getElementById('pw-cancel').classList.toggle('hidden', !!forced);
-      document.getElementById('pw-reset-note').classList.toggle('hidden', !reset);
-      ['pw-current', 'pw-new', 'pw-confirm'].forEach(id => { document.getElementById(id).value = ''; });
-      document.getElementById('pw-error').classList.add('hidden');
-      document.getElementById('password-modal').classList.remove('hidden');
-      setTimeout(() => document.getElementById(reset ? 'pw-new' : 'pw-current').focus(), 50);
-    }
-
-    function closePasswordModal() {
-      if (passwordModalForced_) return;
-      document.getElementById('password-modal').classList.add('hidden');
-    }
-
-    function pwShowError_(msg) {
-      const box = document.getElementById('pw-error');
-      box.textContent = msg;
-      box.classList.remove('hidden');
-    }
-
-    async function submitPasswordForm(e) {
-      e.preventDefault();
-      const cur = document.getElementById('pw-current').value.trim();
-      const nw = document.getElementById('pw-new').value.trim();
-      const cf = document.getElementById('pw-confirm').value.trim();
-      const reset = !!passwordResetTarget_;
-      if (!reset && !cur) return pwShowError_('أدخل كلمة المرور الحالية');
-      if (nw.length < 8) return pwShowError_('كلمة المرور يجب ألا تقل عن 8 أحرف');
-      if (!/\d/.test(nw) || !/[^\d]/.test(nw)) return pwShowError_('كلمة المرور يجب أن تجمع بين أرقام وحروف');
-      if (nw !== cf) return pwShowError_('تأكيد كلمة المرور غير مطابق');
-
-      setLoading(true, 'جاري الحفظ...');
-      try {
-        const res = reset
-          ? await apiPost('resetUserPassword', { username: passwordResetTarget_, newPassword: nw })
-          : await apiPost('changePassword', { currentPassword: cur, newPassword: nw });
-        if (res.status !== 'success') return pwShowError_(res.message || 'تعذر الحفظ');
-
-        ['pw-current', 'pw-new', 'pw-confirm'].forEach(id => { document.getElementById(id).value = ''; });
-        const wasForced = passwordModalForced_;
-        passwordModalForced_ = false;
-        document.getElementById('password-modal').classList.add('hidden');
-        showToast(res.message, 'success');
-        if (!reset) {
-          if (res.token) state.session.token = res.token;
-          state.session.mustChangePassword = false;
-          saveSession_();
-          if (wasForced) goToInitialSection_();
-        }
-      } catch (err) {
-        pwShowError_(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    document.getElementById('password-form').addEventListener('submit', submitPasswordForm);
 
     function buildSidebarMenu() {
       const nav = document.getElementById('sidebar-nav');
@@ -1693,6 +1529,9 @@
       renderSection(state.activeSection);
     }
 
+    // =========================================================================
+    // 6. عارض الأقسام الديناميكي (SECTION RENDERERS)
+    // =========================================================================
     async function renderSection(key) {
       const container = document.getElementById('main-content');
       setLoading(true, 'جاري تحميل البيانات...');
@@ -1720,7 +1559,7 @@
     }
 
     // -------------------------------------------------------------------------
-    // أ. لوحة القيادة
+    // أ. لوحة القيادة (DASHBOARD)
     // -------------------------------------------------------------------------
     async function renderDashboard(container) {
       const res = await apiGet({ action: 'getDashboard' });
@@ -1733,29 +1572,36 @@
       const salPct = Math.round((res.totalSalaries / maxFin) * 100);
 
       container.innerHTML = `
+        <!-- بطاقات الإحصائيات الرئيسية -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
             <div>
               <p class="text-xs font-bold text-slate-500">إجمالي الطلاب</p>
-              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${escapeHTML(res.studentsCount)} <span class="text-xs font-semibold text-slate-400">طالب</span></h3>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${res.studentsCount} <span class="text-xs font-semibold text-slate-400">طالب</span></h3>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fa-solid fa-user-graduate"></i></div>
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
           </div>
 
           <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
             <div>
               <p class="text-xs font-bold text-slate-500">الكادر التعليمي والإداري</p>
-              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${escapeHTML(res.staffCount)} <span class="text-xs font-semibold text-slate-400">موظف</span></h3>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${res.staffCount} <span class="text-xs font-semibold text-slate-400">موظف</span></h3>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
           </div>
 
           <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
             <div>
               <p class="text-xs font-bold text-slate-500">حافلات النقل المدرسي</p>
-              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${escapeHTML(res.busesCount)} <span class="text-xs font-semibold text-slate-400">باص</span></h3>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${res.busesCount} <span class="text-xs font-semibold text-slate-400">باص</span></h3>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl"><i class="fa-solid fa-bus"></i></div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-bus"></i>
+            </div>
           </div>
 
           <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
@@ -1763,10 +1609,13 @@
               <p class="text-xs font-bold text-slate-500">الرواتب الشهرية</p>
               <h3 class="text-xl font-extrabold text-slate-800 mt-1">${formatKWD(res.totalSalaries)}</h3>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl"><i class="fa-solid fa-money-check-dollar"></i></div>
+            <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-money-check-dollar"></i>
+            </div>
           </div>
         </div>
 
+        <!-- الملخص المالي بالدينار الكويتي -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 text-white rounded-2xl p-6 shadow-lg shadow-emerald-600/15">
             <div class="flex items-center justify-between mb-3">
@@ -1774,7 +1623,7 @@
               <i class="fa-solid fa-arrow-trend-up text-emerald-200 text-lg"></i>
             </div>
             <p class="text-2xl font-extrabold">${formatKWD(res.totalIncome)}</p>
-            <p class="text-[11px] text-emerald-200 mt-2">تشمل أقساط الدراسة واشتراكات الباص والإيرادات الأخرى</p>
+            <p class="text-[11px] text-emerald-200 mt-2">تشمل المصروفات الدراسية والإيرادات الأخرى</p>
           </div>
 
           <div class="bg-gradient-to-br from-rose-600 to-rose-800 text-white rounded-2xl p-6 shadow-lg shadow-rose-600/15">
@@ -1796,6 +1645,7 @@
           </div>
         </div>
 
+        <!-- رسم بياني مقارن للتدفقات المالية -->
         <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
           <div class="flex items-center justify-between mb-5">
             <div>
@@ -1841,7 +1691,7 @@
     }
 
     // -------------------------------------------------------------------------
-    // ب. إدارة الطلاب (تسجيل طالب جديد + فلترة حسب المرحلة/الصف + بحث فوري)
+    // ب. إدارة الطلاب (STUDENTS)
     // -------------------------------------------------------------------------
     async function renderStudents(container) {
       const [stRes, busRes] = await Promise.all([
@@ -1852,6 +1702,7 @@
       state.cache.buses = busRes.rows || [];
 
       container.innerHTML = `
+        <!-- نموذج تسجيل طالب جديد -->
         <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
           <h3 class="text-sm font-extrabold text-slate-800 mb-4 flex items-center gap-2">
             <i class="fa-solid fa-user-plus text-blue-600"></i> تسجيل طالب جديد
@@ -1884,6 +1735,7 @@
 
             ${busFieldsHTML('add', '', '')}
 
+            <!-- حقول المرحلة الثانوية الديناميكية -->
             <div id="secondary-fields-wrapper" class="hidden sm:col-span-2 lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-blue-50/70 border border-blue-200">
               <div>
                 <label class="block text-xs font-bold text-blue-900 mb-1">نظام المرحلة الثانوية *</label>
@@ -1913,22 +1765,26 @@
                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
             </div>
 
-            <!-- الحقول المالية الجديدة عند التسجيل -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">القسط المتفق عليه (د.ك) *</label>
-              <input type="number" step="0.001" min="0" name="agreedInstallment" id="agreed-installment-input" oninput="calcNetMonthlyInstallment()" value="0" required
-                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:border-blue-600 outline-none" />
+              <label class="block text-xs font-bold text-slate-700 mb-1">إجمالي المصروفات (د.ك)</label>
+              <input type="number" step="0.001" min="0" name="totalFees" value="0"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">مبلغ الخصم الممنوح (د.ك)</label>
-              <input type="number" step="0.001" min="0" name="discountAmount" id="discount-amount-input" oninput="calcNetMonthlyInstallment()" value="0"
-                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:border-blue-600 outline-none" />
+              <label class="block text-xs font-bold text-slate-700 mb-1">المدفوع عند التسجيل (د.ك)</label>
+              <input type="number" step="0.001" min="0" name="paidFees" value="0"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
             </div>
 
-            <div class="sm:col-span-2 lg:col-span-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
-              <div class="px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-extrabold text-emerald-900">
-                صافي القسط الشهري المستحق تلقائياً: <span id="net-monthly-preview" class="text-sm text-emerald-700">0.000 د.ك</span>
+            <div class="sm:col-span-2 lg:col-span-4 flex flex-wrap items-center justify-between gap-3 pt-2">
+              <div class="flex items-center gap-2">
+                <label class="text-xs font-bold text-slate-600">طريقة الدفع (في حال وجود دفعة قيد):</label>
+                <select name="paymentMethod" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white">
+                  <option value="نقدي">نقدي</option>
+                  <option value="كي نت (K-NET)">كي نت (K-NET)</option>
+                  <option value="تحويل بنكي">تحويل بنكي</option>
+                </select>
               </div>
               <button type="submit" class="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow transition flex items-center gap-2">
                 <i class="fa-solid fa-check"></i> حفظ بيانات الطالب
@@ -1937,17 +1793,13 @@
           </form>
         </div>
 
+        <!-- جدول الطلاب المسجلين -->
         <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
-            <h3 id="students-list-count" class="text-sm font-extrabold text-slate-800">قائمة الطلاب المسجلين (${state.cache.students.length})</h3>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <h3 class="text-sm font-extrabold text-slate-800">قائمة الطلاب المسجلين (${state.cache.students.length})</h3>
             <div class="flex flex-wrap items-center gap-2">
-              <select id="students-grade-filter" onchange="filterStudentsTable()"
-                class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs bg-white font-bold focus:border-blue-600 outline-none">
-                <option value="">جميع المراحل / الصفوف</option>
-                ${GRADES_LIST.map(g => `<option value="${g}">${g}</option>`).join('')}
-              </select>
-              <input type="text" id="students-search" oninput="filterStudentsTable()" placeholder="بحث فوري بالاسم أو الكود..."
-                class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs w-full sm:w-60 focus:border-blue-600 outline-none" />
+              <input type="text" id="students-search" oninput="filterStudentsTable()" placeholder="بحث بالاسم أو الكود أو الصف..."
+                class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs w-full sm:w-64 focus:border-blue-600 outline-none" />
               <button onclick="printStudentsTable()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold flex items-center gap-1.5">
                 <i class="fa-solid fa-print"></i> طباعة القائمة
               </button>
@@ -1962,11 +1814,1615 @@
                   <th class="p-3 font-extrabold">اسم الطالب</th>
                   <th class="p-3 font-extrabold">الصف</th>
                   <th class="p-3 font-extrabold">المنهج</th>
+                  <th class="p-3 font-extrabold">النظام / المسار</th>
                   <th class="p-3 font-extrabold">الباص</th>
-                  <th class="p-3 font-extrabold">القسط المتفق</th>
-                  <th class="p-3 font-extrabold">الخصم</th>
-                  <th class="p-3 font-extrabold">صافي القسط الشهري</th>
+                  <th class="p-3 font-extrabold">الإجمالي (د.ك)</th>
+                  <th class="p-3 font-extrabold">المدفوع (د.ك)</th>
+                  <th class="p-3 font-extrabold">المتبقي (د.ك)</th>
                   <th class="p-3 font-extrabold">إجراء</th>
                 </tr>
               </thead>
-              <tbody id="students-tbody"
+              <tbody id="students-tbody" class="divide-y divide-slate-100">
+                ${renderStudentsRowsHTML(state.cache.students)}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      handleStudentGradeChange();
+      toggleBusSelect('add');
+      document.getElementById('add-student-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const payload = Object.fromEntries(fd.entries());
+        setLoading(true, 'جاري تسجيل الطالب...');
+        try {
+          const res = await apiPost('addStudent', payload);
+          if (res.status === 'success') {
+            showToast(res.message, 'success');
+            if (res.receipt) showReceiptModal(res.receipt);
+            await renderStudents(container);
+          } else {
+            showToast(res.message, 'error');
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    function renderStudentsRowsHTML(rows) {
+      if (!rows.length) {
+        return `<tr><td colspan="10" class="p-6 text-center text-slate-400">لا توجد بيانات طلاب مسجلة حالياً</td></tr>`;
+      }
+      return rows.map(s => `
+        <tr class="hover:bg-slate-50/80 transition">
+          <td class="p-3 font-mono font-bold text-blue-700">${s['كود الطالب']}</td>
+          <td class="p-3 font-bold text-slate-800">${s['الاسم رباعي']}</td>
+          <td class="p-3">${s['المرحلة/الصف']}</td>
+          <td class="p-3">${curriculumBadgeHTML(getStudentCurriculum(s))}</td>
+          <td class="p-3">
+            ${s['نظام الثانوي'] && s['نظام الثانوي'] !== '-'
+              ? `<span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 font-semibold">${s['نظام الثانوي']} - ${s['المسار / الشعبة']}</span>`
+              : '<span class="text-slate-400">-</span>'}
+          </td>
+          <td class="p-3 font-semibold">${s['رقم الباص'] && s['رقم الباص'] !== 'بدون باص' ? escapeHTML(s['رقم الباص']) : '<span class="text-slate-400">لا يركب</span>'}</td>
+          <td class="p-3 font-bold">${Number(s['إجمالي المصروفات (د.ك)'] || 0).toFixed(3)}</td>
+          <td class="p-3 font-bold text-emerald-700">${Number(s['المصروفات المدفوعة (د.ك)'] || 0).toFixed(3)}</td>
+          <td class="p-3 font-bold ${Number(s['المتبقي (د.ك)'] || 0) > 0 ? 'text-rose-600' : 'text-slate-500'}">${Number(s['المتبقي (د.ك)'] || 0).toFixed(3)}</td>
+          <td class="p-3">
+            <button onclick="openEditStudent('${escapeHTML(s['كود الطالب'])}')" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 font-bold whitespace-nowrap">
+              <i class="fa-solid fa-pen-to-square ml-1"></i> تعديل
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function handleStudentGradeChange() {
+      const grade = document.getElementById('student-grade-select').value;
+      updateCurriculumHint('student');
+      const wrapper = document.getElementById('secondary-fields-wrapper');
+      if (SECONDARY_GRADES.includes(grade)) {
+        wrapper.classList.remove('hidden');
+        handleTrackSystemChange();
+      } else {
+        wrapper.classList.add('hidden');
+      }
+    }
+
+    function handleTrackSystemChange() {
+      const sys = document.getElementById('student-track-system').value;
+      const branchSelect = document.getElementById('student-track-branch');
+      const branches = TRACK_BRANCHES[sys] || [];
+      branchSelect.innerHTML = branches.map(b => `<option value="${b}">${b}</option>`).join('');
+    }
+
+    // ---- مكوّنات مشتركة: المنهج + الباص ----
+    function updateCurriculumHint(prefix, gradeOverride) {
+      const grade = gradeOverride || (document.getElementById('student-grade-select') || {}).value || '';
+      const cur = (document.getElementById(prefix + '-curriculum') || {}).value;
+      const box = document.getElementById(prefix + '-curriculum-hint');
+      if (!box) return;
+      const txt = curriculumHintText(grade, cur);
+      box.textContent = txt;
+      box.classList.toggle('hidden', !txt);
+    }
+
+    function busOptionsHTML(selected, excludeCode) {
+      if (!state.cache.buses.length) return '<option value="">لا توجد باصات مسجلة</option>';
+      return state.cache.buses.map(b => {
+        const n = b['رقم الباص'];
+        const cap = Number(b['السعة'] || 0);
+        const occ = state.cache.students.filter(x => x['رقم الباص'] === n && String(x['كود الطالب']) !== String(excludeCode || '')).length;
+        const full = cap > 0 && occ >= cap;
+        return `<option value="${escapeHTML(n)}" ${n === selected ? 'selected' : ''} ${full ? 'disabled' : ''}>${escapeHTML(n)} - ${escapeHTML(b['خط السير'] || b['اسم السائق'] || '')} (${occ}/${cap}${full ? ' - مكتمل' : ''})</option>`;
+      }).join('');
+    }
+
+    function busFieldsHTML(prefix, currentBus, excludeCode) {
+      const rides = currentBus && currentBus !== 'بدون باص';
+      return `
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">هل يركب الباص؟</label>
+          <select name="ridesBus" id="${prefix}-rides" onchange="toggleBusSelect('${prefix}')"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:border-blue-600 outline-none">
+            <option value="لا" ${rides ? '' : 'selected'}>لا</option>
+            <option value="نعم" ${rides ? 'selected' : ''}>نعم</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">رقم الباص</label>
+          <select name="busNumber" id="${prefix}-bus"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:border-blue-600 outline-none disabled:opacity-50 disabled:bg-slate-100">
+            ${busOptionsHTML(rides ? currentBus : '', excludeCode)}
+          </select>
+        </div>`;
+    }
+
+    function toggleBusSelect(prefix) {
+      const rides = document.getElementById(prefix + '-rides').value === 'نعم';
+      document.getElementById(prefix + '-bus').disabled = !rides;
+    }
+
+    // ---- نافذة تعديل بيانات الطالب بعد الحفظ ----
+    function openEditStudent(code) {
+      const s = state.cache.students.find(x => String(x['كود الطالب']) === String(code));
+      if (!s) return showToast('لم يتم العثور على الطالب', 'error');
+      const owner = isOwnerUser();
+      const curBus = s['رقم الباص'] || 'بدون باص';
+      const curr = getStudentCurriculum(s);
+      const total = Number(s['إجمالي المصروفات (د.ك)'] || 0);
+      const paid = Number(s['المصروفات المدفوعة (د.ك)'] || 0);
+      const hasTrack = s['نظام الثانوي'] && s['نظام الثانوي'] !== '-';
+
+      document.getElementById('edit-student-title').textContent = 'تعديل بيانات الطالب - ' + s['الاسم رباعي'];
+      document.getElementById('edit-student-body').innerHTML = `
+        <form id="edit-student-form" class="space-y-4" data-code="${escapeHTML(s['كود الطالب'])}" data-grade="${escapeHTML(s['المرحلة/الصف'])}" data-old-total="${total}" data-paid="${paid}">
+          <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <div><span class="text-slate-500">الكود:</span> <strong class="font-mono">${escapeHTML(s['كود الطالب'])}</strong></div>
+            <div><span class="text-slate-500">الصف:</span> <strong>${escapeHTML(s['المرحلة/الصف'])}</strong></div>
+            <div class="col-span-2"><span class="text-slate-500">النظام / المسار:</span> <strong>${hasTrack ? escapeHTML(s['نظام الثانوي'] + ' - ' + s['المسار / الشعبة']) : 'التعليم العام'}</strong></div>
+          </div>
+
+          <div class="p-4 rounded-2xl border border-indigo-200 bg-indigo-50/40 space-y-3">
+            <h4 class="text-xs font-extrabold text-indigo-900">المنهج الدراسي</h4>
+            <select name="curriculum" id="edit-curriculum" onchange="updateCurriculumHint('edit', '${escapeHTML(s['المرحلة/الصف'])}')"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:border-blue-600 outline-none">
+              <option value="عربي" ${curr === 'عربي' ? 'selected' : ''}>عربي</option>
+              <option value="لغات تجريبي" ${curr === 'لغات تجريبي' ? 'selected' : ''}>لغات تجريبي (علوم ورياضيات بالإنجليزية)</option>
+            </select>
+            <div id="edit-curriculum-hint" class="hidden text-[11px] font-bold text-indigo-800"></div>
+            <p class="text-[11px] text-slate-500">تغيير المنهج يؤثر على مواد الدرجات القادمة فقط؛ الشهادات المرصودة سابقاً تبقى كما هي.</p>
+          </div>
+
+          <div class="p-4 rounded-2xl border border-amber-200 bg-amber-50/40 space-y-3">
+            <h4 class="text-xs font-extrabold text-amber-900"><i class="fa-solid fa-bus ml-1"></i> النقل بالباص</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              ${busFieldsHTML('edit', curBus, s['كود الطالب'])}
+            </div>
+            ${owner ? '' : '<p class="text-[11px] text-amber-800 font-bold">تنبيه: تغيير الباص لا يعدّل المصروفات تلقائياً. إن لزم تعديل المبلغ فيتم ذلك بواسطة المالك.</p>'}
+          </div>
+
+          <div class="p-4 rounded-2xl border border-rose-200 bg-rose-50/40 space-y-3">
+            <h4 class="text-xs font-extrabold text-rose-900"><i class="fa-solid fa-coins ml-1"></i> المصروفات ${owner ? '' : '<span class="text-[10px] font-bold text-slate-500">(للعرض فقط - التعديل للمالك)</span>'}</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">إجمالي المصروفات (د.ك)</label>
+                <input type="number" step="0.001" min="0" id="edit-total" value="${total.toFixed(3)}" ${owner ? '' : 'disabled'}
+                  oninput="onEditTotalInput()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-blue-600 outline-none disabled:bg-slate-100 disabled:text-slate-500" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">المدفوع (د.ك)</label>
+                <div class="px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 font-bold text-emerald-700">${paid.toFixed(3)}</div>
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">المتبقي بعد التعديل (د.ك)</label>
+                <div id="edit-remaining" class="px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 font-bold text-rose-600">${Math.max(0, total - paid).toFixed(3)}</div>
+              </div>
+            </div>
+            <div id="edit-reason-wrap" class="hidden">
+              <label class="block text-xs font-bold text-slate-700 mb-1">سبب تعديل المبلغ * (يُسجَّل في سجل التدقيق)</label>
+              <input type="text" id="edit-reason" maxlength="200" placeholder="مثال: إضافة اشتراك الباص من بداية الفصل / خصم أخوة"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+            <p id="edit-total-warn" class="hidden text-[11px] font-bold text-rose-700"></p>
+          </div>
+
+          <div class="flex justify-end gap-2 pt-1">
+            <button type="button" onclick="closeEditStudent()" class="px-5 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold">إلغاء</button>
+            <button type="submit" id="edit-save-btn" class="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow flex items-center gap-2">
+              <i class="fa-solid fa-floppy-disk"></i> حفظ التعديلات
+            </button>
+          </div>
+
+          <div>
+            <h4 class="text-xs font-extrabold text-slate-700 mb-2">آخر التعديلات على هذا الطالب</h4>
+            <div id="edit-audit-box" class="text-[11px] text-slate-500">جاري التحميل...</div>
+          </div>
+        </form>`;
+
+      document.getElementById('edit-student-modal').classList.remove('hidden');
+      toggleBusSelect('edit');
+      updateCurriculumHint('edit', s['المرحلة/الصف']);
+      document.getElementById('edit-student-form').addEventListener('submit', submitEditStudent);
+      loadStudentAudit(s['كود الطالب']);
+    }
+
+    function closeEditStudent() {
+      document.getElementById('edit-student-modal').classList.add('hidden');
+      document.getElementById('edit-student-body').innerHTML = '';
+    }
+
+    function onEditTotalInput() {
+      const form = document.getElementById('edit-student-form');
+      const oldTotal = Number(form.dataset.oldTotal);
+      const paid = Number(form.dataset.paid);
+      const raw = document.getElementById('edit-total').value;
+      const t = Number(raw);
+      const changed = raw !== '' && isFinite(t) && Math.abs(t - oldTotal) > 0.0004;
+      document.getElementById('edit-reason-wrap').classList.toggle('hidden', !changed);
+      document.getElementById('edit-remaining').textContent = (isFinite(t) ? Math.max(0, t - paid) : 0).toFixed(3);
+      const warn = document.getElementById('edit-total-warn');
+      if (changed && t < paid) {
+        warn.textContent = 'المبلغ أقل من المدفوع فعلياً (' + paid.toFixed(3) + ' د.ك) ولن يُقبل الحفظ.';
+        warn.classList.remove('hidden');
+      } else {
+        warn.classList.add('hidden');
+      }
+    }
+
+    async function submitEditStudent(e) {
+      e.preventDefault();
+      const form = e.target;
+      const payload = {
+        studentId: form.dataset.code,
+        curriculum: document.getElementById('edit-curriculum').value,
+        ridesBus: document.getElementById('edit-rides').value
+      };
+      if (payload.ridesBus === 'نعم') payload.busNumber = document.getElementById('edit-bus').value;
+
+      // المبلغ يُرسل للمالك فقط وعند وجود تغيير فعلي؛ والخادم يتحقق من الصلاحية مرة أخرى
+      if (isOwnerUser()) {
+        const t = document.getElementById('edit-total').value;
+        const oldTotal = Number(form.dataset.oldTotal);
+        if (t !== '' && Math.abs(Number(t) - oldTotal) > 0.0004) {
+          payload.totalFees = t;
+          payload.reason = document.getElementById('edit-reason').value.trim();
+          if (!payload.reason) return showToast('يرجى كتابة سبب تعديل المبلغ', 'warning');
+        }
+      }
+
+      setLoading(true, 'جاري حفظ التعديلات...');
+      try {
+        const res = await apiPost('updateStudent', payload);
+        if (res.status === 'success') {
+          showToast(res.message, res.changed && res.changed.length ? 'success' : 'info');
+          closeEditStudent();
+          refreshCurrentSection();
+        } else {
+          showToast(res.message || 'تعذر حفظ التعديلات', 'error');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function loadStudentAudit(code) {
+      const box = document.getElementById('edit-audit-box');
+      try {
+        const res = await apiGet({ action: 'getStudentAudit', studentId: code });
+        const rows = (res && res.rows) || [];
+        if (!box) return;
+        box.innerHTML = rows.length ? `
+          <div class="overflow-x-auto"><table class="w-full text-right border-collapse">
+            <thead><tr class="text-slate-600 border-b border-slate-200"><th class="py-1.5">الوقت</th><th>المستخدم</th><th>الحقل</th><th>من</th><th>إلى</th><th>السبب</th></tr></thead>
+            <tbody class="divide-y divide-slate-100">${rows.map(a => `
+              <tr><td class="py-1.5">${escapeHTML(a['التاريخ والوقت'])}</td><td>${escapeHTML(a['المستخدم'])}</td><td class="font-bold text-slate-700">${escapeHTML(a['الحقل'])}</td><td>${escapeHTML(a['القيمة القديمة'])}</td><td class="font-bold text-slate-800">${escapeHTML(a['القيمة الجديدة'])}</td><td>${escapeHTML(a['السبب'])}</td></tr>`).join('')}
+            </tbody></table></div>` : 'لا توجد تعديلات سابقة.';
+      } catch (_) {
+        if (box) box.textContent = 'تعذر تحميل سجل التعديلات (قد يحتاج الخادم إلى تحديث).';
+      }
+    }
+
+    function filterStudentsTable() {
+      const q = document.getElementById('students-search').value.trim().toLowerCase();
+      const filtered = state.cache.students.filter(s =>
+        String(s['كود الطالب']).toLowerCase().includes(q) ||
+        String(s['الاسم رباعي']).toLowerCase().includes(q) ||
+        String(s['المرحلة/الصف']).toLowerCase().includes(q) ||
+        String(s['المسار / الشعبة']).toLowerCase().includes(q) ||
+        getStudentCurriculum(s).includes(q)
+      );
+      document.getElementById('students-tbody').innerHTML = renderStudentsRowsHTML(filtered);
+    }
+
+    function printStudentsTable() {
+      const rows = state.cache.students;
+      const html = `
+        <div dir="rtl" class="font-sans">
+          <div class="text-center border-b-2 border-slate-800 pb-4 mb-4">
+            <h2 class="text-xl font-extrabold">كشف الطلاب المقيدين بالمدرسة</h2>
+            <p class="text-xs text-slate-600 mt-1">تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')} | العملة: الدينار الكويتي (د.ك)</p>
+          </div>
+          <table class="w-full text-right border-collapse text-xs border border-slate-400">
+            <thead>
+              <tr class="bg-slate-200">
+                <th class="border border-slate-400 p-2">الكود</th>
+                <th class="border border-slate-400 p-2">الاسم رباعي</th>
+                <th class="border border-slate-400 p-2">الصف</th>
+                <th class="border border-slate-400 p-2">المنهج</th>
+                <th class="border border-slate-400 p-2">النظام / المسار</th>
+                <th class="border border-slate-400 p-2">الباص</th>
+                <th class="border border-slate-400 p-2">الإجمالي</th>
+                <th class="border border-slate-400 p-2">المدفوع</th>
+                <th class="border border-slate-400 p-2">المتبقي</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map(s => `
+                <tr>
+                  <td class="border border-slate-400 p-2">${s['كود الطالب']}</td>
+                  <td class="border border-slate-400 p-2 font-bold">${s['الاسم رباعي']}</td>
+                  <td class="border border-slate-400 p-2">${s['المرحلة/الصف']}</td>
+                  <td class="border border-slate-400 p-2">${getStudentCurriculum(s)}</td>
+                  <td class="border border-slate-400 p-2">${s['نظام الثانوي']} / ${s['المسار / الشعبة']}</td>
+                  <td class="border border-slate-400 p-2">${s['رقم الباص']}</td>
+                  <td class="border border-slate-400 p-2">${Number(s['إجمالي المصروفات (د.ك)'] || 0).toFixed(3)}</td>
+                  <td class="border border-slate-400 p-2">${Number(s['المصروفات المدفوعة (د.ك)'] || 0).toFixed(3)}</td>
+                  <td class="border border-slate-400 p-2">${Number(s['المتبقي (د.ك)'] || 0).toFixed(3)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+      triggerPrint(html);
+    }
+
+    // -------------------------------------------------------------------------
+    // ج. تحصيل المصروفات والإيصالات (STUDENT FEES & RECEIPTS)
+    // -------------------------------------------------------------------------
+    async function renderStudentFees(container) {
+      const recRes = await apiGet({ action: 'getData', sheet: 'RECEIPTS' });
+      state.cache.receipts = recRes.rows || [];
+
+      container.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- نموذج التحصيل -->
+          <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-hand-holding-dollar text-emerald-600"></i> تحصيل دفعة مصروفات
+            </h3>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">كود الطالب *</label>
+              <div class="flex gap-2">
+                <input type="text" id="fee-student-code" placeholder="مثال: STD-1001"
+                  class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono focus:border-blue-600 outline-none" />
+                <button type="button" onclick="lookupStudentForFee()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold">
+                  <i class="fa-solid fa-magnifying-glass"></i> بحث
+                </button>
+              </div>
+            </div>
+
+            <!-- بطاقة بيانات الطالب المسترجعة -->
+            <div id="fee-student-card" class="hidden p-4 rounded-2xl bg-blue-50/80 border border-blue-200 text-xs space-y-2">
+              <div class="flex justify-between">
+                <span class="text-slate-500">اسم الطالب:</span>
+                <span id="fee-st-name" class="font-extrabold text-slate-800"></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-500">الصف / المسار:</span>
+                <span id="fee-st-grade" class="font-bold text-blue-800"></span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 pt-2 border-t border-blue-200/70 text-center">
+                <div class="bg-white p-2 rounded-xl">
+                  <p class="text-[10px] text-slate-400">الإجمالي</p>
+                  <p id="fee-st-total" class="font-extrabold text-slate-800 mt-0.5">0.000</p>
+                </div>
+                <div class="bg-white p-2 rounded-xl">
+                  <p class="text-[10px] text-slate-400">المدفوع</p>
+                  <p id="fee-st-paid" class="font-extrabold text-emerald-700 mt-0.5">0.000</p>
+                </div>
+                <div class="bg-white p-2 rounded-xl">
+                  <p class="text-[10px] text-slate-400">المتبقي</p>
+                  <p id="fee-st-rem" class="font-extrabold text-rose-600 mt-0.5">0.000</p>
+                </div>
+              </div>
+            </div>
+
+            <form id="pay-installment-form" class="space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">المبلغ المدفوع (د.ك) *</label>
+                <input type="number" step="0.001" min="0.001" id="fee-amount" required placeholder="0.000"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:border-emerald-600 outline-none" />
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">بند الدفعة / الشهر</label>
+                  <input type="text" id="fee-label" value="قسط شهري"
+                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">طريقة الدفع</label>
+                  <select id="fee-method" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                    <option value="نقدي">نقدي</option>
+                    <option value="كي نت (K-NET)">كي نت (K-NET)</option>
+                    <option value="تحويل بنكي">تحويل بنكي</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">ملاحظات</label>
+                <input type="text" id="fee-notes" placeholder="ملاحظات إضافية على الإيصال..."
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+              </div>
+
+              <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-receipt"></i> اعتماد السداد وإصدار الإيصال
+              </button>
+            </form>
+          </div>
+
+          <!-- سجل الإيصالات -->
+          <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+            <h3 class="text-sm font-extrabold text-slate-800 mb-4">سجل إيصالات السداد (${state.cache.receipts.length})</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-right border-collapse text-xs">
+                <thead>
+                  <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                    <th class="p-3 font-extrabold">رقم الإيصال</th>
+                    <th class="p-3 font-extrabold">التاريخ</th>
+                    <th class="p-3 font-extrabold">الطالب</th>
+                    <th class="p-3 font-extrabold">البند</th>
+                    <th class="p-3 font-extrabold">المدفوع (د.ك)</th>
+                    <th class="p-3 font-extrabold">إجراء</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  ${state.cache.receipts.length ? state.cache.receipts.map((r, idx) => `
+                    <tr class="hover:bg-slate-50">
+                      <td class="p-3 font-mono font-bold text-blue-700">${r['رقم الإيصال']}</td>
+                      <td class="p-3">${r['التاريخ']}</td>
+                      <td class="p-3 font-bold">${r['اسم الطالب']}<br><span class="text-[10px] text-slate-400 font-mono">${r['كود الطالب']}</span></td>
+                      <td class="p-3">${r['بند الدفعة/الشهر']}</td>
+                      <td class="p-3 font-extrabold text-emerald-700">${Number(r['المبلغ المدفوع (د.ك)'] || 0).toFixed(3)}</td>
+                      <td class="p-3">
+                        <button onclick="openReceiptByIndex(${idx})" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold">
+                          <i class="fa-solid fa-print ml-1"></i> طباعة
+                        </button>
+                      </td>
+                    </tr>
+                  `).join('') : `<tr><td colspan="6" class="p-6 text-center text-slate-400">لا توجد إيصالات مسجلة</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('pay-installment-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const studentId = document.getElementById('fee-student-code').value.trim();
+        const amount = Number(document.getElementById('fee-amount').value);
+        if (!studentId || amount <= 0) {
+          showToast('يرجى إدخال كود الطالب ومبلغ صحيح', 'warning');
+          return;
+        }
+        setLoading(true, 'جاري تسجيل الدفعة وإصدار الإيصال...');
+        try {
+          const res = await apiPost('payStudentInstallment', {
+            studentId,
+            amount,
+            installmentLabel: document.getElementById('fee-label').value.trim(),
+            paymentMethod: document.getElementById('fee-method').value,
+            notes: document.getElementById('fee-notes').value.trim()
+          });
+          if (res.status === 'success') {
+            showToast(res.message, 'success');
+            if (res.receipt) showReceiptModal(res.receipt);
+            await renderStudentFees(container);
+          } else {
+            showToast(res.message, 'error');
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    async function lookupStudentForFee() {
+      const code = document.getElementById('fee-student-code').value.trim();
+      if (!code) return showToast('أدخل كود الطالب أولاً', 'warning');
+      setLoading(true, 'جاري جلب بيانات الطالب...');
+      try {
+        const res = await apiGet({ action: 'lookupEntity', code });
+        if (res.status === 'success' && res.student) {
+          const st = res.student;
+          document.getElementById('fee-student-card').classList.remove('hidden');
+          document.getElementById('fee-st-name').textContent = st.name;
+          document.getElementById('fee-st-grade').textContent = st.grade + (st.trackBranch && st.trackBranch !== '-' ? ' (' + st.trackBranch + ')' : '');
+          document.getElementById('fee-st-total').textContent = st.totalFees.toFixed(3);
+          document.getElementById('fee-st-paid').textContent = st.paidFees.toFixed(3);
+          document.getElementById('fee-st-rem').textContent = st.remaining.toFixed(3);
+          showToast('تم جلب بيانات الطالب بنجاح', 'success');
+        } else {
+          document.getElementById('fee-student-card').classList.add('hidden');
+          showToast(res.message || 'الطالب غير موجود', 'error');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function openReceiptByIndex(idx) {
+      const r = state.cache.receipts[idx];
+      if (!r) return;
+      showReceiptModal({
+        receiptNo: r['رقم الإيصال'],
+        date: r['التاريخ'],
+        studentId: r['كود الطالب'],
+        studentName: r['اسم الطالب'],
+        grade: r['الصف'],
+        installmentLabel: r['بند الدفعة/الشهر'],
+        paymentMethod: r['طريقة الدفع'],
+        amountPaid: Number(r['المبلغ المدفوع (د.ك)'] || 0),
+        remaining: Number(r['المتبقي بعد السداد (د.ك)'] || 0),
+        notes: r['ملاحظات']
+      });
+    }
+
+    function showReceiptModal(receipt) {
+      const html = `
+        <div dir="rtl" class="border-2 border-slate-800 rounded-2xl p-6 bg-white text-slate-900">
+          <div class="flex items-center justify-between border-b-2 border-slate-200 pb-4 mb-5">
+            <div>
+              <h2 class="text-lg font-extrabold text-blue-900">المدرسة المصغرة - الإدارة المالية</h2>
+              <p class="text-xs text-slate-500">إيصال استلام نقدية / مصروفات دراسية</p>
+            </div>
+            <div class="text-left">
+              <span class="inline-block px-3 py-1 rounded-lg bg-blue-900 text-white font-mono text-xs font-bold">${receipt.receiptNo}</span>
+              <p class="text-xs text-slate-500 mt-1">التاريخ: ${receipt.date}</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs mb-5 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div><span class="text-slate-500">اسم الطالب:</span> <strong class="text-slate-900">${receipt.studentName}</strong></div>
+            <div><span class="text-slate-500">كود الطالب:</span> <strong class="font-mono text-blue-800">${receipt.studentId}</strong></div>
+            <div><span class="text-slate-500">الصف الدراسي:</span> <strong>${receipt.grade}</strong></div>
+            <div><span class="text-slate-500">طريقة السداد:</span> <strong>${receipt.paymentMethod}</strong></div>
+          </div>
+
+          <table class="w-full text-right border-collapse text-xs mb-5">
+            <thead>
+              <tr class="bg-slate-800 text-white">
+                <th class="p-3 rounded-tr-lg">بيان الدفعة</th>
+                <th class="p-3">المبلغ المدفوع</th>
+                <th class="p-3 rounded-tl-lg">الرصيد المتبقي</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-300">
+                <td class="p-3 font-bold">${receipt.installmentLabel}</td>
+                <td class="p-3 font-extrabold text-emerald-700 text-sm">${formatKWD(receipt.amountPaid)}</td>
+                <td class="p-3 font-extrabold text-rose-700">${formatKWD(receipt.remaining)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="text-xs text-slate-600 mb-6"><strong>ملاحظات:</strong> ${receipt.notes || '-'}</p>
+
+          <div class="flex justify-between items-center pt-4 border-t border-dashed border-slate-300 text-xs text-slate-600">
+            <div>توقيع أمين الصندوق: ..........................</div>
+            <div>ختم المدرسة الرسمي</div>
+          </div>
+        </div>
+      `;
+      openPreviewModal('إيصال سداد مصروفات دراسية', html);
+    }
+
+    // -------------------------------------------------------------------------
+    // د. الدرجات والشهادات (GRADES & CERTIFICATES)
+    // -------------------------------------------------------------------------
+    let activeGradeStudent = null;
+
+    async function renderGrades(container) {
+      const grRes = await apiGet({ action: 'getData', sheet: 'GRADES' });
+      state.cache.grades = grRes.rows || [];
+      activeGradeStudent = null;
+
+      container.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- نموذج رصد الدرجات -->
+          <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-pen-to-square text-blue-600"></i> رصد درجات طالب حسب المسار
+            </h3>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">كود الطالب *</label>
+              <div class="flex gap-2">
+                <input type="text" id="grade-student-code" placeholder="مثال: STD-1001 أو STD-1003"
+                  class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono focus:border-blue-600 outline-none" />
+                <button type="button" onclick="lookupStudentForGrades()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold">
+                  <i class="fa-solid fa-magnifying-glass"></i> جلب المواد
+                </button>
+              </div>
+            </div>
+
+            <div id="grade-student-info" class="hidden p-3.5 rounded-2xl bg-indigo-50 border border-indigo-200 text-xs space-y-1">
+              <p class="font-extrabold text-indigo-950" id="gr-st-name"></p>
+              <p class="text-indigo-800" id="gr-st-track"></p>
+              <p class="text-[11px] text-indigo-600 font-semibold" id="gr-st-note"></p>
+            </div>
+
+            <form id="add-grades-form" class="hidden space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">الشهر الدراسي *</label>
+                <select id="grade-month" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                  ${MONTHS_LIST.map(m => `<option value="${m}" ${m === 'أكتوبر' ? 'selected' : ''}>${m}</option>`).join('')}
+                </select>
+              </div>
+
+              <!-- حقول المواد الديناميكية -->
+              <div id="dynamic-subjects-fields" class="space-y-2.5 pt-1"></div>
+
+              <div class="p-3 rounded-xl bg-slate-100 flex items-center justify-between text-xs font-extrabold">
+                <span>المجموع المباشر:</span>
+                <span id="live-grade-total" class="text-blue-700">0 / 0</span>
+              </div>
+
+              <button type="submit" class="w-full py-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow transition">
+                <i class="fa-solid fa-floppy-disk ml-1"></i> اعتماد ورصد الدرجات
+              </button>
+            </form>
+          </div>
+
+          <!-- سجل الدرجات والشهادات -->
+          <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+            <h3 class="text-sm font-extrabold text-slate-800 mb-4">سجل الدرجات والشهادات الشهرية (${state.cache.grades.length})</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-right border-collapse text-xs">
+                <thead>
+                  <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                    <th class="p-3 font-extrabold">الطالب</th>
+                    <th class="p-3 font-extrabold">المسار / الشعبة</th>
+                    <th class="p-3 font-extrabold">الشهر</th>
+                    <th class="p-3 font-extrabold">المجموع</th>
+                    <th class="p-3 font-extrabold">النسبة</th>
+                    <th class="p-3 font-extrabold">الشهادة</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  ${state.cache.grades.length ? state.cache.grades.map(g => `
+                    <tr class="hover:bg-slate-50">
+                      <td class="p-3 font-bold">${g['اسم الطالب']}<br><span class="text-[10px] font-mono text-slate-400">${g['كود الطالب']} - ${g['الصف']}</span></td>
+                      <td class="p-3">${g['نظام الثانوي'] !== '-' ? `${g['نظام الثانوي']} (${g['المسار / الشعبة']})` : g['الصف']} ${curriculumBadgeHTML(g['المنهج'] || 'عربي')}</td>
+                      <td class="p-3 font-bold">${g['الشهر']}</td>
+                      <td class="p-3 font-extrabold text-blue-700">${g['المجموع الكلي']} / ${g['النهاية العظمى']}</td>
+                      <td class="p-3 font-bold text-emerald-700">${g['النسبة %']}</td>
+                      <td class="p-3">
+                        <button onclick="openStudentCertificate('${g['كود الطالب']}', '${g['الشهر']}')" class="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold">
+                          <i class="fa-solid fa-certificate ml-1"></i> الشهادة
+                        </button>
+                      </td>
+                    </tr>
+                  `).join('') : `<tr><td colspan="6" class="p-6 text-center text-slate-400">لا توجد درجات مرصودة بعد</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('add-grades-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!activeGradeStudent) return;
+        const scores = {};
+        activeGradeStudent.trackConfig.subjects.forEach(sub => {
+          const inp = document.getElementById('sub-score-' + sub.key);
+          scores[sub.key] = Number(inp ? inp.value : 0);
+        });
+
+        setLoading(true, 'جاري حفظ الدرجات...');
+        try {
+          const res = await apiPost('addGrades', {
+            studentId: activeGradeStudent.code,
+            studentName: activeGradeStudent.name,
+            grade: activeGradeStudent.grade,
+            trackSystem: activeGradeStudent.trackSystem,
+            trackBranch: activeGradeStudent.trackBranch,
+            curriculum: activeGradeStudent.curriculum,
+            month: document.getElementById('grade-month').value,
+            scores
+          });
+          if (res.status === 'success') {
+            showToast(`${res.message} (${res.total}/${res.maxTotal} - ${res.percentage}%)`, 'success');
+            await renderGrades(container);
+          } else {
+            showToast(res.message, 'error');
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    async function lookupStudentForGrades() {
+      const code = document.getElementById('grade-student-code').value.trim();
+      if (!code) return showToast('يرجى إدخال كود الطالب', 'warning');
+      setLoading(true, 'جاري تحديد مواد المسار الدراسي...');
+      try {
+        const res = await apiGet({ action: 'lookupEntity', code });
+        if (res.status === 'success' && res.student) {
+          activeGradeStudent = res.student;
+          const cfg = res.student.trackConfig || getTrackSubjectsConfig(res.student.grade, res.student.trackSystem, res.student.trackBranch, res.student.curriculum);
+          activeGradeStudent.trackConfig = cfg;
+
+          document.getElementById('grade-student-info').classList.remove('hidden');
+          document.getElementById('gr-st-name').textContent = `${res.student.name} (${res.student.grade})`;
+          document.getElementById('gr-st-track').textContent = (res.student.trackSystem !== '-' ? `${res.student.trackSystem} - ${res.student.trackBranch}` : 'التعليم العام') + ' | المنهج: ' + (res.student.curriculum || 'عربي');
+          document.getElementById('gr-st-note').textContent = cfg.note;
+
+          const fieldsDiv = document.getElementById('dynamic-subjects-fields');
+          fieldsDiv.innerHTML = cfg.subjects.map(sub => `
+            <div class="flex items-center justify-between gap-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+              <label class="text-xs font-bold text-slate-700 flex-1">${sub.label} ${sub.lang === 'EN' ? '<span class="px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 text-[10px] font-extrabold">EN</span>' : ''} <span class="text-slate-400">(العظمى: ${sub.max})</span></label>
+              <input type="number" min="0" max="${sub.max}" step="0.5" value="0" id="sub-score-${sub.key}" oninput="updateLiveGradeTotal()"
+                class="w-24 px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-extrabold text-center focus:border-blue-600 outline-none" />
+            </div>
+          `).join('');
+
+          document.getElementById('add-grades-form').classList.remove('hidden');
+          updateLiveGradeTotal();
+          showToast('تم تحميل مواد المسار بنجاح', 'success');
+        } else {
+          showToast(res.message || 'لم يتم العثور على الطالب', 'error');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function updateLiveGradeTotal() {
+      if (!activeGradeStudent) return;
+      const cfg = activeGradeStudent.trackConfig;
+      let sum = 0;
+      cfg.subjects.forEach(sub => {
+        const val = Number(document.getElementById('sub-score-' + sub.key)?.value || 0);
+        sum += val;
+      });
+      document.getElementById('live-grade-total').textContent = `${sum} / ${cfg.maxTotal}`;
+    }
+
+    async function openStudentCertificate(studentId, month) {
+      setLoading(true, 'جاري تجهيز الشهادة الرسمية...');
+      try {
+        const res = await apiGet({ action: 'getStudentCertificate', studentId, month });
+        if (res.status !== 'success') return showToast(res.message, 'error');
+        const c = res.certificate;
+
+        const html = `
+          <div dir="rtl" class="border-4 border-double border-blue-900 rounded-2xl p-6 bg-white text-slate-900">
+            <div class="text-center border-b-2 border-blue-900/20 pb-4 mb-5">
+              <p class="text-xs font-bold text-blue-700">دولة الكويت - التعليم الخاص</p>
+              <h2 class="text-xl font-extrabold text-slate-900 mt-1">شهادة التقييم الأكاديمي الشهري</h2>
+              <p class="text-xs text-slate-500 mt-1">عن شهر: <strong class="text-slate-800">${c.month}</strong></p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-xs bg-blue-50/60 p-4 rounded-xl border border-blue-200 mb-5">
+              <div><span class="text-slate-500">اسم الطالب:</span> <strong>${c.studentName}</strong></div>
+              <div><span class="text-slate-500">كود الطالب:</span> <strong class="font-mono">${c.studentId}</strong></div>
+              <div><span class="text-slate-500">الصف الدراسي:</span> <strong>${c.grade}</strong></div>
+              <div><span class="text-slate-500">النظام / المسار:</span> <strong>${c.trackSystem} ${c.trackBranch !== '-' ? '- ' + c.trackBranch : ''}</strong></div>
+              <div><span class="text-slate-500">المنهج الدراسي:</span> <strong>${c.curriculum === 'لغات تجريبي' ? 'لغات تجريبي (Experimental Languages)' : 'عربي'}</strong></div>
+            </div>
+
+            <table class="w-full text-right border-collapse text-xs mb-5 border border-slate-300">
+              <thead>
+                <tr class="bg-blue-900 text-white">
+                  <th class="p-2.5 border border-blue-800">المادة الدراسية</th>
+                  <th class="p-2.5 border border-blue-800 text-center">النهاية العظمى</th>
+                  <th class="p-2.5 border border-blue-800 text-center">الدرجة المستحقة</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${c.subjects.map(s => `
+                  <tr>
+                    <td class="p-2.5 border border-slate-300 font-bold">${s.label}</td>
+                    <td class="p-2.5 border border-slate-300 text-center">${s.max}</td>
+                    <td class="p-2.5 border border-slate-300 text-center font-extrabold text-blue-800">${s.score}</td>
+                  </tr>
+                `).join('')}
+                <tr class="bg-slate-100 font-extrabold">
+                  <td class="p-3 border border-slate-300">المجموع الكلي</td>
+                  <td class="p-3 border border-slate-300 text-center">${c.maxTotal}</td>
+                  <td class="p-3 border border-slate-300 text-center text-emerald-700 text-sm">${c.total} (${c.percentage})</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-center mb-6">
+              <span class="text-xs text-slate-600">التقدير العام للطالب: </span>
+              <strong class="text-sm font-extrabold text-amber-900">${c.evaluation}</strong>
+            </div>
+
+            <div class="flex justify-between text-xs text-slate-600 pt-3">
+              <div>توقيع المرشد الأكاديمي: ........................</div>
+              <div>يعتمد، مدير المدرسة: ........................</div>
+            </div>
+          </div>
+        `;
+        openPreviewModal('شهادة درجات الطالب - ' + c.studentName, html);
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // هـ. شؤون الموظفين والرواتب (STAFF)
+    // -------------------------------------------------------------------------
+    async function renderStaff(container) {
+      const res = await apiGet({ action: 'getData', sheet: 'STAFF' });
+      state.cache.staff = res.rows || [];
+
+      container.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-user-tie text-indigo-600"></i> إضافة مدرس أو موظف جديد
+          </h3>
+          <form id="add-staff-form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الكامل *</label>
+              <input type="text" name="name" required placeholder="مثال: د. طارق عبد السلام"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">الصفة الوظيفية</label>
+              <select name="personType" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                <option value="مدرس">مدرس</option>
+                <option value="عامل">عامل / إداري</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">رقم الهاتف</label>
+              <input type="tel" name="phone" placeholder="99887766"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">التخصص / المسمى</label>
+              <input type="text" name="roleTitle" placeholder="فيزياء / مشرف / محاسب"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">الصفوف / القسم</label>
+              <input type="text" name="department" placeholder="المرحلة الثانوية"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">الراتب الأساسي (د.ك)</label>
+              <input type="number" step="0.001" min="0" name="baseSalary" id="stf-base" oninput="calcStaffNetPreview()" value="0"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">البدلات</label>
+                <input type="number" step="0.001" min="0" name="allowances" id="stf-allow" oninput="calcStaffNetPreview()" value="0"
+                  class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">الخصومات</label>
+                <input type="number" step="0.001" min="0" name="deductions" id="stf-ded" oninput="calcStaffNetPreview()" value="0"
+                  class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+              </div>
+            </div>
+
+            <div class="sm:col-span-2 lg:col-span-4 flex items-center justify-between pt-2 border-t border-slate-100">
+              <div class="text-xs font-bold text-slate-600">
+                صافي الراتب المستحق: <span id="stf-net-preview" class="text-sm font-extrabold text-emerald-700">0.000 د.ك</span>
+              </div>
+              <button type="submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow">
+                <i class="fa-solid fa-plus ml-1"></i> حفظ بيانات الموظف
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4">كشف الموظفين والرواتب (${state.cache.staff.length})</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                  <th class="p-3 font-extrabold">الكود</th>
+                  <th class="p-3 font-extrabold">الاسم</th>
+                  <th class="p-3 font-extrabold">النوع</th>
+                  <th class="p-3 font-extrabold">التخصص / القسم</th>
+                  <th class="p-3 font-extrabold">الأساسي</th>
+                  <th class="p-3 font-extrabold">البدلات</th>
+                  <th class="p-3 font-extrabold">الخصومات</th>
+                  <th class="p-3 font-extrabold">صافي الراتب (د.ك)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${state.cache.staff.length ? state.cache.staff.map(st => `
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-bold text-indigo-700">${st['كود الموظف']}</td>
+                    <td class="p-3 font-bold">${st['الاسم الكامل']}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 rounded-md bg-slate-100 font-bold">${st['النوع (مدرس/عامل)']}</span></td>
+                    <td class="p-3">${st['التخصص أو المسمى الوظيفي']} (${st['الصفوف/القسم']})</td>
+                    <td class="p-3">${Number(st['الراتب الأساسي (د.ك)'] || 0).toFixed(3)}</td>
+                    <td class="p-3 text-emerald-700">+${Number(st['البدلات (د.ك)'] || 0).toFixed(3)}</td>
+                    <td class="p-3 text-rose-600">-${Number(st['الخصومات (د.ك)'] || 0).toFixed(3)}</td>
+                    <td class="p-3 font-extrabold text-slate-900">${Number(st['صافي الراتب (د.ك)'] || 0).toFixed(3)}</td>
+                  </tr>
+                `).join('') : `<tr><td colspan="8" class="p-6 text-center text-slate-400">لا يوجد موظفون مسجلون</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('add-staff-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = Object.fromEntries(new FormData(e.target).entries());
+        setLoading(true, 'جاري حفظ بيانات الموظف...');
+        try {
+          const res = await apiPost('addStaff', payload);
+          if (res.status === 'success') {
+            showToast(res.message, 'success');
+            await renderStaff(container);
+          } else {
+            showToast(res.message, 'error');
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    function calcStaffNetPreview() {
+      const b = Number(document.getElementById('stf-base')?.value || 0);
+      const a = Number(document.getElementById('stf-allow')?.value || 0);
+      const d = Number(document.getElementById('stf-ded')?.value || 0);
+      document.getElementById('stf-net-preview').textContent = formatKWD(b + a - d);
+    }
+
+    // -------------------------------------------------------------------------
+    // و. الحضور والانصراف (ATTENDANCE)
+    // -------------------------------------------------------------------------
+    async function renderAttendance(container) {
+      const res = await apiGet({ action: 'getData', sheet: 'ATTENDANCE' });
+      state.cache.attendance = res.rows || [];
+
+      container.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-fingerprint text-blue-600"></i> تسجيل حركة حضور / انصراف بالكود السريع
+          </h3>
+          <form id="attendance-form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">كود الطالب أو الموظف</label>
+              <div class="flex gap-1.5">
+                <input type="text" id="att-code" name="code" placeholder="STD-1001 / STF-101"
+                  class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs font-mono focus:border-blue-600 outline-none" />
+                <button type="button" onclick="lookupForAttendance()" class="px-3 py-2.5 rounded-xl bg-slate-800 text-white text-xs font-bold">
+                  <i class="fa-solid fa-search"></i>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الكامل *</label>
+              <input type="text" id="att-name" name="name" required placeholder="يُملأ تلقائياً بالكود"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">الفئة</label>
+              <select id="att-type" name="personType" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                <option value="طالب">طالب</option>
+                <option value="مدرس">مدرس</option>
+                <option value="عامل">عامل</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">الحالة</label>
+              <select name="status" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                <option value="حضور">حضور</option>
+                <option value="انصراف">انصراف</option>
+                <option value="متأخر">متأخر</option>
+                <option value="غائب">غائب</option>
+              </select>
+            </div>
+
+            <div>
+              <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow">
+                <i class="fa-solid fa-check ml-1"></i> تسجيل الحركة
+              </button>
+            </div>
+
+            <div class="sm:col-span-2 lg:col-span-5">
+              <input type="text" name="notes" placeholder="ملاحظات اختيارية (سبب التأخير أو الاستئذان)..."
+                class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:border-blue-600 outline-none" />
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4">سجل الحضور والانصراف (${state.cache.attendance.length})</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                  <th class="p-3 font-extrabold">التاريخ</th>
+                  <th class="p-3 font-extrabold">الوقت</th>
+                  <th class="p-3 font-extrabold">الفئة</th>
+                  <th class="p-3 font-extrabold">الكود</th>
+                  <th class="p-3 font-extrabold">الاسم</th>
+                  <th class="p-3 font-extrabold">الحالة</th>
+                  <th class="p-3 font-extrabold">ملاحظات</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${state.cache.attendance.length ? state.cache.attendance.map(a => {
+                  const st = a['الحالة (حضور/انصراف/غائب/متأخر)'];
+                  const badge = st === 'حضور' ? 'bg-emerald-100 text-emerald-800'
+                    : st === 'انصراف' ? 'bg-blue-100 text-blue-800'
+                    : st === 'متأخر' ? 'bg-amber-100 text-amber-800'
+                    : 'bg-rose-100 text-rose-800';
+                  return `
+                    <tr class="hover:bg-slate-50">
+                      <td class="p-3">${a['التاريخ']}</td>
+                      <td class="p-3 font-mono">${a['الوقت']}</td>
+                      <td class="p-3">${a['النوع (طالب/مدرس/عامل)']}</td>
+                      <td class="p-3 font-mono font-bold">${a['الكود'] || '-'}</td>
+                      <td class="p-3 font-bold">${a['الاسم']}</td>
+                      <td class="p-3"><span class="px-2.5 py-0.5 rounded-full font-bold ${badge}">${st}</span></td>
+                      <td class="p-3 text-slate-500">${a['ملاحظات'] || '-'}</td>
+                    </tr>
+                  `;
+                }).join('') : `<tr><td colspan="7" class="p-6 text-center text-slate-400">لا توجد حركات مسجلة</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('attendance-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = Object.fromEntries(new FormData(e.target).entries());
+        setLoading(true, 'جاري تسجيل الحضور...');
+        try {
+          const res = await apiPost('recordAttendance', payload);
+          if (res.status === 'success') {
+            showToast(res.message, 'success');
+            await renderAttendance(container);
+          } else {
+            showToast(res.message, 'error');
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    async function lookupForAttendance() {
+      const code = document.getElementById('att-code').value.trim();
+      if (!code) return showToast('أدخل الكود للبحث', 'warning');
+      setLoading(true, 'جاري البحث بالكود...');
+      try {
+        const res = await apiGet({ action: 'lookupEntity', code });
+        if (res.status === 'success') {
+          if (res.student) {
+            document.getElementById('att-name').value = res.student.name;
+            document.getElementById('att-type').value = 'طالب';
+          } else if (res.staff) {
+            document.getElementById('att-name').value = res.staff.name;
+            document.getElementById('att-type').value = res.staff.personType || 'مدرس';
+          }
+          showToast('تم تعبئة البيانات تلقائياً', 'success');
+        } else {
+          showToast(res.message, 'error');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // ز. إدارة الباصات (BUSES)
+    // -------------------------------------------------------------------------
+    async function renderBuses(container) {
+      const res = await apiGet({ action: 'getData', sheet: 'BUSES' });
+      state.cache.buses = res.rows || [];
+
+      container.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-bus text-amber-600"></i> تسجيل باص مدرسي جديد
+          </h3>
+          <form id="add-bus-form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">رقم الباص *</label>
+              <input type="text" name="busNumber" required placeholder="مثال: BUS-03"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">اسم السائق *</label>
+              <input type="text" name="driverName" required placeholder="اسم سائق الحافلة"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">هاتف السائق</label>
+              <input type="tel" name="driverPhone" placeholder="99112233"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">خط السير والمناطق</label>
+              <input type="text" name="route" placeholder="السالمية - الرميثية - سلوى"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">السعة الاستيعابية (مقعد)</label>
+              <input type="number" min="1" name="capacity" value="25"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">تكلفة التشغيل الشهرية (د.ك)</label>
+              <input type="number" step="0.001" min="0" name="monthlyCost" value="0"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+            <div class="sm:col-span-2 lg:col-span-3 flex justify-end">
+              <button type="submit" class="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow">
+                <i class="fa-solid fa-plus ml-1"></i> تسجيل الباص
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4">أسطول الباصات المسجلة (${state.cache.buses.length})</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                  <th class="p-3 font-extrabold">رقم الباص</th>
+                  <th class="p-3 font-extrabold">السائق</th>
+                  <th class="p-3 font-extrabold">الهاتف</th>
+                  <th class="p-3 font-extrabold">خط السير</th>
+                  <th class="p-3 font-extrabold">السعة</th>
+                  <th class="p-3 font-extrabold">التكلفة الشهرية (د.ك)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${state.cache.buses.length ? state.cache.buses.map(b => `
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-extrabold text-amber-700">${b['رقم الباص']}</td>
+                    <td class="p-3 font-bold">${b['اسم السائق']}</td>
+                    <td class="p-3 font-mono">${b['هاتف السائق']}</td>
+                    <td class="p-3">${b['خط السير']}</td>
+                    <td class="p-3">${b['السعة']} مقعد</td>
+                    <td class="p-3 font-bold">${Number(b['تكلفة التشغيل الشهرية (د.ك)'] || 0).toFixed(3)}</td>
+                  </tr>
+                `).join('') : `<tr><td colspan="6" class="p-6 text-center text-slate-400">لا توجد باصات مسجلة</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('add-bus-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = Object.fromEntries(new FormData(e.target).entries());
+        setLoading(true, 'جاري تسجيل الباص...');
+        try {
+          const res = await apiPost('addBus', payload);
+          if (res.status === 'success') {
+            showToast(res.message, 'success');
+            await renderBuses(container);
+          } else {
+            showToast(res.message, 'error');
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // ح. كشوف الباصات (BUS ROSTER)
+    // -------------------------------------------------------------------------
+    async function renderBusRoster(container, filterBus = '') {
+      const res = await apiGet({ action: 'getBusRoster', busNumber: filterBus });
+      if (res.status !== 'success') throw new Error(res.message);
+      state.cache.busRoster = res.roster || [];
+
+      const allBuses = state.cache.buses.length ? state.cache.buses : state.cache.busRoster.map(r => ({ 'رقم الباص': r.busNumber }));
+
+      container.innerHTML = `
+        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <label class="text-xs font-bold text-slate-700">تصفية حسب الباص:</label>
+            <select id="roster-bus-filter" onchange="renderBusRoster(document.getElementById('main-content'), this.value)"
+              class="px-4 py-2 rounded-xl border border-slate-300 text-xs bg-white font-bold">
+              <option value="">جميع الباصات</option>
+              ${allBuses.map(b => `<option value="${b['رقم الباص']}" ${filterBus === b['رقم الباص'] ? 'selected' : ''}>${b['رقم الباص']}</option>`).join('')}
+            </select>
+          </div>
+          <button onclick="printBusRoster()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold flex items-center gap-1.5 self-start sm:self-auto">
+            <i class="fa-solid fa-print"></i> طباعة كشف الباصات
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          ${state.cache.busRoster.length ? state.cache.busRoster.map(bus => `
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+              <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+                <div>
+                  <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-mono font-extrabold text-xs">${bus.busNumber}</span>
+                  <h4 class="font-bold text-sm mt-2">${bus.driverName} <span class="text-xs text-slate-400 font-mono">(${bus.driverPhone})</span></h4>
+                  <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-route text-amber-400 ml-1"></i> ${bus.route}</p>
+                </div>
+                <div class="text-left">
+                  <span class="text-lg font-extrabold text-amber-400">${bus.ridersCount} / ${bus.capacity}</span>
+                  <p class="text-[10px] text-slate-400">الإشغال الحالي</p>
+                </div>
+              </div>
+              <div class="p-4">
+                <table class="w-full text-right text-xs">
+                  <thead>
+                    <tr class="border-b border-slate-200 text-slate-500">
+                      <th class="pb-2">الكود</th>
+                      <th class="pb-2">اسم الطالب</th>
+                      <th class="pb-2">الصف</th>
+                      <th class="pb-2">المنهج</th>
+                      <th class="pb-2">الهاتف</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    ${bus.students.length ? bus.students.map(st => `
+                      <tr>
+                        <td class="py-2 font-mono text-blue-700 font-bold">${st.code}</td>
+                        <td class="py-2 font-bold">${st.name}</td>
+                        <td class="py-2">${st.grade}</td>
+                        <td class="py-2">${curriculumBadgeHTML(st.curriculum)}</td>
+                        <td class="py-2 font-mono">${st.phone}</td>
+                      </tr>
+                    `).join('') : `<tr><td colspan="5" class="py-4 text-center text-slate-400">لا يوجد طلاب مسجلون على هذا الباص</td></tr>`}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `).join('') : `<div class="col-span-2 bg-white p-8 rounded-2xl text-center text-slate-400 text-xs">لا توجد بيانات باصات لعرضها</div>`}
+        </div>
+      `;
+    }
+
+    function printBusRoster() {
+      const roster = state.cache.busRoster;
+      const html = `
+        <div dir="rtl" class="font-sans">
+          <div class="text-center border-b-2 border-slate-800 pb-3 mb-5">
+            <h2 class="text-xl font-extrabold">كشف مشرفي وطلبة النقل المدرسي</h2>
+            <p class="text-xs text-slate-500 mt-1">تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')}</p>
+          </div>
+          ${roster.map(bus => `
+            <div class="mb-6 border border-slate-400 rounded-lg p-4">
+              <div class="flex justify-between font-bold text-xs bg-slate-100 p-2 mb-3">
+                <span>رقم الباص: ${bus.busNumber} | السائق: ${bus.driverName} (${bus.driverPhone})</span>
+                <span>خط السير: ${bus.route} | العدد: ${bus.ridersCount}/${bus.capacity}</span>
+              </div>
+              <table class="w-full text-right border-collapse text-xs border border-slate-400">
+                <thead>
+                  <tr class="bg-slate-200">
+                    <th class="border border-slate-400 p-1.5">م</th>
+                    <th class="border border-slate-400 p-1.5">الكود</th>
+                    <th class="border border-slate-400 p-1.5">اسم الطالب</th>
+                    <th class="border border-slate-400 p-1.5">الصف</th>
+                    <th class="border border-slate-400 p-1.5">هاتف ولي الأمر</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${bus.students.map((s, i) => `
+                    <tr>
+                      <td class="border border-slate-400 p-1.5">${i + 1}</td>
+                      <td class="border border-slate-400 p-1.5">${s.code}</td>
+                      <td class="border border-slate-400 p-1.5 font-bold">${s.name}</td>
+                      <td class="border border-slate-400 p-1.5">${s.grade}</td>
+                      <td class="border border-slate-400 p-1.5">${s.phone}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      triggerPrint(html);
+    }
+
+    // -------------------------------------------------------------------------
+    // ط. الإيرادات والمصروفات (REVENUES & EXPENSES)
+    // -------------------------------------------------------------------------
+    async function renderFinanceSection(container, targetType) {
+      const res = await apiGet({ action: 'getData', sheet: 'FINANCE' });
+      state.cache.finance = res.rows || [];
+      const filteredRows = state.cache.finance.filter(f => f['النوع (إيراد/مصروف)'] === targetType);
+      const isRev = targetType === 'إيراد';
+
+      const categories = isRev
+        ? ['مصروفات دراسية', 'اشتراك باص مدرسي', 'كتب وزي مدرسي', 'أنشطة ودورات', 'إيراد عام']
+        : ['رواتب وأجور', 'إيجار ومرافق', 'صيانة ووقود باصات', 'قرطاسية ومستلزمات', 'مصروف عام'];
+
+      container.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fa-solid ${isRev ? 'fa-circle-plus text-emerald-600' : 'fa-circle-minus text-rose-600'}"></i>
+            تسجيل ${isRev ? 'إيراد جديد' : 'مصروف جديد'} (د.ك)
+          </h3>
+          <form id="finance-form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">البند *</label>
+              <select name="category" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                ${categories.map(c => `<option value="${c}">${c}</option>`).join('')}
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">المبلغ (د.ك) *</label>
+              <input type="number" step="0.001" min="0.001" name="amount" required placeholder="0.000"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">التفاصيل والبيان</label>
+              <input type="text" name="notes" placeholder="وصف العملية المالية..."
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <button type="submit" class="w-full py-2.5 px-4 rounded-xl ${isRev ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-rose-600 hover:bg-rose-700'} text-white text-xs font-bold shadow">
+                <i class="fa-solid fa-check ml-1"></i> حفظ ${isRev ? 'الإيراد' : 'المصروف'}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-extrabold text-slate-800">سجل ${isRev ? 'الإيرادات' : 'المصروفات'} (${filteredRows.length})</h3>
+            <span class="px-3 py-1 rounded-full text-xs font-extrabold ${isRev ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
+              الإجمالي: ${formatKWD(filteredRows.reduce((s, r) => s + Number(r['المبلغ (د.ك)'] || 0), 0))}
+            </span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                  <th class="p-3 font-extrabold">رقم العملية</th>
+                  <th class="p-3 font-extrabold">التاريخ</th>
+                  <th class="p-3 font-extrabold">البند</th>
+                  <th class="p-3 font-extrabold">المبلغ (د.ك)</th>
+                  <th class="p-3 font-extrabold">التفاصيل</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${filteredRows.length ? filteredRows.map(f => `
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-bold text-slate-600">${f['رقم العملية']}</td>
+                    <td class="p-3">${f['التاريخ']}</td>
+                    <td class="p-3 font-bold">${f['البند']}</td>
+                    <td class="p-3 font-extrabold ${isRev ? 'text-emerald-700' : 'text-rose-700'}">${Number(f['المبلغ (د.ك)'] || 0).toFixed(3)}</td>
+                    <td class="p-3 text-slate-600">${f['التفاصيل'] || '-'}</td>
+                  </tr>
+                `).join('') : `<tr><td colspan="5" class="p-6 text-center text-slate-400">لا توجد حركات مسجلة</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('finance-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = Object.fromEntries(new FormData(e.target).entries());
+        const actionName = isRev ? 'addRevenue' : 'addExpense';
+        setLoading(true, 'جاري تسجيل العملية المالية...');
+        try {
+          const res = await apiPost(actionName, payload);
+          if (res.status === 'success') {
+            showToast(res.message, 'success');
+            await renderFinanceSection(container, targetType);
+          } else {
+            showToast(res.message, 'error');
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // ي. إدارة المستخدمين (USERS)
+    // -------------------------------------------------------------------------
+    async function renderUsers(container) {
+      const res = await apiGet({ action: 'getData', sheet: 'USERS' });
+      state.cache.users = res.rows || [];
+
+      container.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-user-shield text-blue-600"></i> إضافة مستخدم جديد للنظام
+          </h3>
+          <form id="add-user-form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الكامل *</label>
+              <input type="text" name="fullName" required placeholder="الاسم الظاهر في النظام"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">اسم المستخدم *</label>
+              <input type="text" name="username" required placeholder="username"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور *</label>
+              <input type="password" name="password" required placeholder="••••••••"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">الدور والصلاحيات</label>
+              <select name="role" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white font-bold">
+                <option value="SUPERVISOR">مشرف عام (SUPERVISOR)</option>
+                <option value="ADMIN">مدير المدرسة (ADMIN)</option>
+                <option value="OWNER">مالك المدرسة (OWNER)</option>
+              </select>
+            </div>
+            <div>
+              <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow">
+                <i class="fa-solid fa-user-plus ml-1"></i> إضافة المستخدم
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
+          <h3 class="text-sm font-extrabold text-slate-800 mb-4">المستخدمون المسجلون (${state.cache.users.length})</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                  <th class="p-3 font-extrabold">اسم المستخدم</th>
+                  <th class="p-3 font-extrabold">الاسم الكامل</th>
+                  <th class="p-3 font-extrabold">الدور</th>
+                  <th class="p-3 font-extrabold">الحالة</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${state.cache.users.map(u => `
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-mono font-bold text-blue-700">${u['اسم المستخدم']}</td>
+                    <td class="p-3 font-bold">${u['الاسم الكامل']}</td>
+                    <td class="p-3"><span class="px-2.5 py-0.5 rounded-md bg-slate-100 font-extrabold">${u['الدور']}</span></td>
+                    <td class="p-3"><span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">${u['الحالة']}</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('add-user-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = Object.fromEntries(new FormData(e.target).entries());
+        setLoading(true, 'جاري إضافة المستخدم...');
+        try {
+          const res = await apiPost('addUser', payload);
+          if (res.status === 'success') {
+            showToast(res.message, 'success');
+            await renderUsers(container);
+          } else {
+            showToast(res.message, 'error');
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // ك. الإعدادات (SETTINGS)
+    // -------------------------------------------------------------------------
+    function renderSettings(container) {
+      container.innerHTML = `
+        <div class="max-w-2xl bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-5">
+          <div>
+            <h3 class="text-base font-extrabold text-slate-800">إعدادات الربط السحابي وقاعدة البيانات</h3>
+            <p class="text-xs text-slate-500 mt-1">يمكنك ربط الواجهة مباشرة مع مشروع Google Apps Script المنشور كـ Web App</p>
+          </div>
+
+          <div class="space-y-3">
+            <label class="block text-xs font-bold text-slate-700">رابط Google Apps Script Web App URL</label>
+            <input type="url" id="settings-gas-url" value="${state.gasUrl}" dir="ltr"
+              placeholder="https://script.google.com/macros/s/.../exec"
+              class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-mono text-left focus:border-blue-600 outline-none" />
+
+            <label class="inline-flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer pt-1">
+              <input type="checkbox" id="settings-demo-mode" ${state.demoMode ? 'checked' : ''} class="rounded text-blue-600" />
+              <span>تفعيل الوضع التجريبي المحلي (Demo Mode)</span>
+            </label>
+          </div>
+
+          <div class="flex flex-wrap gap-3 pt-3 border-t border-slate-100">
+            <button onclick="saveSettingsPage()" class="px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow">
+              <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ الإعدادات
+            </button>
+            <button onclick="triggerSetupFromSettings()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow">
+              <i class="fa-solid fa-database ml-1"></i> تهيئة الجداول (setupDatabase)
+            </button>
+            <button onclick="resetDemoData()" class="px-5 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold">
+              <i class="fa-solid fa-rotate-left ml-1"></i> إعادة ضبط البيانات التجريبية
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function saveSettingsPage() {
+      const url = document.getElementById('settings-gas-url').value.trim();
+      const demo = document.getElementById('settings-demo-mode').checked;
+      state.gasUrl = url;
+      state.demoMode = url ? demo : true;
+      localStorage.setItem(STORAGE_KEYS.GAS_URL, state.gasUrl);
+      localStorage.setItem(STORAGE_KEYS.DEMO_MODE, String(state.demoMode));
+      syncConnectionUI();
+      showToast('تم حفظ الإعدادات بنجاح', 'success');
+    }
+
+    async function triggerSetupFromSettings() {
+      saveSettingsPage();
+      setLoading(true, 'جاري تهيئة الجداول في Google Sheets...');
+      try {
+        const res = await apiGet({ action: 'setupDatabase' });
+        showToast(res.message || 'تمت التهيئة بنجاح', res.status === 'success' ? 'success' : 'error');
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function resetDemoData() {
+      initDemoDatabase(true);
+      showToast('تمت إعادة ضبط قاعدة البيانات التجريبية إلى حالتها الافتراضية', 'success');
+      refreshCurrentSection();
+    }
+
+    // =========================================================================
+    // 7. نقطة الانطلاق عند تحميل الصفحة
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      initDemoDatabase(false);
+      syncConnectionUI();
+      if (state.session && state.session.user) {
+        enterApp();
+      }
+    });
+  </script>
+</body>
+</html>
