@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نظام إدارة اكاديمية المستقبل</title>
+  <title>نظام إدارة المدرسة المصغرة | الدليل الذكي (د.ك)</title>
   <!-- خط القاهرة / تجوال العربي الاحترافي -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -111,15 +111,15 @@
           <div class="w-14 h-14 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center text-2xl mb-6 border border-white/20">
             <i class="fa-solid fa-graduation-cap text-amber-400"></i>
           </div>
-          <h1 class="text-2xl font-extrabold leading-snug mb-3">نظام إدارة اكاديمية المستقبل</h1>
+          <h1 class="text-2xl font-extrabold leading-snug mb-3">نظام إدارة المدرسة المصغرة</h1>
           <p class="text-blue-200 text-sm leading-relaxed mb-6">
             منصة إدارية ومالية وأكاديمية متكاملة بالعملة الكويتية (<span class="font-bold text-amber-300">د.ك</span>) تدعم مسارات الثانوية العامة (320) والبكالوريا المصرية (600) والحضور والباصات.
           </p>
         </div>
 
-        <div class="space-y-3 bg-white/10 rounded-2xl p-4 border border-white/10 text-xs">
+        <div id="demo-hint-box" class="space-y-3 bg-white/10 rounded-2xl p-4 border border-white/10 text-xs">
           <p class="font-bold text-amber-300 flex items-center gap-2">
-            <i class="fa-solid fa-bolt"></i> تعبئة سريعة لحسابات التجربة:
+            <i class="fa-solid fa-bolt"></i> تعبئة سريعة (الوضع التجريبي المحلي فقط - بيانات وهمية):
           </p>
           <div class="grid grid-cols-1 gap-2">
             <button type="button" onclick="quickFillLogin('owner', 'owner123')" class="w-full text-right px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition flex items-center justify-between">
@@ -181,7 +181,7 @@
               </label>
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
-              <input type="url" id="gas-url-input" placeholder="https://script.google.com/macros/s/AKfycbwJAa63EOlWPWobsmxUswODPY4ZbDft1Kq8cLHWg3eqq6MF-YX5HaFdGqPn2zek7pU4/exec"
+              <input type="url" id="gas-url-input" placeholder="https://script.google.com/macros/s/AKfycby6RFrwm4R9ol9JWM9a9OQBXC3AvYZL5xFEuwJXabskonlmtXiE_SJjHB1cW7FNcLbO/exec"
                 class="flex-1 px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-mono text-left dir-ltr focus:border-blue-600 outline-none" dir="ltr" />
               <button type="button" onclick="saveGasUrlFromLogin()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition whitespace-nowrap">
                 <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ الرابط
@@ -194,7 +194,7 @@
             <button type="submit" class="flex-1 py-3 px-5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm shadow-lg shadow-blue-700/20 transition flex items-center justify-center gap-2">
               <i class="fa-solid fa-right-to-bracket"></i> دخول إلى النظام
             </button>
-            <button type="button" onclick="runSetupDatabase()" class="py-3 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition flex items-center justify-center gap-1.5">
+            <button type="button" id="login-setup-btn" onclick="runSetupDatabase()" class="py-3 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition flex items-center justify-center gap-1.5">
               <i class="fa-solid fa-database"></i> تهيئة قاعدة البيانات (setupDatabase)
             </button>
           </div>
@@ -248,7 +248,10 @@
       <nav id="sidebar-nav" class="flex-1 overflow-y-auto p-3 space-y-1 mt-2"></nav>
 
       <!-- زر تسجيل الخروج -->
-      <div class="p-4 border-t border-slate-800">
+ <div class="p-4 border-t border-slate-800 space-y-2">
+        <button onclick="openPasswordModal(false)" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-key"></i> تغيير كلمة المرور
+        </button>
         <button onclick="logout()" class="w-full py-2.5 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/20 text-xs font-bold transition flex items-center justify-center gap-2">
           <i class="fa-solid fa-arrow-right-from-bracket"></i> تسجيل الخروج
         </button>
@@ -283,6 +286,37 @@
       <main id="main-content" class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-6">
         <!-- يتم حقن محتوى القسم النشط هنا -->
       </main>
+    </div>
+  </div>
+
+  <!-- نافذة تغيير كلمة المرور -->
+  <div id="password-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[70] flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-200">
+        <h3 id="pw-title" class="font-extrabold text-slate-800 text-base">تغيير كلمة المرور</h3>
+      </div>
+      <form id="password-form" class="p-6 space-y-3" autocomplete="off">
+        <p id="pw-forced-note" class="hidden text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">حسابك يستخدم كلمة مرور مؤقتة أو افتراضية. اختر كلمة مرور خاصة بك للمتابعة.</p>
+        <p id="pw-reset-note" class="hidden text-xs font-bold text-slate-600 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">ستكون كلمة مؤقتة: سيُطلب من المستخدم تغييرها عند أول دخول.</p>
+        <div id="pw-current-wrap">
+          <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور الحالية</label>
+          <input type="password" id="pw-current" autocomplete="current-password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-blue-600 outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور الجديدة</label>
+          <input type="password" id="pw-new" autocomplete="new-password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-blue-600 outline-none" />
+          <p class="text-[11px] text-slate-500 mt-1">8 أحرف على الأقل، تجمع أرقاماً وحروفاً، ولا تحتوي اسم المستخدم.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">تأكيد كلمة المرور</label>
+          <input type="password" id="pw-confirm" autocomplete="new-password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-blue-600 outline-none" />
+        </div>
+        <p id="pw-error" class="hidden text-xs font-bold text-rose-700"></p>
+        <div class="flex justify-end gap-2 pt-1">
+          <button type="button" id="pw-cancel" onclick="closePasswordModal()" class="px-5 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold">إلغاء</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow">حفظ</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -322,15 +356,16 @@
     // 1. الثوابت والصلاحيات وهيكل المواد (مطابق تماماً لكود Google Apps Script)
     // =========================================================================
     const ROLE_PERMISSIONS = {
-      OWNER: ['dashboard', 'students', 'student-fees', 'grades', 'staff', 'attendance', 'buses', 'bus-roster', 'revenues', 'expenses', 'users', 'settings'],
-      ADMIN: ['dashboard', 'students', 'student-fees', 'grades', 'staff', 'attendance', 'buses', 'bus-roster', 'revenues', 'expenses'],
-      SUPERVISOR: ['dashboard', 'students', 'student-fees', 'grades', 'attendance', 'bus-roster']
+      OWNER: ['dashboard', 'students', 'student-fees', 'payers', 'grades', 'staff', 'attendance', 'buses', 'bus-roster', 'revenues', 'expenses', 'users', 'settings'],
+      ADMIN: ['dashboard', 'students', 'student-fees', 'payers', 'grades', 'staff', 'attendance', 'buses', 'bus-roster', 'revenues', 'expenses'],
+      SUPERVISOR: ['dashboard', 'students', 'student-fees', 'payers', 'grades', 'attendance', 'bus-roster']
     };
 
     const NAV_ITEMS = [
       { key: 'dashboard', label: 'لوحة القيادة', subtitle: 'ملخص الإحصائيات والمؤشرات المالية بالدينار الكويتي', icon: 'fa-chart-pie' },
       { key: 'students', label: 'إدارة الطلاب', subtitle: 'تسجيل الطلاب والمسارات الدراسية والبيانات الأساسية', icon: 'fa-user-graduate' },
       { key: 'student-fees', label: 'تحصيل المصروفات والإيصالات', subtitle: 'سداد الأقساط واستخراج إيصالات الدفع الرسمية', icon: 'fa-file-invoice-dollar' },
+      { key: 'payers', label: 'سجل المسددين', subtitle: 'الطلاب الذين سددوا قسط الدراسة أو اشتراك الباص مع البحث والفلترة', icon: 'fa-user-check' },
       { key: 'grades', label: 'الدرجات والشهادات', subtitle: 'رصد درجات المسارات واستخراج الشهادات الشهرية', icon: 'fa-award' },
       { key: 'staff', label: 'شؤون الموظفين والرواتب', subtitle: 'إدارة المعلمين والعاملين واحتساب صافي الرواتب', icon: 'fa-chalkboard-user' },
       { key: 'attendance', label: 'الحضور والانصراف', subtitle: 'تسجيل ومتابعة حضور الطلاب والموظفين بالكود', icon: 'fa-clipboard-check' },
@@ -398,6 +433,75 @@
       'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر',
       'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو'
     ];
+
+    // ---- النظام المالي الشهري (نفس قواعد Code.gs) ----
+    // القسط الشهري الصافي = القسط المتفق عليه - مبلغ الخصم. التحصيل شهري، وقسط الدراسة واشتراك الباص حقلان مستقلان.
+    const COL_AGREED = 'القسط المتفق عليه (د.ك)';
+    const COL_DISCOUNT = 'مبلغ الخصم (د.ك)';
+    const COL_NET = 'صافي القسط الشهري (د.ك)';
+    const PAY_METHODS = ['نقدي', 'كي نت (K-NET)', 'تحويل بنكي'];
+    const CAT_TUITION = 'مصروفات دراسية';
+    const CAT_BUS = 'اشتراك باص مدرسي';
+    const CAL_MONTH_INDEX = { 'يناير': 1, 'فبراير': 2, 'مارس': 3, 'أبريل': 4, 'مايو': 5, 'سبتمبر': 9, 'أكتوبر': 10, 'نوفمبر': 11, 'ديسمبر': 12 };
+
+    function r3(n) { return Math.round(Number(n) * 1000) / 1000; }   // الدينار الكويتي: 3 خانات عشرية
+    function numOf(v) { const n = Number(v); return isFinite(n) ? n : 0; }
+    function netInstallmentOf(st) { return Math.max(0, r3(numOf(st[COL_AGREED]) - numOf(st[COL_DISCOUNT]))); }
+
+    function monthKeyOf(month, year) {
+      const m = String(month || '').trim();
+      const y = Number(year);
+      if (!MONTHS_LIST.includes(m) || !isFinite(y) || y < 2020 || y > 2100 || Math.floor(y) !== y) return null;
+      return m + ' ' + y;
+    }
+
+    // الإيصالات القديمة (قبل النظام الشهري) تُعامل كلها قسط دراسة ولا تُحسب على شهر
+    function receiptPartsOf(r) {
+      const key = String(r['الشهر المستحق'] || '').trim();
+      if (key) return { month: key, tuition: numOf(r['قسط الدراسة (د.ك)']), bus: numOf(r['اشتراك الباص (د.ك)']), legacy: false };
+      return { month: String(r['بند الدفعة/الشهر'] || '').trim() || '-', tuition: numOf(r['المبلغ المدفوع (د.ك)']), bus: 0, legacy: true };
+    }
+
+    function receiptNoValue(no) { const m = /(\d+)\s*$/.exec(String(no || '')); return m ? Number(m[1]) : 0; }
+
+    function currentSchoolMonth() {
+      return ({ 8: 'سبتمبر', 9: 'أكتوبر', 10: 'نوفمبر', 11: 'ديسمبر', 0: 'يناير', 1: 'فبراير', 2: 'مارس', 3: 'أبريل', 4: 'مايو' })[new Date().getMonth()] || 'سبتمبر';
+    }
+
+    function yearOptionsHTML(selected) {
+      const y = new Date().getFullYear();
+      return [y - 1, y, y + 1].map(v => `<option value="${v}" ${v === (selected || y) ? 'selected' : ''}>${v}</option>`).join('');
+    }
+
+    // سجل المسددين: إيصالات الطالب مجمّعة حسب (الطالب + الشهر)
+    function buildPayersRows(receipts) {
+      const map = new Map();
+      receipts.forEach(r => {
+        const parts = receiptPartsOf(r);
+        const key = String(r['كود الطالب']) + '|' + parts.month;
+        let g = map.get(key);
+        if (!g) {
+          g = { code: r['كود الطالب'], name: r['اسم الطالب'], grade: r['الصف'], month: parts.month, legacy: parts.legacy, tuition: 0, bus: 0, count: 0, lastNo: '', lastDate: '' };
+          map.set(key, g);
+        }
+        g.tuition = r3(g.tuition + parts.tuition);
+        g.bus = r3(g.bus + parts.bus);
+        g.count++;
+        if (receiptNoValue(r['رقم الإيصال']) >= receiptNoValue(g.lastNo)) { g.lastNo = r['رقم الإيصال']; g.lastDate = r['التاريخ']; }
+      });
+      return [...map.values()];
+    }
+
+    function payTypeOf(g) {
+      if (g.tuition > 0 && g.bus > 0) return 'both';
+      if (g.bus > 0) return 'bus';
+      return 'tuition';
+    }
+
+    function monthSortValue(label) {
+      const m = /^(\S+)\s+(\d{4})$/.exec(label || '');
+      return m && CAL_MONTH_INDEX[m[1]] ? Number(m[2]) * 100 + CAL_MONTH_INDEX[m[1]] : 999999;
+    }
 
     // نفس دالة getTrackSubjectsConfig من الـ Backend لضمان التطابق الكامل
     function getTrackSubjectsConfig(grade, trackSystem, trackBranch, curriculum) {
@@ -566,13 +670,30 @@
       GAS_URL: 'mini_school_gas_url',
       DEMO_MODE: 'mini_school_demo_mode',
       SESSION: 'mini_school_session',
-      DEMO_DB: 'mini_school_demo_db_v1'
+      DEMO_DB: 'mini_school_demo_db_v2'
     };
+
+    // الجلسة: توكن قصير العمر في sessionStorage (يزول بإغلاق التبويب). لا تُحفظ كلمة المرور في أي مكان.
+    // السطر التالي يمسح الجلسات القديمة التي كانت تخزّن كلمة المرور نفسها في localStorage.
+    localStorage.removeItem(STORAGE_KEYS.SESSION);
+    function loadSession_() {
+      try {
+        const s = JSON.parse(sessionStorage.getItem(STORAGE_KEYS.SESSION) || 'null');
+        return s && s.user && s.token ? { user: s.user, token: s.token, mustChangePassword: !!s.mustChangePassword } : null;
+      } catch (_) { return null; }
+    }
+    function saveSession_() {
+      if (state.session) {
+        sessionStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify({ user: state.session.user, token: state.session.token, mustChangePassword: !!state.session.mustChangePassword }));
+      } else {
+        sessionStorage.removeItem(STORAGE_KEYS.SESSION);
+      }
+    }
 
     let state = {
       gasUrl: localStorage.getItem(STORAGE_KEYS.GAS_URL) || '',
       demoMode: localStorage.getItem(STORAGE_KEYS.DEMO_MODE) !== 'false',
-      session: JSON.parse(localStorage.getItem(STORAGE_KEYS.SESSION) || 'null'),
+      session: loadSession_(),
       activeSection: 'dashboard',
       cache: {
         dashboard: null,
@@ -614,9 +735,9 @@
             'ولي الأمر': 'أحمد محمد العلي',
             'رقم الهاتف': '55112233',
             'رقم الباص': 'BUS-01',
-            'إجمالي المصروفات (د.ك)': 850,
-            'المصروفات المدفوعة (د.ك)': 500,
-            'المتبقي (د.ك)': 350,
+            'القسط المتفق عليه (د.ك)': 110,
+            'مبلغ الخصم (د.ك)': 10,
+            'صافي القسط الشهري (د.ك)': 100,
             'تاريخ التسجيل': '2026/09/01'
           },
           {
@@ -629,9 +750,9 @@
             'ولي الأمر': 'خالد إبراهيم الصباح',
             'رقم الهاتف': '99445566',
             'رقم الباص': 'BUS-01',
-            'إجمالي المصروفات (د.ك)': 950,
-            'المصروفات المدفوعة (د.ك)': 950,
-            'المتبقي (د.ك)': 0,
+            'القسط المتفق عليه (د.ك)': 120,
+            'مبلغ الخصم (د.ك)': 0,
+            'صافي القسط الشهري (د.ك)': 120,
             'تاريخ التسجيل': '2026/09/02'
           },
           {
@@ -644,9 +765,9 @@
             'ولي الأمر': 'طارق حسن المطيري',
             'رقم الهاتف': '66778899',
             'رقم الباص': 'BUS-02',
-            'إجمالي المصروفات (د.ك)': 950,
-            'المصروفات المدفوعة (د.ك)': 450,
-            'المتبقي (د.ك)': 500,
+            'القسط المتفق عليه (د.ك)': 120,
+            'مبلغ الخصم (د.ك)': 20,
+            'صافي القسط الشهري (د.ك)': 100,
             'تاريخ التسجيل': '2026/09/03'
           },
           {
@@ -659,9 +780,9 @@
             'ولي الأمر': 'وليد عبد الرحمن',
             'رقم الهاتف': '50129834',
             'رقم الباص': 'BUS-02',
-            'إجمالي المصروفات (د.ك)': 650,
-            'المصروفات المدفوعة (د.ك)': 400,
-            'المتبقي (د.ك)': 250,
+            'القسط المتفق عليه (د.ك)': 80,
+            'مبلغ الخصم (د.ك)': 0,
+            'صافي القسط الشهري (د.ك)': 80,
             'تاريخ التسجيل': '2026/09/04'
           }
         ],
@@ -671,8 +792,9 @@
           { 'كود الموظف': 'STF-103', 'الاسم الكامل': 'سيد إبراهيم حسن', 'النوع (مدرس/عامل)': 'عامل', 'التخصص أو المسمى الوظيفي': 'مشرف خدمات وأمن', 'الصفوف/القسم': 'الخدمات الإدارية', 'الراتب الأساسي (د.ك)': 220, 'البدلات (د.ك)': 30, 'الخصومات (د.ك)': 0, 'صافي الراتب (د.ك)': 250, 'رقم الهاتف': '51223344' }
         ],
         RECEIPTS: [
-          { 'رقم الإيصال': 'RCP-841021', 'التاريخ': '2026/09/01', 'كود الطالب': 'STD-1001', 'اسم الطالب': 'يوسف أحمد محمد العلي', 'الصف': 'الثالث الثانوي', 'بند الدفعة/الشهر': 'دفعة قيد + قسط أول', 'طريقة الدفع': 'كي نت (K-NET)', 'المبلغ المدفوع (د.ك)': 500, 'المتبقي بعد السداد (د.ك)': 350, 'ملاحظات': 'سداد عبر رابط الدفع' },
-          { 'رقم الإيصال': 'RCP-841022', 'التاريخ': '2026/09/02', 'كود الطالب': 'STD-1002', 'اسم الطالب': 'مريم خالد إبراهيم الصباح', 'الصف': 'الثاني الثانوي', 'بند الدفعة/الشهر': 'سداد كامل الرسوم', 'طريقة الدفع': 'نقدي', 'المبلغ المدفوع (د.ك)': 950, 'المتبقي بعد السداد (د.ك)': 0, 'ملاحظات': 'خصم السداد المبكر مطبق' }
+          { 'رقم الإيصال': 'RCP-841021', 'التاريخ': '2026/09/01', 'كود الطالب': 'STD-1001', 'اسم الطالب': 'يوسف أحمد محمد العلي', 'الصف': 'الثالث الثانوي', 'بند الدفعة/الشهر': 'قسط دراسة + اشتراك باص - سبتمبر 2026', 'طريقة الدفع': 'كي نت (K-NET)', 'المبلغ المدفوع (د.ك)': 115, 'المتبقي بعد السداد (د.ك)': 0, 'ملاحظات': 'سداد عبر رابط الدفع', 'الشهر المستحق': 'سبتمبر 2026', 'قسط الدراسة (د.ك)': 100, 'اشتراك الباص (د.ك)': 15 },
+          { 'رقم الإيصال': 'RCP-841022', 'التاريخ': '2026/09/02', 'كود الطالب': 'STD-1002', 'اسم الطالب': 'مريم خالد إبراهيم الصباح', 'الصف': 'الثاني الثانوي', 'بند الدفعة/الشهر': 'قسط دراسة - سبتمبر 2026', 'طريقة الدفع': 'نقدي', 'المبلغ المدفوع (د.ك)': 120, 'المتبقي بعد السداد (د.ك)': 0, 'ملاحظات': '', 'الشهر المستحق': 'سبتمبر 2026', 'قسط الدراسة (د.ك)': 120, 'اشتراك الباص (د.ك)': 0 },
+          { 'رقم الإيصال': 'RCP-841023', 'التاريخ': '2026/10/01', 'كود الطالب': 'STD-1001', 'اسم الطالب': 'يوسف أحمد محمد العلي', 'الصف': 'الثالث الثانوي', 'بند الدفعة/الشهر': 'قسط دراسة - أكتوبر 2026', 'طريقة الدفع': 'نقدي', 'المبلغ المدفوع (د.ك)': 60, 'المتبقي بعد السداد (د.ك)': 40, 'ملاحظات': 'دفعة جزئية - الباص لاحقاً', 'الشهر المستحق': 'أكتوبر 2026', 'قسط الدراسة (د.ك)': 60, 'اشتراك الباص (د.ك)': 0 }
         ],
         GRADES: [
           {
@@ -732,6 +854,28 @@
       return db;
     }
 
+    function demoStudentPayments(db, studentId) {
+      const sid = String(studentId || '').trim();
+      const byMonth = {};
+      const order = [];
+      // الإيصالات في الوضع التجريبي الأحدث أولاً؛ نعكسها لتطابق ترتيب الشيت (الأقدم أولاً)
+      [...db.RECEIPTS].reverse().forEach(r => {
+        if (String(r['كود الطالب'] || '').trim() !== sid) return;
+        const parts = receiptPartsOf(r);
+        if (parts.legacy) return;
+        if (!byMonth[parts.month]) { byMonth[parts.month] = { month: parts.month, tuition: 0, bus: 0 }; order.push(parts.month); }
+        byMonth[parts.month].tuition = r3(byMonth[parts.month].tuition + parts.tuition);
+        byMonth[parts.month].bus = r3(byMonth[parts.month].bus + parts.bus);
+      });
+      return order.map(k => byMonth[k]);
+    }
+
+    function demoNextReceiptNo(db) {
+      let max = 0;
+      db.RECEIPTS.forEach(r => { const m = /^RCP-(\d+)$/.exec(String(r['رقم الإيصال'] || '').trim()); if (m) max = Math.max(max, Number(m[1])); });
+      return 'RCP-' + String(Math.max(max + 1, 100001));
+    }
+
     // المستخدم المنفذ للعملية (في الوضع التجريبي يُستخرج من الجلسة؛ في الخادم الحقيقي يجب التحقق من كلمة المرور)
     function getDemoActor(db, customAuth) {
       const uname = String((customAuth && customAuth.username) || (state.session && state.session.user && state.session.user.username) || '').trim();
@@ -756,34 +900,31 @@
     // =========================================================================
     // 3. طبقة الاتصال بالخادم (API CLIENT - يدعم GAS و Demo Mode بسلاسة)
     // =========================================================================
-    async function apiGet(params = {}) {
-      if (state.demoMode || !state.gasUrl) {
-        return handleDemoGet(params);
-      }
-      const url = new URL(state.gasUrl);
-      const authParams = state.session ? { username: state.session.user.username, password: state.session.password } : {};
-      const merged = Object.assign({}, authParams, params);
-      Object.keys(merged).forEach(k => {
-        if (merged[k] !== undefined && merged[k] !== null) {
-          url.searchParams.set(k, merged[k]);
-        }
-      });
+    function isDemo_() { return state.demoMode || !state.gasUrl; }
 
-      const res = await fetch(url.toString(), { method: 'GET' });
-      return await res.json();
-    }
-
-    async function apiPost(action, payload = {}, customAuth = null) {
-      if (state.demoMode || !state.gasUrl) {
-        return handleDemoPost(action, payload, customAuth);
-      }
-      const auth = customAuth || (state.session ? { username: state.session.user.username, password: state.session.password } : {});
+    // كل الطلبات إلى الخادم الحقيقي تتم بـ POST والتوكن في جسم الطلب (لا شيء حساس في الرابط)
+    async function callServer_(body) {
       const res = await fetch(state.gasUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action, payload, auth })
+        body: JSON.stringify(body)
       });
-      return await res.json();
+      let json;
+      try { json = await res.json(); } catch (_) { throw new Error('رد غير صالح من الخادم'); }
+      if (json && json.code === 'AUTH_REQUIRED' && state.session) { logout('expired'); }
+      if (json && json.code === 'PASSWORD_CHANGE_REQUIRED' && state.session) { openPasswordModal(true); }
+      return json;
+    }
+
+    async function apiGet(params = {}) {
+      if (isDemo_()) return handleDemoGet(params);
+      const { action, ...rest } = params;
+      return callServer_({ action, params: rest, token: state.session && state.session.token });
+    }
+
+    async function apiPost(action, payload = {}, customAuth = null) {
+      if (isDemo_()) return handleDemoPost(action, payload, customAuth);
+      return callServer_({ action, payload, token: state.session && state.session.token });
     }
 
     // محاكاة كاملة لدوال doGet في Google Apps Script
@@ -845,9 +986,11 @@
               parentName: st['ولي الأمر'],
               phone: st['رقم الهاتف'],
               busNumber: st['رقم الباص'],
-              totalFees: Number(st['إجمالي المصروفات (د.ك)'] || 0),
-              paidFees: Number(st['المصروفات المدفوعة (د.ك)'] || 0),
-              remaining: Number(st['المتبقي (د.ك)'] || 0)
+              agreedInstallment: numOf(st[COL_AGREED]),
+              discountAmount: numOf(st[COL_DISCOUNT]),
+              netInstallment: netInstallmentOf(st),
+              legacyRemaining: numOf(st['المتبقي (د.ك)']),
+              payments: (params.withPayments === true || params.withPayments === 'true') ? demoStudentPayments(db, st['كود الطالب']) : undefined
             }
           };
         }
@@ -959,6 +1102,12 @@
         if (!p.name) return { status: 'error', message: 'يرجى إدخال اسم الطالب' };
         const isSec = SECONDARY_GRADES.includes(p.grade);
         const curriculum = CURRICULUM_LIST.includes(p.curriculum) ? p.curriculum : 'عربي';
+        const agreed = r3(numOf(p.agreedInstallment));
+        const discount = r3(numOf(p.discountAmount));
+        if (!(agreed > 0)) return { status: 'error', message: 'يرجى إدخال القسط المتفق عليه (أكبر من صفر)' };
+        if (discount < 0) return { status: 'error', message: 'مبلغ الخصم لا يمكن أن يكون سالباً' };
+        if (discount > agreed) return { status: 'error', message: 'مبلغ الخصم لا يمكن أن يتجاوز القسط المتفق عليه' };
+        const net = r3(agreed - discount);
         const ridesBus = (p.ridesBus || (p.busNumber && p.busNumber !== 'بدون باص' ? 'نعم' : 'لا')) === 'نعم';
         let busNumber = 'بدون باص';
         if (ridesBus) {
@@ -966,11 +1115,8 @@
           if (busErr) return { status: 'error', message: busErr };
           busNumber = p.busNumber;
         }
-        const id = 'STD-' + Math.floor(1000 + Math.random() * 9000);
-        const totalFees = Math.max(0, Number(p.totalFees || 0));
-        const paidFees = Math.max(0, Number(p.paidFees || 0));
-        const remaining = Math.max(0, totalFees - paidFees);
-        const dateStr = new Date().toLocaleDateString('ar-EG');
+        let id = 'STD-' + Math.floor(1000 + Math.random() * 9000);
+        for (let t = 0; db.STUDENTS.some(x => x['كود الطالب'] === id) && t < 50; t++) id = 'STD-' + Math.floor(1000 + Math.random() * 9000);
 
         db.STUDENTS.unshift({
           'كود الطالب': id,
@@ -982,60 +1128,16 @@
           'ولي الأمر': p.parentName || '',
           'رقم الهاتف': p.phone || '',
           'رقم الباص': busNumber,
-          'إجمالي المصروفات (د.ك)': totalFees,
-          'المصروفات المدفوعة (د.ك)': paidFees,
-          'المتبقي (د.ك)': remaining,
-          'تاريخ التسجيل': dateStr
+          [COL_AGREED]: agreed,
+          [COL_DISCOUNT]: discount,
+          [COL_NET]: net,
+          'تاريخ التسجيل': new Date().toLocaleDateString('ar-EG')
         });
-
-        let receipt = null;
-        if (paidFees > 0) {
-          db.FINANCE.unshift({
-            'رقم العملية': 'TRX-' + Date.now().toString().slice(-6),
-            'التاريخ': dateStr,
-            'النوع (إيراد/مصروف)': 'إيراد',
-            'البند': 'مصروفات دراسية',
-            'المبلغ (د.ك)': paidFees,
-            'التفاصيل': 'دفعة قيد للطالب: ' + p.name + ' (' + id + ')'
-          });
-
-          const receiptNo = 'RCP-' + Date.now().toString().slice(-6);
-          receipt = {
-            receiptNo,
-            date: dateStr,
-            studentId: id,
-            studentName: p.name,
-            grade: p.grade,
-            installmentLabel: 'دفعة قيد',
-            paymentMethod: p.paymentMethod || 'نقدي',
-            amountPaid: paidFees,
-            remaining,
-            notes: 'دفعة قيد وسداد مصروفات دراسية'
-          };
-          db.RECEIPTS.unshift({
-            'رقم الإيصال': receiptNo,
-            'التاريخ': dateStr,
-            'كود الطالب': id,
-            'اسم الطالب': p.name,
-            'الصف': p.grade,
-            'بند الدفعة/الشهر': 'دفعة قيد',
-            'طريقة الدفع': receipt.paymentMethod,
-            'المبلغ المدفوع (د.ك)': paidFees,
-            'المتبقي بعد السداد (د.ك)': remaining,
-            'ملاحظات': receipt.notes
-          });
-        }
         saveDemoDB(db);
-        return {
-          status: 'success',
-          id,
-          receipt,
-          message: paidFees > 0 ? 'تم تسجيل الطالب وإصدار إيصال السداد تلقائياً' : 'تم تسجيل بيانات الطالب بنجاح'
-        };
+        return { status: 'success', id, message: 'تم تسجيل الطالب. القسط الشهري الصافي: ' + net.toFixed(3) + ' د.ك' };
       }
 
       if (action === 'updateStudent') {
-        // 1) الصلاحية (يجب تكرار نفس التحقق في Google Apps Script)
         const actor = getDemoActor(db, customAuth);
         if (!actor || !(ROLE_PERMISSIONS[actor.role] || []).includes('students')) {
           return { status: 'error', message: 'غير مصرح لك بتعديل بيانات الطلاب' };
@@ -1045,14 +1147,12 @@
         const st = db.STUDENTS[idx];
         const changes = [];
 
-        // 2) المنهج
         if (p.curriculum !== undefined && p.curriculum !== '') {
           if (!CURRICULUM_LIST.includes(p.curriculum)) return { status: 'error', message: 'قيمة المنهج غير صحيحة' };
           const oldC = getStudentCurriculum(st);
-          if (p.curriculum !== oldC) changes.push({ field: 'المنهج', oldV: oldC, newV: p.curriculum, key: 'المنهج' });
+          if (p.curriculum !== oldC) changes.push({ field: 'المنهج', oldV: oldC, newV: p.curriculum });
         }
 
-        // 3) الباص
         if (p.ridesBus !== undefined) {
           const oldBus = st['رقم الباص'] || 'بدون باص';
           let newBus = 'بدون باص';
@@ -1061,36 +1161,41 @@
             if (busErr) return { status: 'error', message: busErr };
             newBus = p.busNumber;
           }
-          if (newBus !== oldBus) changes.push({ field: 'رقم الباص', oldV: oldBus, newV: newBus, key: 'رقم الباص' });
+          if (newBus !== oldBus) changes.push({ field: 'رقم الباص', oldV: oldBus, newV: newBus });
         }
 
-        // 4) المبلغ - للمالك فقط (يُرفض الطلب كاملاً لغير المالك بدل تجاهل الحقل بصمت)
-        let newTotal = null;
-        const paid = Number(st['المصروفات المدفوعة (د.ك)'] || 0);
-        const oldTotal = Number(st['إجمالي المصروفات (د.ك)'] || 0);
-        if (p.totalFees !== undefined && p.totalFees !== '' && p.totalFees !== null) {
-          const t = Number(p.totalFees);
-          if (!isFinite(t) || t < 0) return { status: 'error', message: 'المبلغ المدخل غير صحيح' };
-          if (Math.abs(t - oldTotal) > 0.0004) {
-            if (actor.role !== 'OWNER') return { status: 'error', message: 'تعديل المبلغ متاح للمالك فقط' };
-            if (t < paid) return { status: 'error', message: 'المبلغ الجديد (' + t.toFixed(3) + ') أقل من المدفوع فعلياً (' + paid.toFixed(3) + ' د.ك). عالج الاسترداد محاسبياً أولاً.' };
-            if (!String(p.reason || '').trim()) return { status: 'error', message: 'يرجى كتابة سبب تعديل المبلغ (مطلوب للتدقيق)' };
-            newTotal = Math.round(t * 1000) / 1000;
-            changes.push({ field: 'إجمالي المصروفات (د.ك)', oldV: oldTotal.toFixed(3), newV: newTotal.toFixed(3), key: 'إجمالي المصروفات (د.ك)' });
+        const oldAgreed = r3(numOf(st[COL_AGREED]));
+        const oldDiscount = r3(numOf(st[COL_DISCOUNT]));
+        let finalAgreed = oldAgreed, finalDiscount = oldDiscount;
+        const has = v => v !== undefined && v !== null && v !== '';
+        if (has(p.agreedInstallment) || has(p.discountAmount)) {
+          const a = has(p.agreedInstallment) ? Number(p.agreedInstallment) : oldAgreed;
+          const d = has(p.discountAmount) ? Number(p.discountAmount) : oldDiscount;
+          if (!isFinite(a) || !isFinite(d)) return { status: 'error', message: 'المبلغ المدخل غير صحيح' };
+          const aR = r3(a), dR = r3(d);
+          const feeChanged = Math.abs(aR - oldAgreed) > 0.0004 || Math.abs(dR - oldDiscount) > 0.0004;
+          if (feeChanged) {
+            if (actor.role !== 'OWNER') return { status: 'error', message: 'تعديل القسط والخصم متاح للمالك فقط' };
+            if (!(aR > 0)) return { status: 'error', message: 'القسط المتفق عليه يجب أن يكون أكبر من صفر' };
+            if (dR < 0) return { status: 'error', message: 'مبلغ الخصم لا يمكن أن يكون سالباً' };
+            if (dR > aR) return { status: 'error', message: 'مبلغ الخصم لا يمكن أن يتجاوز القسط المتفق عليه' };
+            if (!String(p.reason || '').trim()) return { status: 'error', message: 'يرجى كتابة سبب تعديل القسط أو الخصم (مطلوب للتدقيق)' };
+            finalAgreed = aR; finalDiscount = dR;
+            if (Math.abs(aR - oldAgreed) > 0.0004) changes.push({ field: COL_AGREED, oldV: oldAgreed.toFixed(3), newV: aR.toFixed(3), fee: true });
+            if (Math.abs(dR - oldDiscount) > 0.0004) changes.push({ field: COL_DISCOUNT, oldV: oldDiscount.toFixed(3), newV: dR.toFixed(3), fee: true });
           }
         }
 
         if (!changes.length) return { status: 'success', changed: [], message: 'لا توجد تغييرات لحفظها' };
 
-        // 5) التطبيق + سجل التدقيق (بعد نجاح كل التحققات فقط)
         const now = new Date().toLocaleString('ar-EG');
+        if (changes.some(c => c.fee)) {
+          st[COL_AGREED] = finalAgreed;
+          st[COL_DISCOUNT] = finalDiscount;
+          st[COL_NET] = r3(finalAgreed - finalDiscount);
+        }
         changes.forEach(c => {
-          if (c.key === 'إجمالي المصروفات (د.ك)') {
-            st['إجمالي المصروفات (د.ك)'] = newTotal;
-            st['المتبقي (د.ك)'] = Math.max(0, newTotal - paid);
-          } else {
-            st[c.key] = c.newV;
-          }
+          if (!c.fee) st[c.field] = c.newV;
           db.AUDIT.unshift({
             'رقم السجل': 'AUD-' + Date.now().toString().slice(-7) + Math.floor(Math.random() * 90 + 10),
             'التاريخ والوقت': now,
@@ -1101,7 +1206,7 @@
             'الحقل': c.field,
             'القيمة القديمة': c.oldV,
             'القيمة الجديدة': c.newV,
-            'السبب': c.key === 'إجمالي المصروفات (د.ك)' ? String(p.reason).trim() : (String(p.reason || '').trim())
+            'السبب': String(p.reason || '').trim()
           });
         });
         saveDemoDB(db);
@@ -1109,55 +1214,56 @@
       }
 
       if (action === 'payStudentInstallment') {
-        const idx = db.STUDENTS.findIndex(s => String(s['كود الطالب']).trim() === String(p.studentId).trim());
-        if (idx === -1) return { status: 'error', message: 'لم يتم العثور على طالب بالكود: ' + p.studentId };
-        const amt = Number(p.amount || 0);
-        if (amt <= 0) return { status: 'error', message: 'يرجى إدخال مبلغ صحيح أكبر من صفر' };
+        const targetId = String(p.studentId || '').trim();
+        if (!targetId) return { status: 'error', message: 'يرجى إدخال كود الطالب' };
+        const mk = monthKeyOf(p.month, p.year);
+        if (!mk) return { status: 'error', message: 'يرجى تحديد الشهر والسنة بشكل صحيح' };
+        const tuition = r3(numOf(p.tuitionAmount));
+        const bus = r3(numOf(p.busAmount));
+        if (tuition < 0 || bus < 0) return { status: 'error', message: 'المبالغ لا يمكن أن تكون سالبة' };
+        if (tuition <= 0 && bus <= 0) return { status: 'error', message: 'أدخل مبلغ قسط الدراسة أو اشتراك الباص (أو كليهما)' };
+        const method = String(p.paymentMethod || 'نقدي').trim();
+        if (!PAY_METHODS.includes(method)) return { status: 'error', message: 'طريقة الدفع غير صحيحة' };
 
-        const st = db.STUDENTS[idx];
-        const newPaid = Number(st['المصروفات المدفوعة (د.ك)'] || 0) + amt;
-        const newRem = Math.max(0, Number(st['إجمالي المصروفات (د.ك)'] || 0) - newPaid);
-        st['المصروفات المدفوعة (د.ك)'] = newPaid;
-        st['المتبقي (د.ك)'] = newRem;
+        const st = db.STUDENTS.find(x => String(x['كود الطالب']).trim() === targetId);
+        if (!st) return { status: 'error', message: 'لم يتم العثور على طالب بالكود: ' + targetId };
 
+        const net = netInstallmentOf(st);
+        const paidSoFar = demoStudentPayments(db, targetId).filter(x => x.month === mk).reduce((a, x) => a + x.tuition, 0);
+        const remainingBefore = r3(net - paidSoFar);
+        if (tuition > 0) {
+          if (numOf(st[COL_AGREED]) <= 0) return { status: 'error', message: 'لم يُحدَّد القسط الشهري لهذا الطالب بعد. يحدده المالك من شاشة إدارة الطلاب (تعديل).' };
+          if (net <= 0) return { status: 'error', message: 'القسط الشهري لهذا الطالب مغطّى بالخصم بالكامل، لا يوجد قسط مستحق.' };
+          if (remainingBefore <= 0) return { status: 'error', message: 'قسط شهر ' + mk + ' مسدد بالكامل.' };
+          if (tuition > remainingBefore + 0.0004) return { status: 'error', message: 'المبلغ يتجاوز المتبقي من قسط شهر ' + mk + ' (المتبقي: ' + remainingBefore.toFixed(3) + ' د.ك).' };
+        }
+        const busNo = String(st['رقم الباص'] || '').trim();
+        if (bus > 0 && (!busNo || busNo === 'بدون باص')) return { status: 'error', message: 'الطالب غير مشترك في باص. سجّل اشتراكه من شاشة إدارة الطلاب أولاً.' };
+
+        const remainingAfter = net > 0 ? Math.max(0, r3(net - paidSoFar - tuition)) : 0;
+        const label = [tuition > 0 ? 'قسط دراسة' : null, bus > 0 ? 'اشتراك باص' : null].filter(Boolean).join(' + ') + ' - ' + mk;
         const dateStr = new Date().toLocaleDateString('ar-EG');
-        const label = p.installmentLabel || 'دفعة شهرية';
-        db.FINANCE.unshift({
-          'رقم العملية': 'TRX-' + Date.now().toString().slice(-6),
-          'التاريخ': dateStr,
-          'النوع (إيراد/مصروف)': 'إيراد',
-          'البند': 'مصروفات دراسية',
-          'المبلغ (د.ك)': amt,
-          'التفاصيل': label + ' - الطالب: ' + st['الاسم رباعي'] + ' (' + st['كود الطالب'] + ')'
-        });
-
-        const receiptNo = 'RCP-' + Date.now().toString().slice(-6);
+        const receiptNo = demoNextReceiptNo(db);
+        const notes = String(p.notes || '').trim();
         const receipt = {
-          receiptNo,
-          date: dateStr,
-          studentId: st['كود الطالب'],
-          studentName: st['الاسم رباعي'],
-          grade: st['المرحلة/الصف'],
-          installmentLabel: label,
-          paymentMethod: p.paymentMethod || 'نقدي',
-          amountPaid: amt,
-          remaining: newRem,
-          notes: p.notes || label
+          receiptNo, date: dateStr, studentId: st['كود الطالب'], studentName: st['الاسم رباعي'], grade: st['المرحلة/الصف'],
+          month: mk, installmentLabel: label, paymentMethod: method, tuitionPaid: tuition, busPaid: bus,
+          amountPaid: r3(tuition + bus), remaining: remainingAfter, netInstallment: net, notes
         };
         db.RECEIPTS.unshift({
-          'رقم الإيصال': receiptNo,
-          'التاريخ': dateStr,
-          'كود الطالب': receipt.studentId,
-          'اسم الطالب': receipt.studentName,
-          'الصف': receipt.grade,
-          'بند الدفعة/الشهر': receipt.installmentLabel,
-          'طريقة الدفع': receipt.paymentMethod,
-          'المبلغ المدفوع (د.ك)': amt,
-          'المتبقي بعد السداد (د.ك)': newRem,
-          'ملاحظات': receipt.notes
+          'رقم الإيصال': receiptNo, 'التاريخ': dateStr, 'كود الطالب': receipt.studentId, 'اسم الطالب': receipt.studentName, 'الصف': receipt.grade,
+          'بند الدفعة/الشهر': label, 'طريقة الدفع': method, 'المبلغ المدفوع (د.ك)': receipt.amountPaid, 'المتبقي بعد السداد (د.ك)': remainingAfter,
+          'ملاحظات': notes, 'الشهر المستحق': mk, 'قسط الدراسة (د.ك)': tuition, 'اشتراك الباص (د.ك)': bus
         });
+        const who = ' - الطالب: ' + st['الاسم رباعي'] + ' (' + targetId + ') - إيصال ' + receiptNo;
+        const fin = (cat, amt, txt) => db.FINANCE.unshift({
+          'رقم العملية': 'TRX-' + Date.now().toString().slice(-6) + Math.floor(Math.random() * 90 + 10), 'التاريخ': dateStr,
+          'النوع (إيراد/مصروف)': 'إيراد', 'البند': cat, 'المبلغ (د.ك)': amt, 'التفاصيل': txt + who
+        });
+        if (tuition > 0) fin(CAT_TUITION, tuition, 'قسط دراسة ' + mk);
+        if (bus > 0) fin(CAT_BUS, bus, 'اشتراك باص ' + mk);
         saveDemoDB(db);
-        return { status: 'success', receipt, message: 'تم تسجيل الدفعة وتحديث الرصيد وإصدار الإيصال تلقائياً' };
+        return { status: 'success', receipt, message: 'تم تسجيل الدفعة وإصدار الإيصال ' + receiptNo };
       }
 
       if (action === 'addGrades') {
@@ -1278,6 +1384,30 @@
         return { status: 'success', message: type === 'إيراد' ? 'تم تسجيل الإيراد بنجاح' : 'تم تسجيل المصروف بنجاح' };
       }
 
+      if (action === 'changePassword') {
+        const actor = getDemoActor(db, customAuth);
+        const rec = actor && db.USERS.find(u => u['اسم المستخدم'] === actor.username);
+        if (!rec) return { status: 'error', message: 'الحساب غير موجود' };
+        if (rec['كلمة المرور'] !== String(p.currentPassword || '')) return { status: 'error', message: 'كلمة المرور الحالية غير صحيحة' };
+        const np = String(p.newPassword || '');
+        if (np.length < 8 || !/\d/.test(np) || !/[^\d]/.test(np)) return { status: 'error', message: 'كلمة المرور: 8 أحرف على الأقل وتجمع أرقاماً وحروفاً' };
+        rec['كلمة المرور'] = np;
+        saveDemoDB(db);
+        return { status: 'success', token: 'demo', message: 'تم تغيير كلمة المرور بنجاح' };
+      }
+
+      if (action === 'resetUserPassword') {
+        const actor = getDemoActor(db, customAuth);
+        if (!actor || actor.role !== 'OWNER') return { status: 'error', message: 'ليس لديك صلاحية تنفيذ هذا الإجراء' };
+        const rec = db.USERS.find(u => u['اسم المستخدم'] === String(p.username || ''));
+        if (!rec) return { status: 'error', message: 'المستخدم غير موجود' };
+        const np = String(p.newPassword || '');
+        if (np.length < 8 || !/\d/.test(np) || !/[^\d]/.test(np)) return { status: 'error', message: 'كلمة المرور: 8 أحرف على الأقل وتجمع أرقاماً وحروفاً' };
+        rec['كلمة المرور'] = np;
+        saveDemoDB(db);
+        return { status: 'success', message: 'تمت إعادة تعيين كلمة المرور' };
+      }
+
       if (action === 'addUser') {
         if (!p.username || !p.password || !p.fullName) return { status: 'error', message: 'يرجى إكمال بيانات المستخدم' };
         if (db.USERS.some(u => u['اسم المستخدم'] === p.username)) return { status: 'error', message: 'اسم المستخدم مستخدم مسبقاً' };
@@ -1314,7 +1444,7 @@
       };
       const toast = document.createElement('div');
       toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3.5 rounded-2xl shadow-xl border text-xs font-bold transition-all duration-300 transform translate-y-0 ${colors[type] || colors.info}`;
-      toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info} text-base"></i><span class="flex-1 leading-relaxed">${message}</span>`;
+      toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info} text-base"></i><span class="flex-1 leading-relaxed">${escapeHTML(message)}</span>`;
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
@@ -1376,6 +1506,12 @@
     // 5. إدارة تسجيل الدخول والجلسة
     // =========================================================================
     function syncConnectionUI() {
+      const demoNow = state.demoMode || !state.gasUrl;
+      // حسابات التجربة وزر إعادة التهيئة لا يظهران أبداً أمام الخادم الحقيقي
+      const hint = document.getElementById('demo-hint-box');
+      const setupBtn = document.getElementById('login-setup-btn');
+      if (hint) hint.classList.toggle('hidden', !demoNow);
+      if (setupBtn) setupBtn.classList.toggle('hidden', !demoNow);
       const urlInput = document.getElementById('gas-url-input');
       const demoToggle = document.getElementById('demo-mode-toggle');
       const badge = document.getElementById('connection-badge');
@@ -1422,6 +1558,10 @@
 
     async function runSetupDatabase() {
       saveGasUrlFromLogin();
+      if (!isDemo_()) {
+        showToast('تهيئة الخادم الحقيقي تتم من محرر Apps Script أو من حساب المالك داخل النظام', 'warning');
+        return;
+      }
       setLoading(true, 'جاري تهيئة الجداول وحسابات المستخدمين...');
       try {
         const res = await apiGet({ action: 'setupDatabase' });
@@ -1451,10 +1591,17 @@
 
       setLoading(true, 'جاري التحقق من بيانات الدخول...');
       try {
-        const res = await apiGet({ action: 'login', username, password });
-        if (res.status === 'success' && res.user) {
-          state.session = { user: res.user, password };
-          localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(state.session));
+        let res;
+        if (isDemo_()) {
+          res = handleDemoGet({ action: 'login', username, password });
+          if (res.status === 'success') res.token = 'demo';
+        } else {
+          res = await callServer_({ action: 'login', payload: { username, password } });
+        }
+        document.getElementById('login-password').value = '';
+        if (res.status === 'success' && res.user && res.token) {
+          state.session = { user: res.user, token: res.token, mustChangePassword: !!res.mustChangePassword };
+          saveSession_();
           showToast('أهلاً بك، ' + res.user.fullName, 'success');
           enterApp();
         } else {
@@ -1467,12 +1614,26 @@
       }
     });
 
-    function logout() {
+    function logout(reason) {
+      const tok = state.session && state.session.token;
+      if (tok && !isDemo_()) {
+        // إبطال التوكن في الخادم (بدون انتظار)
+        try {
+          fetch(state.gasUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'logout', token: tok }) }).catch(() => {});
+        } catch (_) {}
+      }
       state.session = null;
-      localStorage.removeItem(STORAGE_KEYS.SESSION);
+      saveSession_();
+      // لا تبقى بيانات المدرسة في الذاكرة على جهاز مشترك بعد الخروج
+      Object.keys(state.cache).forEach(k => { state.cache[k] = Array.isArray(state.cache[k]) ? [] : null; });
+      document.getElementById('main-content').innerHTML = '';
+      closeEditStudent();
+      document.getElementById('password-modal').classList.add('hidden');
+      passwordModalForced_ = false;
       document.getElementById('app-shell').classList.add('hidden');
       document.getElementById('login-view').classList.remove('hidden');
-      showToast('تم تسجيل الخروج بنجاح', 'info');
+      if (reason === 'expired') showToast('انتهت الجلسة، يرجى تسجيل الدخول مجدداً', 'warning');
+      else showToast('تم تسجيل الخروج بنجاح', 'info');
     }
 
     function enterApp() {
@@ -1485,10 +1646,85 @@
       document.getElementById('sidebar-user-role').textContent = user.role;
 
       buildSidebarMenu();
-      const allowed = user.permissions || [];
-      const initialSection = allowed.includes('dashboard') ? 'dashboard' : (allowed[0] || 'dashboard');
-      navigateTo(initialSection);
+      if (state.session.mustChangePassword) {
+        // كلمة مرور مؤقتة: لا يُعرض أي قسم قبل اختيار كلمة مرور خاصة
+        openPasswordModal(true);
+        return;
+      }
+      goToInitialSection_();
     }
+
+    function goToInitialSection_() {
+      const allowed = (state.session.user.permissions) || [];
+      navigateTo(allowed.includes('dashboard') ? 'dashboard' : (allowed[0] || 'dashboard'));
+    }
+
+    // ---- تغيير كلمة المرور / إعادة تعيينها (للمالك) ----
+    let passwordModalForced_ = false;
+    let passwordResetTarget_ = null;
+
+    function openPasswordModal(forced, resetUser) {
+      passwordModalForced_ = !!forced;
+      passwordResetTarget_ = resetUser || null;
+      const reset = !!passwordResetTarget_;
+      document.getElementById('pw-title').textContent = reset ? 'إعادة تعيين كلمة مرور: ' + resetUser : (forced ? 'يجب تغيير كلمة المرور المؤقتة' : 'تغيير كلمة المرور');
+      document.getElementById('pw-forced-note').classList.toggle('hidden', !forced);
+      document.getElementById('pw-current-wrap').classList.toggle('hidden', reset);
+      document.getElementById('pw-cancel').classList.toggle('hidden', !!forced);
+      document.getElementById('pw-reset-note').classList.toggle('hidden', !reset);
+      ['pw-current', 'pw-new', 'pw-confirm'].forEach(id => { document.getElementById(id).value = ''; });
+      document.getElementById('pw-error').classList.add('hidden');
+      document.getElementById('password-modal').classList.remove('hidden');
+      setTimeout(() => document.getElementById(reset ? 'pw-new' : 'pw-current').focus(), 50);
+    }
+
+    function closePasswordModal() {
+      if (passwordModalForced_) return;   // المؤقتة لا يمكن تجاوزها
+      document.getElementById('password-modal').classList.add('hidden');
+    }
+
+    function pwShowError_(msg) {
+      const box = document.getElementById('pw-error');
+      box.textContent = msg;
+      box.classList.remove('hidden');
+    }
+
+    async function submitPasswordForm(e) {
+      e.preventDefault();
+      const cur = document.getElementById('pw-current').value.trim();
+      const nw = document.getElementById('pw-new').value.trim();
+      const cf = document.getElementById('pw-confirm').value.trim();
+      const reset = !!passwordResetTarget_;
+      if (!reset && !cur) return pwShowError_('أدخل كلمة المرور الحالية');
+      if (nw.length < 8) return pwShowError_('كلمة المرور يجب ألا تقل عن 8 أحرف');
+      if (!/\d/.test(nw) || !/[^\d]/.test(nw)) return pwShowError_('كلمة المرور يجب أن تجمع بين أرقام وحروف');
+      if (nw !== cf) return pwShowError_('تأكيد كلمة المرور غير مطابق');
+
+      setLoading(true, 'جاري الحفظ...');
+      try {
+        const res = reset
+          ? await apiPost('resetUserPassword', { username: passwordResetTarget_, newPassword: nw })
+          : await apiPost('changePassword', { currentPassword: cur, newPassword: nw });
+        if (res.status !== 'success') return pwShowError_(res.message || 'تعذر الحفظ');
+
+        ['pw-current', 'pw-new', 'pw-confirm'].forEach(id => { document.getElementById(id).value = ''; });
+        const wasForced = passwordModalForced_;
+        passwordModalForced_ = false;
+        document.getElementById('password-modal').classList.add('hidden');
+        showToast(res.message, 'success');
+        if (!reset) {
+          if (res.token) state.session.token = res.token;   // الجلسات القديمة أُبطلت، هذا توكن جديد
+          state.session.mustChangePassword = false;
+          saveSession_();
+          if (wasForced) goToInitialSection_();
+        }
+      } catch (err) {
+        pwShowError_(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    document.getElementById('password-form').addEventListener('submit', submitPasswordForm);
 
     function buildSidebarMenu() {
       const nav = document.getElementById('sidebar-nav');
@@ -1540,6 +1776,7 @@
           case 'dashboard': await renderDashboard(container); break;
           case 'students': await renderStudents(container); break;
           case 'student-fees': await renderStudentFees(container); break;
+          case 'payers': await renderPayers(container); break;
           case 'grades': await renderGrades(container); break;
           case 'staff': await renderStaff(container); break;
           case 'attendance': await renderAttendance(container); break;
@@ -1577,7 +1814,7 @@
           <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
             <div>
               <p class="text-xs font-bold text-slate-500">إجمالي الطلاب</p>
-              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${res.studentsCount} <span class="text-xs font-semibold text-slate-400">طالب</span></h3>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${escapeHTML(res.studentsCount)} <span class="text-xs font-semibold text-slate-400">طالب</span></h3>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
               <i class="fa-solid fa-user-graduate"></i>
@@ -1587,7 +1824,7 @@
           <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
             <div>
               <p class="text-xs font-bold text-slate-500">الكادر التعليمي والإداري</p>
-              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${res.staffCount} <span class="text-xs font-semibold text-slate-400">موظف</span></h3>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${escapeHTML(res.staffCount)} <span class="text-xs font-semibold text-slate-400">موظف</span></h3>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
               <i class="fa-solid fa-chalkboard-user"></i>
@@ -1597,7 +1834,7 @@
           <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
             <div>
               <p class="text-xs font-bold text-slate-500">حافلات النقل المدرسي</p>
-              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${res.busesCount} <span class="text-xs font-semibold text-slate-400">باص</span></h3>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">${escapeHTML(res.busesCount)} <span class="text-xs font-semibold text-slate-400">باص</span></h3>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
               <i class="fa-solid fa-bus"></i>
@@ -1766,25 +2003,20 @@
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">إجمالي المصروفات (د.ك)</label>
-              <input type="number" step="0.001" min="0" name="totalFees" value="0"
-                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+              <label class="block text-xs font-bold text-slate-700 mb-1">القسط المتفق عليه (د.ك) *</label>
+              <input type="number" step="0.001" min="0.001" name="agreedInstallment" id="add-agreed" required placeholder="0.000" oninput="updateNetPreview('add')"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:border-blue-600 outline-none" />
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">المدفوع عند التسجيل (د.ك)</label>
-              <input type="number" step="0.001" min="0" name="paidFees" value="0"
-                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
+              <label class="block text-xs font-bold text-slate-700 mb-1">مبلغ الخصم الممنوح (د.ك)</label>
+              <input type="number" step="0.001" min="0" name="discountAmount" id="add-discount" value="0" oninput="updateNetPreview('add')"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:border-blue-600 outline-none" />
             </div>
 
             <div class="sm:col-span-2 lg:col-span-4 flex flex-wrap items-center justify-between gap-3 pt-2">
-              <div class="flex items-center gap-2">
-                <label class="text-xs font-bold text-slate-600">طريقة الدفع (في حال وجود دفعة قيد):</label>
-                <select name="paymentMethod" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white">
-                  <option value="نقدي">نقدي</option>
-                  <option value="كي نت (K-NET)">كي نت (K-NET)</option>
-                  <option value="تحويل بنكي">تحويل بنكي</option>
-                </select>
+              <div id="add-net-preview" class="px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-extrabold text-emerald-800">
+                صافي القسط الشهري المستحق: 0.000 د.ك
               </div>
               <button type="submit" class="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow transition flex items-center gap-2">
                 <i class="fa-solid fa-check"></i> حفظ بيانات الطالب
@@ -1796,10 +2028,14 @@
         <!-- جدول الطلاب المسجلين -->
         <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <h3 class="text-sm font-extrabold text-slate-800">قائمة الطلاب المسجلين (${state.cache.students.length})</h3>
+            <h3 class="text-sm font-extrabold text-slate-800">قائمة الطلاب المسجلين <span id="students-count" class="text-slate-500">(${state.cache.students.length})</span></h3>
             <div class="flex flex-wrap items-center gap-2">
-              <input type="text" id="students-search" oninput="filterStudentsTable()" placeholder="بحث بالاسم أو الكود أو الصف..."
-                class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs w-full sm:w-64 focus:border-blue-600 outline-none" />
+              <select id="students-grade-filter" onchange="filterStudentsTable()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white focus:border-blue-600 outline-none">
+                <option value="">كل الصفوف</option>
+                ${GRADES_LIST.map(g => `<option value="${g}">${g}</option>`).join('')}
+              </select>
+              <input type="text" id="students-search" oninput="filterStudentsTable()" placeholder="بحث بالاسم أو الكود..."
+                class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs w-full sm:w-56 focus:border-blue-600 outline-none" />
               <button onclick="printStudentsTable()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold flex items-center gap-1.5">
                 <i class="fa-solid fa-print"></i> طباعة القائمة
               </button>
@@ -1816,9 +2052,9 @@
                   <th class="p-3 font-extrabold">المنهج</th>
                   <th class="p-3 font-extrabold">النظام / المسار</th>
                   <th class="p-3 font-extrabold">الباص</th>
-                  <th class="p-3 font-extrabold">الإجمالي (د.ك)</th>
-                  <th class="p-3 font-extrabold">المدفوع (د.ك)</th>
-                  <th class="p-3 font-extrabold">المتبقي (د.ك)</th>
+                  <th class="p-3 font-extrabold">القسط المتفق (د.ك)</th>
+                  <th class="p-3 font-extrabold">الخصم (د.ك)</th>
+                  <th class="p-3 font-extrabold">الصافي الشهري (د.ك)</th>
                   <th class="p-3 font-extrabold">إجراء</th>
                 </tr>
               </thead>
@@ -1841,7 +2077,6 @@
           const res = await apiPost('addStudent', payload);
           if (res.status === 'success') {
             showToast(res.message, 'success');
-            if (res.receipt) showReceiptModal(res.receipt);
             await renderStudents(container);
           } else {
             showToast(res.message, 'error');
@@ -1860,21 +2095,21 @@
       }
       return rows.map(s => `
         <tr class="hover:bg-slate-50/80 transition">
-          <td class="p-3 font-mono font-bold text-blue-700">${s['كود الطالب']}</td>
-          <td class="p-3 font-bold text-slate-800">${s['الاسم رباعي']}</td>
-          <td class="p-3">${s['المرحلة/الصف']}</td>
+          <td class="p-3 font-mono font-bold text-blue-700">${escapeHTML(s['كود الطالب'])}</td>
+          <td class="p-3 font-bold text-slate-800">${escapeHTML(s['الاسم رباعي'])}</td>
+          <td class="p-3">${escapeHTML(s['المرحلة/الصف'])}</td>
           <td class="p-3">${curriculumBadgeHTML(getStudentCurriculum(s))}</td>
           <td class="p-3">
             ${s['نظام الثانوي'] && s['نظام الثانوي'] !== '-'
-              ? `<span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 font-semibold">${s['نظام الثانوي']} - ${s['المسار / الشعبة']}</span>`
+              ? `<span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 font-semibold">${escapeHTML(s['نظام الثانوي'])} - ${escapeHTML(s['المسار / الشعبة'])}</span>`
               : '<span class="text-slate-400">-</span>'}
           </td>
           <td class="p-3 font-semibold">${s['رقم الباص'] && s['رقم الباص'] !== 'بدون باص' ? escapeHTML(s['رقم الباص']) : '<span class="text-slate-400">لا يركب</span>'}</td>
-          <td class="p-3 font-bold">${Number(s['إجمالي المصروفات (د.ك)'] || 0).toFixed(3)}</td>
-          <td class="p-3 font-bold text-emerald-700">${Number(s['المصروفات المدفوعة (د.ك)'] || 0).toFixed(3)}</td>
-          <td class="p-3 font-bold ${Number(s['المتبقي (د.ك)'] || 0) > 0 ? 'text-rose-600' : 'text-slate-500'}">${Number(s['المتبقي (د.ك)'] || 0).toFixed(3)}</td>
+          <td class="p-3 font-bold">${numOf(s[COL_AGREED]) > 0 ? numOf(s[COL_AGREED]).toFixed(3) : '<span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-[10px]">غير محدد</span>'}</td>
+          <td class="p-3 font-bold text-amber-700">${numOf(s[COL_DISCOUNT]).toFixed(3)}</td>
+          <td class="p-3 font-extrabold ${netInstallmentOf(s) > 0 ? 'text-emerald-700' : 'text-slate-400'}">${netInstallmentOf(s).toFixed(3)}</td>
           <td class="p-3">
-            <button onclick="openEditStudent('${escapeHTML(s['كود الطالب'])}')" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 font-bold whitespace-nowrap">
+            <button data-edit-student="${escapeHTML(s['كود الطالب'])}" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 font-bold whitespace-nowrap">
               <i class="fa-solid fa-pen-to-square ml-1"></i> تعديل
             </button>
           </td>
@@ -1903,7 +2138,8 @@
 
     // ---- مكوّنات مشتركة: المنهج + الباص ----
     function updateCurriculumHint(prefix, gradeOverride) {
-      const grade = gradeOverride || (document.getElementById('student-grade-select') || {}).value || '';
+      const editForm = document.getElementById('edit-student-form');
+      const grade = gradeOverride || (prefix === 'edit' && editForm ? editForm.dataset.grade : (document.getElementById('student-grade-select') || {}).value) || '';
       const cur = (document.getElementById(prefix + '-curriculum') || {}).value;
       const box = document.getElementById(prefix + '-curriculum-hint');
       if (!box) return;
@@ -1955,13 +2191,14 @@
       const owner = isOwnerUser();
       const curBus = s['رقم الباص'] || 'بدون باص';
       const curr = getStudentCurriculum(s);
-      const total = Number(s['إجمالي المصروفات (د.ك)'] || 0);
-      const paid = Number(s['المصروفات المدفوعة (د.ك)'] || 0);
+      const agreed = numOf(s[COL_AGREED]);
+      const discount = numOf(s[COL_DISCOUNT]);
+      const legacyRem = numOf(s['المتبقي (د.ك)']);
       const hasTrack = s['نظام الثانوي'] && s['نظام الثانوي'] !== '-';
 
       document.getElementById('edit-student-title').textContent = 'تعديل بيانات الطالب - ' + s['الاسم رباعي'];
       document.getElementById('edit-student-body').innerHTML = `
-        <form id="edit-student-form" class="space-y-4" data-code="${escapeHTML(s['كود الطالب'])}" data-grade="${escapeHTML(s['المرحلة/الصف'])}" data-old-total="${total}" data-paid="${paid}">
+        <form id="edit-student-form" class="space-y-4" data-code="${escapeHTML(s['كود الطالب'])}" data-grade="${escapeHTML(s['المرحلة/الصف'])}" data-old-agreed="${agreed}" data-old-discount="${discount}">
           <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-200">
             <div><span class="text-slate-500">الكود:</span> <strong class="font-mono">${escapeHTML(s['كود الطالب'])}</strong></div>
             <div><span class="text-slate-500">الصف:</span> <strong>${escapeHTML(s['المرحلة/الصف'])}</strong></div>
@@ -1970,7 +2207,7 @@
 
           <div class="p-4 rounded-2xl border border-indigo-200 bg-indigo-50/40 space-y-3">
             <h4 class="text-xs font-extrabold text-indigo-900">المنهج الدراسي</h4>
-            <select name="curriculum" id="edit-curriculum" onchange="updateCurriculumHint('edit', '${escapeHTML(s['المرحلة/الصف'])}')"
+            <select name="curriculum" id="edit-curriculum" onchange="updateCurriculumHint('edit')"
               class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:border-blue-600 outline-none">
               <option value="عربي" ${curr === 'عربي' ? 'selected' : ''}>عربي</option>
               <option value="لغات تجريبي" ${curr === 'لغات تجريبي' ? 'selected' : ''}>لغات تجريبي (علوم ورياضيات بالإنجليزية)</option>
@@ -1984,29 +2221,29 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               ${busFieldsHTML('edit', curBus, s['كود الطالب'])}
             </div>
-            ${owner ? '' : '<p class="text-[11px] text-amber-800 font-bold">تنبيه: تغيير الباص لا يعدّل المصروفات تلقائياً. إن لزم تعديل المبلغ فيتم ذلك بواسطة المالك.</p>'}
+            <p class="text-[11px] text-amber-800 font-bold">اشتراك الباص يُحصَّل شهرياً من شاشة التحصيل، ولا يمكن تحصيله إلا لطالب مشترك في باص.</p>
           </div>
 
           <div class="p-4 rounded-2xl border border-rose-200 bg-rose-50/40 space-y-3">
-            <h4 class="text-xs font-extrabold text-rose-900"><i class="fa-solid fa-coins ml-1"></i> المصروفات ${owner ? '' : '<span class="text-[10px] font-bold text-slate-500">(للعرض فقط - التعديل للمالك)</span>'}</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <h4 class="text-xs font-extrabold text-rose-900"><i class="fa-solid fa-coins ml-1"></i> القسط الشهري ${owner ? '' : '<span class="text-[10px] font-bold text-slate-500">(للعرض فقط - التعديل للمالك)</span>'}</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <label class="block font-bold text-slate-700 mb-1">إجمالي المصروفات (د.ك)</label>
-                <input type="number" step="0.001" min="0" id="edit-total" value="${total.toFixed(3)}" ${owner ? '' : 'disabled'}
-                  oninput="onEditTotalInput()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-blue-600 outline-none disabled:bg-slate-100 disabled:text-slate-500" />
+                <label class="block font-bold text-slate-700 mb-1">القسط المتفق عليه (د.ك)</label>
+                <input type="number" step="0.001" min="0" id="edit-agreed" value="${agreed.toFixed(3)}" ${owner ? '' : 'disabled'}
+                  oninput="onEditFeeInput()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-blue-600 outline-none disabled:bg-slate-100 disabled:text-slate-500" />
               </div>
               <div>
-                <label class="block font-bold text-slate-700 mb-1">المدفوع (د.ك)</label>
-                <div class="px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 font-bold text-emerald-700">${paid.toFixed(3)}</div>
-              </div>
-              <div>
-                <label class="block font-bold text-slate-700 mb-1">المتبقي بعد التعديل (د.ك)</label>
-                <div id="edit-remaining" class="px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 font-bold text-rose-600">${Math.max(0, total - paid).toFixed(3)}</div>
+                <label class="block font-bold text-slate-700 mb-1">مبلغ الخصم الممنوح (د.ك)</label>
+                <input type="number" step="0.001" min="0" id="edit-discount" value="${discount.toFixed(3)}" ${owner ? '' : 'disabled'}
+                  oninput="onEditFeeInput()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-bold focus:border-blue-600 outline-none disabled:bg-slate-100 disabled:text-slate-500" />
               </div>
             </div>
+            <div id="edit-net-preview" class="px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-extrabold text-emerald-800">صافي القسط الشهري المستحق: ${r3(agreed - discount).toFixed(3)} د.ك</div>
+            ${agreed <= 0 ? '<p class="text-[11px] font-bold text-amber-800">القسط غير محدد لهذا الطالب (قيد قديم). لا يمكن تحصيل قسط الدراسة قبل أن يحدده المالك.</p>' : ''}
+            ${legacyRem > 0 ? `<p class="text-[11px] text-slate-500">رصيد النظام القديم المتبقي: <strong>${legacyRem.toFixed(3)} د.ك</strong> (للعلم فقط، لا يدخل في التحصيل الشهري).</p>` : ''}
             <div id="edit-reason-wrap" class="hidden">
-              <label class="block text-xs font-bold text-slate-700 mb-1">سبب تعديل المبلغ * (يُسجَّل في سجل التدقيق)</label>
-              <input type="text" id="edit-reason" maxlength="200" placeholder="مثال: إضافة اشتراك الباص من بداية الفصل / خصم أخوة"
+              <label class="block text-xs font-bold text-slate-700 mb-1">سبب تعديل القسط أو الخصم * (يُسجَّل في سجل التدقيق)</label>
+              <input type="text" id="edit-reason" maxlength="200" placeholder="مثال: اتفاق جديد مع ولي الأمر / خصم أخوة"
                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
             </div>
             <p id="edit-total-warn" class="hidden text-[11px] font-bold text-rose-700"></p>
@@ -2037,22 +2274,24 @@
       document.getElementById('edit-student-body').innerHTML = '';
     }
 
-    function onEditTotalInput() {
+    function onEditFeeInput() {
       const form = document.getElementById('edit-student-form');
-      const oldTotal = Number(form.dataset.oldTotal);
-      const paid = Number(form.dataset.paid);
-      const raw = document.getElementById('edit-total').value;
-      const t = Number(raw);
-      const changed = raw !== '' && isFinite(t) && Math.abs(t - oldTotal) > 0.0004;
+      const oldA = Number(form.dataset.oldAgreed), oldD = Number(form.dataset.oldDiscount);
+      const a = numOf(document.getElementById('edit-agreed').value);
+      const d = numOf(document.getElementById('edit-discount').value);
+      const changed = Math.abs(a - oldA) > 0.0004 || Math.abs(d - oldD) > 0.0004;
       document.getElementById('edit-reason-wrap').classList.toggle('hidden', !changed);
-      document.getElementById('edit-remaining').textContent = (isFinite(t) ? Math.max(0, t - paid) : 0).toFixed(3);
+      const box = document.getElementById('edit-net-preview');
       const warn = document.getElementById('edit-total-warn');
-      if (changed && t < paid) {
-        warn.textContent = 'المبلغ أقل من المدفوع فعلياً (' + paid.toFixed(3) + ' د.ك) ولن يُقبل الحفظ.';
-        warn.classList.remove('hidden');
+      if (d > a) {
+        box.textContent = 'الخصم أكبر من القسط المتفق عليه!';
+        box.className = 'px-4 py-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs font-extrabold text-rose-700';
       } else {
-        warn.classList.add('hidden');
+        box.textContent = 'صافي القسط الشهري المستحق: ' + r3(a - d).toFixed(3) + ' د.ك';
+        box.className = 'px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-extrabold text-emerald-800';
       }
+      if (changed) { warn.textContent = 'التعديل يسري على التحصيلات القادمة فقط؛ الإيصالات الصادرة لا تتغير.'; warn.classList.remove('hidden'); }
+      else warn.classList.add('hidden');
     }
 
     async function submitEditStudent(e) {
@@ -2065,14 +2304,16 @@
       };
       if (payload.ridesBus === 'نعم') payload.busNumber = document.getElementById('edit-bus').value;
 
-      // المبلغ يُرسل للمالك فقط وعند وجود تغيير فعلي؛ والخادم يتحقق من الصلاحية مرة أخرى
+      // القسط والخصم يُرسلان للمالك فقط وعند وجود تغيير فعلي؛ والخادم يتحقق من الصلاحية مرة أخرى
       if (isOwnerUser()) {
-        const t = document.getElementById('edit-total').value;
-        const oldTotal = Number(form.dataset.oldTotal);
-        if (t !== '' && Math.abs(Number(t) - oldTotal) > 0.0004) {
-          payload.totalFees = t;
+        const a = numOf(document.getElementById('edit-agreed').value);
+        const d = numOf(document.getElementById('edit-discount').value);
+        const oldA = Number(form.dataset.oldAgreed), oldD = Number(form.dataset.oldDiscount);
+        if (Math.abs(a - oldA) > 0.0004 || Math.abs(d - oldD) > 0.0004) {
+          payload.agreedInstallment = a;
+          payload.discountAmount = d;
           payload.reason = document.getElementById('edit-reason').value.trim();
-          if (!payload.reason) return showToast('يرجى كتابة سبب تعديل المبلغ', 'warning');
+          if (!payload.reason) return showToast('يرجى كتابة سبب تعديل القسط أو الخصم', 'warning');
         }
       }
 
@@ -2110,20 +2351,39 @@
       }
     }
 
-    function filterStudentsTable() {
-      const q = document.getElementById('students-search').value.trim().toLowerCase();
-      const filtered = state.cache.students.filter(s =>
-        String(s['كود الطالب']).toLowerCase().includes(q) ||
-        String(s['الاسم رباعي']).toLowerCase().includes(q) ||
-        String(s['المرحلة/الصف']).toLowerCase().includes(q) ||
-        String(s['المسار / الشعبة']).toLowerCase().includes(q) ||
-        getStudentCurriculum(s).includes(q)
+    // الفلترة بالصف + البحث بالاسم/الكود (تُستخدم في الجدول وفي الطباعة)
+    function getFilteredStudents() {
+      const q = (document.getElementById('students-search') || { value: '' }).value.trim().toLowerCase();
+      const grade = (document.getElementById('students-grade-filter') || { value: '' }).value;
+      return state.cache.students.filter(s =>
+        (!grade || s['المرحلة/الصف'] === grade) &&
+        (!q || String(s['كود الطالب']).toLowerCase().includes(q) || String(s['الاسم رباعي']).toLowerCase().includes(q))
       );
+    }
+
+    function filterStudentsTable() {
+      const filtered = getFilteredStudents();
       document.getElementById('students-tbody').innerHTML = renderStudentsRowsHTML(filtered);
+      const total = state.cache.students.length;
+      document.getElementById('students-count').textContent = filtered.length === total ? '(' + total + ')' : '(' + filtered.length + ' من ' + total + ')';
+    }
+
+    // معاينة صافي القسط (نموذج التسجيل ونافذة التعديل)
+    function updateNetPreview(prefix) {
+      const a = numOf(document.getElementById(prefix + '-agreed').value);
+      const d = numOf(document.getElementById(prefix + '-discount').value);
+      const box = document.getElementById(prefix + '-net-preview');
+      if (d > a) {
+        box.textContent = 'الخصم أكبر من القسط المتفق عليه!';
+        box.className = 'px-4 py-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs font-extrabold text-rose-700';
+      } else {
+        box.textContent = 'صافي القسط الشهري المستحق: ' + r3(a - d).toFixed(3) + ' د.ك';
+        box.className = 'px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-extrabold text-emerald-800';
+      }
     }
 
     function printStudentsTable() {
-      const rows = state.cache.students;
+      const rows = getFilteredStudents();
       const html = `
         <div dir="rtl" class="font-sans">
           <div class="text-center border-b-2 border-slate-800 pb-4 mb-4">
@@ -2139,23 +2399,23 @@
                 <th class="border border-slate-400 p-2">المنهج</th>
                 <th class="border border-slate-400 p-2">النظام / المسار</th>
                 <th class="border border-slate-400 p-2">الباص</th>
-                <th class="border border-slate-400 p-2">الإجمالي</th>
-                <th class="border border-slate-400 p-2">المدفوع</th>
-                <th class="border border-slate-400 p-2">المتبقي</th>
+                <th class="border border-slate-400 p-2">القسط المتفق</th>
+                <th class="border border-slate-400 p-2">الخصم</th>
+                <th class="border border-slate-400 p-2">الصافي الشهري</th>
               </tr>
             </thead>
             <tbody>
               ${rows.map(s => `
                 <tr>
-                  <td class="border border-slate-400 p-2">${s['كود الطالب']}</td>
-                  <td class="border border-slate-400 p-2 font-bold">${s['الاسم رباعي']}</td>
-                  <td class="border border-slate-400 p-2">${s['المرحلة/الصف']}</td>
+                  <td class="border border-slate-400 p-2">${escapeHTML(s['كود الطالب'])}</td>
+                  <td class="border border-slate-400 p-2 font-bold">${escapeHTML(s['الاسم رباعي'])}</td>
+                  <td class="border border-slate-400 p-2">${escapeHTML(s['المرحلة/الصف'])}</td>
                   <td class="border border-slate-400 p-2">${getStudentCurriculum(s)}</td>
-                  <td class="border border-slate-400 p-2">${s['نظام الثانوي']} / ${s['المسار / الشعبة']}</td>
-                  <td class="border border-slate-400 p-2">${s['رقم الباص']}</td>
-                  <td class="border border-slate-400 p-2">${Number(s['إجمالي المصروفات (د.ك)'] || 0).toFixed(3)}</td>
-                  <td class="border border-slate-400 p-2">${Number(s['المصروفات المدفوعة (د.ك)'] || 0).toFixed(3)}</td>
-                  <td class="border border-slate-400 p-2">${Number(s['المتبقي (د.ك)'] || 0).toFixed(3)}</td>
+                  <td class="border border-slate-400 p-2">${escapeHTML(s['نظام الثانوي'])} / ${escapeHTML(s['المسار / الشعبة'])}</td>
+                  <td class="border border-slate-400 p-2">${escapeHTML(s['رقم الباص'])}</td>
+                  <td class="border border-slate-400 p-2">${numOf(s[COL_AGREED]).toFixed(3)}</td>
+                  <td class="border border-slate-400 p-2">${numOf(s[COL_DISCOUNT]).toFixed(3)}</td>
+                  <td class="border border-slate-400 p-2">${netInstallmentOf(s).toFixed(3)}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -2168,16 +2428,21 @@
     // -------------------------------------------------------------------------
     // ج. تحصيل المصروفات والإيصالات (STUDENT FEES & RECEIPTS)
     // -------------------------------------------------------------------------
+    let feeStudent = null;      // الطالب المحمّل في بطاقة التحصيل
+    let feePayments = [];       // مجاميع المدفوع لكل شهر لهذا الطالب
+
     async function renderStudentFees(container) {
       const recRes = await apiGet({ action: 'getData', sheet: 'RECEIPTS' });
       state.cache.receipts = recRes.rows || [];
+      feeStudent = null;
+      feePayments = [];
 
       container.innerHTML = `
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <!-- نموذج التحصيل -->
+          <!-- نموذج التحصيل الشهري -->
           <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
             <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
-              <i class="fa-solid fa-hand-holding-dollar text-emerald-600"></i> تحصيل دفعة مصروفات
+              <i class="fa-solid fa-hand-holding-dollar text-emerald-600"></i> تحصيل المصروفات الشهرية
             </h3>
 
             <div>
@@ -2191,53 +2456,59 @@
               </div>
             </div>
 
-            <!-- بطاقة بيانات الطالب المسترجعة -->
+            <!-- بطاقة بيانات الطالب -->
             <div id="fee-student-card" class="hidden p-4 rounded-2xl bg-blue-50/80 border border-blue-200 text-xs space-y-2">
-              <div class="flex justify-between">
-                <span class="text-slate-500">اسم الطالب:</span>
-                <span id="fee-st-name" class="font-extrabold text-slate-800"></span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-slate-500">الصف / المسار:</span>
-                <span id="fee-st-grade" class="font-bold text-blue-800"></span>
-              </div>
+              <div class="flex justify-between"><span class="text-slate-500">اسم الطالب:</span><span id="fee-st-name" class="font-extrabold text-slate-800"></span></div>
+              <div class="flex justify-between"><span class="text-slate-500">الصف / المسار:</span><span id="fee-st-grade" class="font-bold text-blue-800"></span></div>
+              <div class="flex justify-between"><span class="text-slate-500">الباص:</span><span id="fee-st-bus" class="font-bold"></span></div>
               <div class="grid grid-cols-3 gap-2 pt-2 border-t border-blue-200/70 text-center">
-                <div class="bg-white p-2 rounded-xl">
-                  <p class="text-[10px] text-slate-400">الإجمالي</p>
-                  <p id="fee-st-total" class="font-extrabold text-slate-800 mt-0.5">0.000</p>
-                </div>
-                <div class="bg-white p-2 rounded-xl">
-                  <p class="text-[10px] text-slate-400">المدفوع</p>
-                  <p id="fee-st-paid" class="font-extrabold text-emerald-700 mt-0.5">0.000</p>
-                </div>
-                <div class="bg-white p-2 rounded-xl">
-                  <p class="text-[10px] text-slate-400">المتبقي</p>
-                  <p id="fee-st-rem" class="font-extrabold text-rose-600 mt-0.5">0.000</p>
-                </div>
+                <div class="bg-white p-2 rounded-xl"><p class="text-[10px] text-slate-400">القسط المتفق</p><p id="fee-st-agreed" class="font-extrabold text-slate-800 mt-0.5">0.000</p></div>
+                <div class="bg-white p-2 rounded-xl"><p class="text-[10px] text-slate-400">الخصم</p><p id="fee-st-discount" class="font-extrabold text-amber-700 mt-0.5">0.000</p></div>
+                <div class="bg-white p-2 rounded-xl"><p class="text-[10px] text-slate-400">الصافي الشهري</p><p id="fee-st-net" class="font-extrabold text-emerald-700 mt-0.5">0.000</p></div>
               </div>
+              <p id="fee-st-warn" class="hidden text-[11px] font-bold text-amber-800"></p>
+              <p id="fee-st-legacy" class="hidden text-[11px] text-slate-500"></p>
             </div>
 
             <form id="pay-installment-form" class="space-y-3">
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">المبلغ المدفوع (د.ك) *</label>
-                <input type="number" step="0.001" min="0.001" id="fee-amount" required placeholder="0.000"
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:border-emerald-600 outline-none" />
-              </div>
-
               <div class="grid grid-cols-2 gap-3">
                 <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">بند الدفعة / الشهر</label>
-                  <input type="text" id="fee-label" value="قسط شهري"
-                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">طريقة الدفع</label>
-                  <select id="fee-method" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
-                    <option value="نقدي">نقدي</option>
-                    <option value="كي نت (K-NET)">كي نت (K-NET)</option>
-                    <option value="تحويل بنكي">تحويل بنكي</option>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">الشهر المستحق *</label>
+                  <select id="fee-month" onchange="refreshFeeMonth()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                    ${MONTHS_LIST.map(m => `<option value="${m}" ${m === currentSchoolMonth() ? 'selected' : ''}>${m}</option>`).join('')}
                   </select>
                 </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">السنة *</label>
+                  <select id="fee-year" onchange="refreshFeeMonth()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                    ${yearOptionsHTML()}
+                  </select>
+                </div>
+              </div>
+
+              <div id="fee-month-box" class="hidden p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1"></div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="block text-xs font-bold text-slate-700">قسط الدراسة المدفوع (د.ك)</label>
+                  <button type="button" id="fee-fill-remaining" onclick="fillFeeRemaining()" class="hidden text-[11px] font-bold text-blue-700 hover:underline">سداد المتبقي</button>
+                </div>
+                <input type="number" step="0.001" min="0" id="fee-tuition" placeholder="0.000"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:border-emerald-600 outline-none disabled:bg-slate-100" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">اشتراك الباص المدفوع (د.ك)</label>
+                <input type="number" step="0.001" min="0" id="fee-bus" placeholder="0.000"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold focus:border-amber-600 outline-none disabled:bg-slate-100" />
+                <p class="text-[11px] text-slate-500 mt-1">يمكن دفع القسط فقط، وسداد الباص لاحقاً بإيصال جديد (والعكس).</p>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">طريقة الدفع</label>
+                <select id="fee-method" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                  ${PAY_METHODS.map(m => `<option value="${m}">${m}</option>`).join('')}
+                </select>
               </div>
 
               <div>
@@ -2262,26 +2533,32 @@
                     <th class="p-3 font-extrabold">رقم الإيصال</th>
                     <th class="p-3 font-extrabold">التاريخ</th>
                     <th class="p-3 font-extrabold">الطالب</th>
-                    <th class="p-3 font-extrabold">البند</th>
-                    <th class="p-3 font-extrabold">المدفوع (د.ك)</th>
+                    <th class="p-3 font-extrabold">الشهر</th>
+                    <th class="p-3 font-extrabold">قسط الدراسة</th>
+                    <th class="p-3 font-extrabold">الباص</th>
+                    <th class="p-3 font-extrabold">الإجمالي</th>
                     <th class="p-3 font-extrabold">إجراء</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                  ${state.cache.receipts.length ? state.cache.receipts.map((r, idx) => `
+                  ${state.cache.receipts.length ? state.cache.receipts.map((r, idx) => {
+                    const parts = receiptPartsOf(r);
+                    return `
                     <tr class="hover:bg-slate-50">
-                      <td class="p-3 font-mono font-bold text-blue-700">${r['رقم الإيصال']}</td>
-                      <td class="p-3">${r['التاريخ']}</td>
-                      <td class="p-3 font-bold">${r['اسم الطالب']}<br><span class="text-[10px] text-slate-400 font-mono">${r['كود الطالب']}</span></td>
-                      <td class="p-3">${r['بند الدفعة/الشهر']}</td>
-                      <td class="p-3 font-extrabold text-emerald-700">${Number(r['المبلغ المدفوع (د.ك)'] || 0).toFixed(3)}</td>
+                      <td class="p-3 font-mono font-bold text-blue-700">${escapeHTML(r['رقم الإيصال'])}</td>
+                      <td class="p-3">${escapeHTML(r['التاريخ'])}</td>
+                      <td class="p-3 font-bold">${escapeHTML(r['اسم الطالب'])}<br><span class="text-[10px] text-slate-400 font-mono">${escapeHTML(r['كود الطالب'])}</span></td>
+                      <td class="p-3">${parts.legacy ? '<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 text-[10px] ml-1">قديم</span>' : ''}${escapeHTML(parts.month)}</td>
+                      <td class="p-3 font-bold text-emerald-700">${parts.tuition.toFixed(3)}</td>
+                      <td class="p-3 font-bold text-amber-700">${parts.bus.toFixed(3)}</td>
+                      <td class="p-3 font-extrabold">${r3(parts.tuition + parts.bus).toFixed(3)}</td>
                       <td class="p-3">
-                        <button onclick="openReceiptByIndex(${idx})" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold">
+                        <button onclick="openReceiptByIndex(${idx})" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold whitespace-nowrap">
                           <i class="fa-solid fa-print ml-1"></i> طباعة
                         </button>
                       </td>
-                    </tr>
-                  `).join('') : `<tr><td colspan="6" class="p-6 text-center text-slate-400">لا توجد إيصالات مسجلة</td></tr>`}
+                    </tr>`;
+                  }).join('') : `<tr><td colspan="8" class="p-6 text-center text-slate-400">لا توجد إيصالات مسجلة</td></tr>`}
                 </tbody>
               </table>
             </div>
@@ -2292,24 +2569,36 @@
       document.getElementById('pay-installment-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const studentId = document.getElementById('fee-student-code').value.trim();
-        const amount = Number(document.getElementById('fee-amount').value);
-        if (!studentId || amount <= 0) {
-          showToast('يرجى إدخال كود الطالب ومبلغ صحيح', 'warning');
-          return;
+        const tuition = r3(numOf(document.getElementById('fee-tuition').value));
+        const bus = r3(numOf(document.getElementById('fee-bus').value));
+        if (!feeStudent || String(feeStudent.code) !== studentId) {
+          return showToast('اضغط «بحث» لجلب بيانات الطالب أولاً ثم أدخل المبالغ', 'warning');
+        }
+        if (tuition <= 0 && bus <= 0) {
+          return showToast('أدخل مبلغ قسط الدراسة أو اشتراك الباص (أو كليهما)', 'warning');
         }
         setLoading(true, 'جاري تسجيل الدفعة وإصدار الإيصال...');
         try {
           const res = await apiPost('payStudentInstallment', {
             studentId,
-            amount,
-            installmentLabel: document.getElementById('fee-label').value.trim(),
+            month: document.getElementById('fee-month').value,
+            year: Number(document.getElementById('fee-year').value),
+            tuitionAmount: tuition,
+            busAmount: bus,
             paymentMethod: document.getElementById('fee-method').value,
             notes: document.getElementById('fee-notes').value.trim()
           });
           if (res.status === 'success') {
             showToast(res.message, 'success');
             if (res.receipt) showReceiptModal(res.receipt);
+            const keepMonth = document.getElementById('fee-month').value;
+            const keepYear = document.getElementById('fee-year').value;
             await renderStudentFees(container);
+            // إبقاء الطالب والشهر محمّلين لتسهيل إصدار إيصال لاحق (مثل سداد الباص)
+            document.getElementById('fee-student-code').value = studentId;
+            document.getElementById('fee-month').value = keepMonth;
+            document.getElementById('fee-year').value = keepYear;
+            await lookupStudentForFee(true);
           } else {
             showToast(res.message, 'error');
           }
@@ -2321,50 +2610,122 @@
       });
     }
 
-    async function lookupStudentForFee() {
+    async function lookupStudentForFee(quiet) {
       const code = document.getElementById('fee-student-code').value.trim();
       if (!code) return showToast('أدخل كود الطالب أولاً', 'warning');
-      setLoading(true, 'جاري جلب بيانات الطالب...');
+      if (!quiet) setLoading(true, 'جاري جلب بيانات الطالب...');
       try {
-        const res = await apiGet({ action: 'lookupEntity', code });
+        const res = await apiGet({ action: 'lookupEntity', code, withPayments: true });
         if (res.status === 'success' && res.student) {
           const st = res.student;
+          feeStudent = st;
+          feePayments = st.payments || [];
           document.getElementById('fee-student-card').classList.remove('hidden');
           document.getElementById('fee-st-name').textContent = st.name;
           document.getElementById('fee-st-grade').textContent = st.grade + (st.trackBranch && st.trackBranch !== '-' ? ' (' + st.trackBranch + ')' : '');
-          document.getElementById('fee-st-total').textContent = st.totalFees.toFixed(3);
-          document.getElementById('fee-st-paid').textContent = st.paidFees.toFixed(3);
-          document.getElementById('fee-st-rem').textContent = st.remaining.toFixed(3);
-          showToast('تم جلب بيانات الطالب بنجاح', 'success');
+          const rides = st.busNumber && st.busNumber !== 'بدون باص';
+          const busEl = document.getElementById('fee-st-bus');
+          busEl.textContent = rides ? 'مشترك - ' + st.busNumber : 'غير مشترك';
+          busEl.className = 'font-bold ' + (rides ? 'text-emerald-700' : 'text-slate-400');
+          document.getElementById('fee-st-agreed').textContent = numOf(st.agreedInstallment).toFixed(3);
+          document.getElementById('fee-st-discount').textContent = numOf(st.discountAmount).toFixed(3);
+          document.getElementById('fee-st-net').textContent = numOf(st.netInstallment).toFixed(3);
+          const warn = document.getElementById('fee-st-warn');
+          if (numOf(st.agreedInstallment) <= 0) {
+            warn.textContent = 'لم يُحدَّد القسط الشهري لهذا الطالب. يحدده المالك من شاشة إدارة الطلاب (تعديل) قبل تحصيل قسط الدراسة.';
+            warn.classList.remove('hidden');
+          } else if (numOf(st.netInstallment) <= 0) {
+            warn.textContent = 'القسط الشهري مغطّى بالخصم بالكامل، لا يوجد قسط دراسة مستحق.';
+            warn.classList.remove('hidden');
+          } else {
+            warn.classList.add('hidden');
+          }
+          const lg = document.getElementById('fee-st-legacy');
+          if (numOf(st.legacyRemaining) > 0) {
+            lg.textContent = 'رصيد النظام القديم المتبقي: ' + numOf(st.legacyRemaining).toFixed(3) + ' د.ك (للعلم فقط، لا يدخل في التحصيل الشهري).';
+            lg.classList.remove('hidden');
+          } else {
+            lg.classList.add('hidden');
+          }
+          refreshFeeMonth();
+          if (!quiet) showToast('تم جلب بيانات الطالب بنجاح', 'success');
         } else {
+          feeStudent = null;
           document.getElementById('fee-student-card').classList.add('hidden');
+          document.getElementById('fee-month-box').classList.add('hidden');
           showToast(res.message || 'الطالب غير موجود', 'error');
         }
       } catch (err) {
         showToast(err.message, 'error');
       } finally {
-        setLoading(false);
+        if (!quiet) setLoading(false);
       }
+    }
+
+    // حالة الشهر المختار للطالب المحمّل: المدفوع والمتبقي من القسط + ما دُفع للباص
+    function getFeeMonthStatus() {
+      if (!feeStudent) return null;
+      const mk = monthKeyOf(document.getElementById('fee-month').value, document.getElementById('fee-year').value);
+      const paid = feePayments.find(x => x.month === mk) || { tuition: 0, bus: 0 };
+      const net = numOf(feeStudent.netInstallment);
+      return { mk, net, tuitionPaid: paid.tuition, busPaid: paid.bus, remaining: Math.max(0, r3(net - paid.tuition)) };
+    }
+
+    function refreshFeeMonth() {
+      const box = document.getElementById('fee-month-box');
+      const st = getFeeMonthStatus();
+      if (!st) { box.classList.add('hidden'); return; }
+      const rides = feeStudent.busNumber && feeStudent.busNumber !== 'بدون باص';
+      const tuitionOk = numOf(feeStudent.agreedInstallment) > 0 && st.net > 0;
+      box.classList.remove('hidden');
+      box.innerHTML = `
+        <div class="flex justify-between"><span class="text-slate-500">قسط الدراسة - ${escapeHTML(st.mk)}:</span>
+          <span class="font-bold">${tuitionOk
+            ? `مدفوع <span class="text-emerald-700">${st.tuitionPaid.toFixed(3)}</span> | متبقي <span class="${st.remaining > 0 ? 'text-rose-600' : 'text-emerald-700'}">${st.remaining.toFixed(3)}</span>`
+            : '<span class="text-slate-400">لا يوجد قسط مستحق</span>'}</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">اشتراك الباص - ${escapeHTML(st.mk)}:</span>
+          <span class="font-bold">${rides ? `مدفوع <span class="text-amber-700">${st.busPaid.toFixed(3)}</span>` : '<span class="text-slate-400">الطالب غير مشترك</span>'}</span></div>`;
+      const tuitionInput = document.getElementById('fee-tuition');
+      const busInput = document.getElementById('fee-bus');
+      tuitionInput.disabled = !tuitionOk || st.remaining <= 0;
+      busInput.disabled = !rides;
+      if (tuitionInput.disabled) tuitionInput.value = '';
+      if (busInput.disabled) busInput.value = '';
+      tuitionInput.max = tuitionOk ? String(st.remaining) : '';
+      document.getElementById('fee-fill-remaining').classList.toggle('hidden', !(tuitionOk && st.remaining > 0));
+    }
+
+    function fillFeeRemaining() {
+      const st = getFeeMonthStatus();
+      if (st && st.remaining > 0) document.getElementById('fee-tuition').value = st.remaining.toFixed(3);
     }
 
     function openReceiptByIndex(idx) {
       const r = state.cache.receipts[idx];
       if (!r) return;
+      const parts = receiptPartsOf(r);
       showReceiptModal({
         receiptNo: r['رقم الإيصال'],
         date: r['التاريخ'],
         studentId: r['كود الطالب'],
         studentName: r['اسم الطالب'],
         grade: r['الصف'],
-        installmentLabel: r['بند الدفعة/الشهر'],
+        month: parts.month,
+        legacy: parts.legacy,
         paymentMethod: r['طريقة الدفع'],
-        amountPaid: Number(r['المبلغ المدفوع (د.ك)'] || 0),
-        remaining: Number(r['المتبقي بعد السداد (د.ك)'] || 0),
+        tuitionPaid: parts.tuition,
+        busPaid: parts.bus,
+        amountPaid: r3(parts.tuition + parts.bus),
+        remaining: numOf(r['المتبقي بعد السداد (د.ك)']),
         notes: r['ملاحظات']
       });
     }
 
     function showReceiptModal(receipt) {
+      const rows = [];
+      if (numOf(receipt.tuitionPaid) > 0) rows.push(['قسط الدراسة' + (receipt.legacy ? ' (إيصال قديم)' : ''), receipt.tuitionPaid]);
+      if (numOf(receipt.busPaid) > 0) rows.push(['اشتراك الباص', receipt.busPaid]);
+      const showRemaining = !receipt.legacy;
       const html = `
         <div dir="rtl" class="border-2 border-slate-800 rounded-2xl p-6 bg-white text-slate-900">
           <div class="flex items-center justify-between border-b-2 border-slate-200 pb-4 mb-5">
@@ -2373,36 +2734,41 @@
               <p class="text-xs text-slate-500">إيصال استلام نقدية / مصروفات دراسية</p>
             </div>
             <div class="text-left">
-              <span class="inline-block px-3 py-1 rounded-lg bg-blue-900 text-white font-mono text-xs font-bold">${receipt.receiptNo}</span>
-              <p class="text-xs text-slate-500 mt-1">التاريخ: ${receipt.date}</p>
+              <span class="inline-block px-3 py-1 rounded-lg bg-blue-900 text-white font-mono text-xs font-bold">${escapeHTML(receipt.receiptNo)}</span>
+              <p class="text-xs text-slate-500 mt-1">التاريخ: ${escapeHTML(receipt.date)}</p>
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-3 text-xs mb-5 bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <div><span class="text-slate-500">اسم الطالب:</span> <strong class="text-slate-900">${receipt.studentName}</strong></div>
-            <div><span class="text-slate-500">كود الطالب:</span> <strong class="font-mono text-blue-800">${receipt.studentId}</strong></div>
-            <div><span class="text-slate-500">الصف الدراسي:</span> <strong>${receipt.grade}</strong></div>
-            <div><span class="text-slate-500">طريقة السداد:</span> <strong>${receipt.paymentMethod}</strong></div>
+            <div><span class="text-slate-500">اسم الطالب:</span> <strong class="text-slate-900">${escapeHTML(receipt.studentName)}</strong></div>
+            <div><span class="text-slate-500">كود الطالب:</span> <strong class="font-mono text-blue-800">${escapeHTML(receipt.studentId)}</strong></div>
+            <div><span class="text-slate-500">الصف الدراسي:</span> <strong>${escapeHTML(receipt.grade)}</strong></div>
+            <div><span class="text-slate-500">طريقة السداد:</span> <strong>${escapeHTML(receipt.paymentMethod)}</strong></div>
+            <div class="col-span-2"><span class="text-slate-500">${receipt.legacy ? 'البيان' : 'الشهر المستحق'}:</span> <strong>${escapeHTML(receipt.month)}</strong></div>
           </div>
 
           <table class="w-full text-right border-collapse text-xs mb-5">
             <thead>
               <tr class="bg-slate-800 text-white">
-                <th class="p-3 rounded-tr-lg">بيان الدفعة</th>
-                <th class="p-3">المبلغ المدفوع</th>
-                <th class="p-3 rounded-tl-lg">الرصيد المتبقي</th>
+                <th class="p-3 rounded-tr-lg">البند</th>
+                <th class="p-3 rounded-tl-lg">المبلغ المدفوع</th>
               </tr>
             </thead>
             <tbody>
+              ${rows.map(row => `
               <tr class="border-b border-slate-300">
-                <td class="p-3 font-bold">${receipt.installmentLabel}</td>
-                <td class="p-3 font-extrabold text-emerald-700 text-sm">${formatKWD(receipt.amountPaid)}</td>
-                <td class="p-3 font-extrabold text-rose-700">${formatKWD(receipt.remaining)}</td>
+                <td class="p-3 font-bold">${escapeHTML(row[0])}</td>
+                <td class="p-3 font-extrabold text-emerald-700 text-sm">${formatKWD(row[1])}</td>
+              </tr>`).join('')}
+              <tr class="bg-slate-100">
+                <td class="p-3 font-extrabold">إجمالي الإيصال</td>
+                <td class="p-3 font-extrabold text-blue-900 text-sm">${formatKWD(receipt.amountPaid)}</td>
               </tr>
             </tbody>
           </table>
 
-          <p class="text-xs text-slate-600 mb-6"><strong>ملاحظات:</strong> ${receipt.notes || '-'}</p>
+          ${showRemaining ? `<p class="text-xs text-slate-700 mb-3"><strong>المتبقي من قسط الدراسة لهذا الشهر:</strong> <span class="font-extrabold text-rose-700">${formatKWD(receipt.remaining)}</span></p>` : ''}
+          <p class="text-xs text-slate-600 mb-6"><strong>ملاحظات:</strong> ${escapeHTML(receipt.notes || '-')}</p>
 
           <div class="flex justify-between items-center pt-4 border-t border-dashed border-slate-300 text-xs text-slate-600">
             <div>توقيع أمين الصندوق: ..........................</div>
@@ -2411,6 +2777,101 @@
         </div>
       `;
       openPreviewModal('إيصال سداد مصروفات دراسية', html);
+    }
+
+    // -------------------------------------------------------------------------
+    // ج-2. سجل الطلاب المسددين (PAYERS REGISTRY)
+    // -------------------------------------------------------------------------
+    let payersRows = [];
+
+    async function renderPayers(container) {
+      const recRes = await apiGet({ action: 'getData', sheet: 'RECEIPTS' });
+      state.cache.receipts = recRes.rows || [];
+      payersRows = buildPayersRows(state.cache.receipts);
+      const months = [...new Set(payersRows.map(g => g.month))].sort((x, y) => monthSortValue(x) - monthSortValue(y) || String(x).localeCompare(String(y)));
+
+      container.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-user-check text-emerald-600"></i> سجل الطلاب الذين قاموا بالدفع
+              <span id="payers-count" class="text-slate-500 font-bold"></span>
+            </h3>
+            <div class="flex flex-wrap items-center gap-2">
+              <input type="text" id="payers-search" oninput="filterPayers()" placeholder="بحث بكود الطالب أو اسمه..."
+                class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs w-full sm:w-60 font-mono focus:border-blue-600 outline-none" />
+              <select id="payers-type" onchange="filterPayers()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white">
+                <option value="all">كل أنواع السداد</option>
+                <option value="tuition">سدد قسط دراسة فقط</option>
+                <option value="bus">سدد اشتراك باص فقط</option>
+                <option value="both">سدد قسط + باص</option>
+              </select>
+              <select id="payers-month" onchange="filterPayers()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white">
+                <option value="">كل الشهور</option>
+                ${months.map(m => `<option value="${escapeHTML(m)}">${escapeHTML(m)}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-right border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                  <th class="p-3 font-extrabold">الكود</th>
+                  <th class="p-3 font-extrabold">اسم الطالب</th>
+                  <th class="p-3 font-extrabold">الصف</th>
+                  <th class="p-3 font-extrabold">الشهر</th>
+                  <th class="p-3 font-extrabold">قسط الدراسة (د.ك)</th>
+                  <th class="p-3 font-extrabold">اشتراك الباص (د.ك)</th>
+                  <th class="p-3 font-extrabold">الإجمالي (د.ك)</th>
+                  <th class="p-3 font-extrabold">نوع السداد</th>
+                  <th class="p-3 font-extrabold">الإيصالات</th>
+                </tr>
+              </thead>
+              <tbody id="payers-tbody" class="divide-y divide-slate-100"></tbody>
+              <tfoot id="payers-tfoot"></tfoot>
+            </table>
+          </div>
+        </div>
+      `;
+      filterPayers();
+    }
+
+    function filterPayers() {
+      const q = document.getElementById('payers-search').value.trim().toLowerCase();
+      const type = document.getElementById('payers-type').value;
+      const month = document.getElementById('payers-month').value;
+      const rows = payersRows
+        .filter(g => (!q || String(g.code).toLowerCase().includes(q) || String(g.name).toLowerCase().includes(q)) &&
+                     (type === 'all' || payTypeOf(g) === type) &&
+                     (!month || g.month === month))
+        .sort((x, y) => monthSortValue(y.month) - monthSortValue(x.month) || receiptNoValue(y.lastNo) - receiptNoValue(x.lastNo));
+      const badge = { tuition: ['قسط فقط', 'bg-emerald-50 text-emerald-800 border-emerald-200'], bus: ['باص فقط', 'bg-amber-50 text-amber-800 border-amber-200'], both: ['قسط + باص', 'bg-indigo-50 text-indigo-800 border-indigo-200'] };
+      document.getElementById('payers-tbody').innerHTML = rows.length ? rows.map(g => {
+        const t = badge[payTypeOf(g)];
+        return `
+        <tr class="hover:bg-slate-50">
+          <td class="p-3 font-mono font-bold text-blue-700">${escapeHTML(g.code)}</td>
+          <td class="p-3 font-bold text-slate-800">${escapeHTML(g.name)}</td>
+          <td class="p-3">${escapeHTML(g.grade)}</td>
+          <td class="p-3">${g.legacy ? '<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 text-[10px] ml-1">قديم</span>' : ''}${escapeHTML(g.month)}</td>
+          <td class="p-3 font-bold text-emerald-700">${g.tuition.toFixed(3)}</td>
+          <td class="p-3 font-bold text-amber-700">${g.bus.toFixed(3)}</td>
+          <td class="p-3 font-extrabold">${r3(g.tuition + g.bus).toFixed(3)}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-md border font-bold text-[10px] ${escapeHTML(t[1])}">${escapeHTML(t[0])}</span></td>
+          <td class="p-3 text-slate-500">${escapeHTML(g.count)} <span class="text-[10px] font-mono">(آخرها ${escapeHTML(g.lastNo)})</span></td>
+        </tr>`;
+      }).join('') : `<tr><td colspan="9" class="p-6 text-center text-slate-400">لا توجد نتائج مطابقة</td></tr>`;
+      const sumT = r3(rows.reduce((a, g) => a + g.tuition, 0));
+      const sumB = r3(rows.reduce((a, g) => a + g.bus, 0));
+      document.getElementById('payers-tfoot').innerHTML = rows.length ? `
+        <tr class="bg-slate-800 text-white font-extrabold">
+          <td class="p-3" colspan="4">الإجمالي (${rows.length} سجل)</td>
+          <td class="p-3">${sumT.toFixed(3)}</td>
+          <td class="p-3">${sumB.toFixed(3)}</td>
+          <td class="p-3">${r3(sumT + sumB).toFixed(3)}</td>
+          <td class="p-3" colspan="2"></td>
+        </tr>` : '';
+      document.getElementById('payers-count').textContent = '(' + new Set(rows.map(g => g.code)).size + ' طالب)';
     }
 
     // -------------------------------------------------------------------------
@@ -2488,13 +2949,13 @@
                 <tbody class="divide-y divide-slate-100">
                   ${state.cache.grades.length ? state.cache.grades.map(g => `
                     <tr class="hover:bg-slate-50">
-                      <td class="p-3 font-bold">${g['اسم الطالب']}<br><span class="text-[10px] font-mono text-slate-400">${g['كود الطالب']} - ${g['الصف']}</span></td>
-                      <td class="p-3">${g['نظام الثانوي'] !== '-' ? `${g['نظام الثانوي']} (${g['المسار / الشعبة']})` : g['الصف']} ${curriculumBadgeHTML(g['المنهج'] || 'عربي')}</td>
-                      <td class="p-3 font-bold">${g['الشهر']}</td>
-                      <td class="p-3 font-extrabold text-blue-700">${g['المجموع الكلي']} / ${g['النهاية العظمى']}</td>
-                      <td class="p-3 font-bold text-emerald-700">${g['النسبة %']}</td>
+                      <td class="p-3 font-bold">${escapeHTML(g['اسم الطالب'])}<br><span class="text-[10px] font-mono text-slate-400">${escapeHTML(g['كود الطالب'])} - ${escapeHTML(g['الصف'])}</span></td>
+                      <td class="p-3">${g['نظام الثانوي'] !== '-' ? `${escapeHTML(g['نظام الثانوي'])} (${escapeHTML(g['المسار / الشعبة'])})` : escapeHTML(g['الصف'])} ${curriculumBadgeHTML(g['المنهج'] || 'عربي')}</td>
+                      <td class="p-3 font-bold">${escapeHTML(g['الشهر'])}</td>
+                      <td class="p-3 font-extrabold text-blue-700">${escapeHTML(g['المجموع الكلي'])} / ${escapeHTML(g['النهاية العظمى'])}</td>
+                      <td class="p-3 font-bold text-emerald-700">${escapeHTML(g['النسبة %'])}</td>
                       <td class="p-3">
-                        <button onclick="openStudentCertificate('${g['كود الطالب']}', '${g['الشهر']}')" class="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold">
+                        <button data-cert-id="${escapeHTML(g['كود الطالب'])}" data-cert-month="${escapeHTML(g['الشهر'])}" class="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold">
                           <i class="fa-solid fa-certificate ml-1"></i> الشهادة
                         </button>
                       </td>
@@ -2529,7 +2990,7 @@
             scores
           });
           if (res.status === 'success') {
-            showToast(`${res.message} (${res.total}/${res.maxTotal} - ${res.percentage}%)`, 'success');
+            showToast(`${escapeHTML(res.message)} (${escapeHTML(res.total)}/${escapeHTML(res.maxTotal)} - ${escapeHTML(res.percentage)}%)`, 'success');
             await renderGrades(container);
           } else {
             showToast(res.message, 'error');
@@ -2554,15 +3015,15 @@
           activeGradeStudent.trackConfig = cfg;
 
           document.getElementById('grade-student-info').classList.remove('hidden');
-          document.getElementById('gr-st-name').textContent = `${res.student.name} (${res.student.grade})`;
-          document.getElementById('gr-st-track').textContent = (res.student.trackSystem !== '-' ? `${res.student.trackSystem} - ${res.student.trackBranch}` : 'التعليم العام') + ' | المنهج: ' + (res.student.curriculum || 'عربي');
+          document.getElementById('gr-st-name').textContent = `${escapeHTML(res.student.name)} (${escapeHTML(res.student.grade)})`;
+          document.getElementById('gr-st-track').textContent = (res.student.trackSystem !== '-' ? `${escapeHTML(res.student.trackSystem)} - ${escapeHTML(res.student.trackBranch)}` : 'التعليم العام') + ' | المنهج: ' + (res.student.curriculum || 'عربي');
           document.getElementById('gr-st-note').textContent = cfg.note;
 
           const fieldsDiv = document.getElementById('dynamic-subjects-fields');
           fieldsDiv.innerHTML = cfg.subjects.map(sub => `
             <div class="flex items-center justify-between gap-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-              <label class="text-xs font-bold text-slate-700 flex-1">${sub.label} ${sub.lang === 'EN' ? '<span class="px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 text-[10px] font-extrabold">EN</span>' : ''} <span class="text-slate-400">(العظمى: ${sub.max})</span></label>
-              <input type="number" min="0" max="${sub.max}" step="0.5" value="0" id="sub-score-${sub.key}" oninput="updateLiveGradeTotal()"
+              <label class="text-xs font-bold text-slate-700 flex-1">${escapeHTML(sub.label)} ${sub.lang === 'EN' ? '<span class="px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 text-[10px] font-extrabold">EN</span>' : ''} <span class="text-slate-400">(العظمى: ${escapeHTML(sub.max)})</span></label>
+              <input type="number" min="0" max="${escapeHTML(sub.max)}" step="0.5" value="0" id="sub-score-${escapeHTML(sub.key)}" oninput="updateLiveGradeTotal()"
                 class="w-24 px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-extrabold text-center focus:border-blue-600 outline-none" />
             </div>
           `).join('');
@@ -2588,7 +3049,7 @@
         const val = Number(document.getElementById('sub-score-' + sub.key)?.value || 0);
         sum += val;
       });
-      document.getElementById('live-grade-total').textContent = `${sum} / ${cfg.maxTotal}`;
+      document.getElementById('live-grade-total').textContent = `${sum} / ${escapeHTML(cfg.maxTotal)}`;
     }
 
     async function openStudentCertificate(studentId, month) {
@@ -2603,14 +3064,14 @@
             <div class="text-center border-b-2 border-blue-900/20 pb-4 mb-5">
               <p class="text-xs font-bold text-blue-700">دولة الكويت - التعليم الخاص</p>
               <h2 class="text-xl font-extrabold text-slate-900 mt-1">شهادة التقييم الأكاديمي الشهري</h2>
-              <p class="text-xs text-slate-500 mt-1">عن شهر: <strong class="text-slate-800">${c.month}</strong></p>
+              <p class="text-xs text-slate-500 mt-1">عن شهر: <strong class="text-slate-800">${escapeHTML(c.month)}</strong></p>
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-xs bg-blue-50/60 p-4 rounded-xl border border-blue-200 mb-5">
-              <div><span class="text-slate-500">اسم الطالب:</span> <strong>${c.studentName}</strong></div>
-              <div><span class="text-slate-500">كود الطالب:</span> <strong class="font-mono">${c.studentId}</strong></div>
-              <div><span class="text-slate-500">الصف الدراسي:</span> <strong>${c.grade}</strong></div>
-              <div><span class="text-slate-500">النظام / المسار:</span> <strong>${c.trackSystem} ${c.trackBranch !== '-' ? '- ' + c.trackBranch : ''}</strong></div>
+              <div><span class="text-slate-500">اسم الطالب:</span> <strong>${escapeHTML(c.studentName)}</strong></div>
+              <div><span class="text-slate-500">كود الطالب:</span> <strong class="font-mono">${escapeHTML(c.studentId)}</strong></div>
+              <div><span class="text-slate-500">الصف الدراسي:</span> <strong>${escapeHTML(c.grade)}</strong></div>
+              <div><span class="text-slate-500">النظام / المسار:</span> <strong>${escapeHTML(c.trackSystem)} ${c.trackBranch !== '-' ? '- ' + escapeHTML(c.trackBranch) : ''}</strong></div>
               <div><span class="text-slate-500">المنهج الدراسي:</span> <strong>${c.curriculum === 'لغات تجريبي' ? 'لغات تجريبي (Experimental Languages)' : 'عربي'}</strong></div>
             </div>
 
@@ -2625,22 +3086,22 @@
               <tbody>
                 ${c.subjects.map(s => `
                   <tr>
-                    <td class="p-2.5 border border-slate-300 font-bold">${s.label}</td>
-                    <td class="p-2.5 border border-slate-300 text-center">${s.max}</td>
-                    <td class="p-2.5 border border-slate-300 text-center font-extrabold text-blue-800">${s.score}</td>
+                    <td class="p-2.5 border border-slate-300 font-bold">${escapeHTML(s.label)}</td>
+                    <td class="p-2.5 border border-slate-300 text-center">${escapeHTML(s.max)}</td>
+                    <td class="p-2.5 border border-slate-300 text-center font-extrabold text-blue-800">${escapeHTML(s.score)}</td>
                   </tr>
                 `).join('')}
                 <tr class="bg-slate-100 font-extrabold">
                   <td class="p-3 border border-slate-300">المجموع الكلي</td>
-                  <td class="p-3 border border-slate-300 text-center">${c.maxTotal}</td>
-                  <td class="p-3 border border-slate-300 text-center text-emerald-700 text-sm">${c.total} (${c.percentage})</td>
+                  <td class="p-3 border border-slate-300 text-center">${escapeHTML(c.maxTotal)}</td>
+                  <td class="p-3 border border-slate-300 text-center text-emerald-700 text-sm">${escapeHTML(c.total)} (${escapeHTML(c.percentage)})</td>
                 </tr>
               </tbody>
             </table>
 
             <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-center mb-6">
               <span class="text-xs text-slate-600">التقدير العام للطالب: </span>
-              <strong class="text-sm font-extrabold text-amber-900">${c.evaluation}</strong>
+              <strong class="text-sm font-extrabold text-amber-900">${escapeHTML(c.evaluation)}</strong>
             </div>
 
             <div class="flex justify-between text-xs text-slate-600 pt-3">
@@ -2751,10 +3212,10 @@
               <tbody class="divide-y divide-slate-100">
                 ${state.cache.staff.length ? state.cache.staff.map(st => `
                   <tr class="hover:bg-slate-50">
-                    <td class="p-3 font-mono font-bold text-indigo-700">${st['كود الموظف']}</td>
-                    <td class="p-3 font-bold">${st['الاسم الكامل']}</td>
-                    <td class="p-3"><span class="px-2 py-0.5 rounded-md bg-slate-100 font-bold">${st['النوع (مدرس/عامل)']}</span></td>
-                    <td class="p-3">${st['التخصص أو المسمى الوظيفي']} (${st['الصفوف/القسم']})</td>
+                    <td class="p-3 font-mono font-bold text-indigo-700">${escapeHTML(st['كود الموظف'])}</td>
+                    <td class="p-3 font-bold">${escapeHTML(st['الاسم الكامل'])}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 rounded-md bg-slate-100 font-bold">${escapeHTML(st['النوع (مدرس/عامل)'])}</span></td>
+                    <td class="p-3">${escapeHTML(st['التخصص أو المسمى الوظيفي'])} (${escapeHTML(st['الصفوف/القسم'])})</td>
                     <td class="p-3">${Number(st['الراتب الأساسي (د.ك)'] || 0).toFixed(3)}</td>
                     <td class="p-3 text-emerald-700">+${Number(st['البدلات (د.ك)'] || 0).toFixed(3)}</td>
                     <td class="p-3 text-rose-600">-${Number(st['الخصومات (د.ك)'] || 0).toFixed(3)}</td>
@@ -2880,13 +3341,13 @@
                     : 'bg-rose-100 text-rose-800';
                   return `
                     <tr class="hover:bg-slate-50">
-                      <td class="p-3">${a['التاريخ']}</td>
-                      <td class="p-3 font-mono">${a['الوقت']}</td>
-                      <td class="p-3">${a['النوع (طالب/مدرس/عامل)']}</td>
-                      <td class="p-3 font-mono font-bold">${a['الكود'] || '-'}</td>
-                      <td class="p-3 font-bold">${a['الاسم']}</td>
-                      <td class="p-3"><span class="px-2.5 py-0.5 rounded-full font-bold ${badge}">${st}</span></td>
-                      <td class="p-3 text-slate-500">${a['ملاحظات'] || '-'}</td>
+                      <td class="p-3">${escapeHTML(a['التاريخ'])}</td>
+                      <td class="p-3 font-mono">${escapeHTML(a['الوقت'])}</td>
+                      <td class="p-3">${escapeHTML(a['النوع (طالب/مدرس/عامل)'])}</td>
+                      <td class="p-3 font-mono font-bold">${escapeHTML(a['الكود'] || '-')}</td>
+                      <td class="p-3 font-bold">${escapeHTML(a['الاسم'])}</td>
+                      <td class="p-3"><span class="px-2.5 py-0.5 rounded-full font-bold ${badge}">${escapeHTML(st)}</span></td>
+                      <td class="p-3 text-slate-500">${escapeHTML(a['ملاحظات'] || '-')}</td>
                     </tr>
                   `;
                 }).join('') : `<tr><td colspan="7" class="p-6 text-center text-slate-400">لا توجد حركات مسجلة</td></tr>`}
@@ -3009,11 +3470,11 @@
               <tbody class="divide-y divide-slate-100">
                 ${state.cache.buses.length ? state.cache.buses.map(b => `
                   <tr class="hover:bg-slate-50">
-                    <td class="p-3 font-mono font-extrabold text-amber-700">${b['رقم الباص']}</td>
-                    <td class="p-3 font-bold">${b['اسم السائق']}</td>
-                    <td class="p-3 font-mono">${b['هاتف السائق']}</td>
-                    <td class="p-3">${b['خط السير']}</td>
-                    <td class="p-3">${b['السعة']} مقعد</td>
+                    <td class="p-3 font-mono font-extrabold text-amber-700">${escapeHTML(b['رقم الباص'])}</td>
+                    <td class="p-3 font-bold">${escapeHTML(b['اسم السائق'])}</td>
+                    <td class="p-3 font-mono">${escapeHTML(b['هاتف السائق'])}</td>
+                    <td class="p-3">${escapeHTML(b['خط السير'])}</td>
+                    <td class="p-3">${escapeHTML(b['السعة'])} مقعد</td>
                     <td class="p-3 font-bold">${Number(b['تكلفة التشغيل الشهرية (د.ك)'] || 0).toFixed(3)}</td>
                   </tr>
                 `).join('') : `<tr><td colspan="6" class="p-6 text-center text-slate-400">لا توجد باصات مسجلة</td></tr>`}
@@ -3060,7 +3521,7 @@
             <select id="roster-bus-filter" onchange="renderBusRoster(document.getElementById('main-content'), this.value)"
               class="px-4 py-2 rounded-xl border border-slate-300 text-xs bg-white font-bold">
               <option value="">جميع الباصات</option>
-              ${allBuses.map(b => `<option value="${b['رقم الباص']}" ${filterBus === b['رقم الباص'] ? 'selected' : ''}>${b['رقم الباص']}</option>`).join('')}
+              ${allBuses.map(b => `<option value="${escapeHTML(b['رقم الباص'])}" ${filterBus === b['رقم الباص'] ? 'selected' : ''}>${escapeHTML(b['رقم الباص'])}</option>`).join('')}
             </select>
           </div>
           <button onclick="printBusRoster()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold flex items-center gap-1.5 self-start sm:self-auto">
@@ -3073,12 +3534,12 @@
             <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
               <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
                 <div>
-                  <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-mono font-extrabold text-xs">${bus.busNumber}</span>
-                  <h4 class="font-bold text-sm mt-2">${bus.driverName} <span class="text-xs text-slate-400 font-mono">(${bus.driverPhone})</span></h4>
-                  <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-route text-amber-400 ml-1"></i> ${bus.route}</p>
+                  <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-mono font-extrabold text-xs">${escapeHTML(bus.busNumber)}</span>
+                  <h4 class="font-bold text-sm mt-2">${escapeHTML(bus.driverName)} <span class="text-xs text-slate-400 font-mono">(${escapeHTML(bus.driverPhone)})</span></h4>
+                  <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-route text-amber-400 ml-1"></i> ${escapeHTML(bus.route)}</p>
                 </div>
                 <div class="text-left">
-                  <span class="text-lg font-extrabold text-amber-400">${bus.ridersCount} / ${bus.capacity}</span>
+                  <span class="text-lg font-extrabold text-amber-400">${escapeHTML(bus.ridersCount)} / ${escapeHTML(bus.capacity)}</span>
                   <p class="text-[10px] text-slate-400">الإشغال الحالي</p>
                 </div>
               </div>
@@ -3096,11 +3557,11 @@
                   <tbody class="divide-y divide-slate-100">
                     ${bus.students.length ? bus.students.map(st => `
                       <tr>
-                        <td class="py-2 font-mono text-blue-700 font-bold">${st.code}</td>
-                        <td class="py-2 font-bold">${st.name}</td>
-                        <td class="py-2">${st.grade}</td>
+                        <td class="py-2 font-mono text-blue-700 font-bold">${escapeHTML(st.code)}</td>
+                        <td class="py-2 font-bold">${escapeHTML(st.name)}</td>
+                        <td class="py-2">${escapeHTML(st.grade)}</td>
                         <td class="py-2">${curriculumBadgeHTML(st.curriculum)}</td>
-                        <td class="py-2 font-mono">${st.phone}</td>
+                        <td class="py-2 font-mono">${escapeHTML(st.phone)}</td>
                       </tr>
                     `).join('') : `<tr><td colspan="5" class="py-4 text-center text-slate-400">لا يوجد طلاب مسجلون على هذا الباص</td></tr>`}
                   </tbody>
@@ -3123,8 +3584,8 @@
           ${roster.map(bus => `
             <div class="mb-6 border border-slate-400 rounded-lg p-4">
               <div class="flex justify-between font-bold text-xs bg-slate-100 p-2 mb-3">
-                <span>رقم الباص: ${bus.busNumber} | السائق: ${bus.driverName} (${bus.driverPhone})</span>
-                <span>خط السير: ${bus.route} | العدد: ${bus.ridersCount}/${bus.capacity}</span>
+                <span>رقم الباص: ${escapeHTML(bus.busNumber)} | السائق: ${escapeHTML(bus.driverName)} (${escapeHTML(bus.driverPhone)})</span>
+                <span>خط السير: ${escapeHTML(bus.route)} | العدد: ${escapeHTML(bus.ridersCount)}/${escapeHTML(bus.capacity)}</span>
               </div>
               <table class="w-full text-right border-collapse text-xs border border-slate-400">
                 <thead>
@@ -3140,10 +3601,10 @@
                   ${bus.students.map((s, i) => `
                     <tr>
                       <td class="border border-slate-400 p-1.5">${i + 1}</td>
-                      <td class="border border-slate-400 p-1.5">${s.code}</td>
-                      <td class="border border-slate-400 p-1.5 font-bold">${s.name}</td>
-                      <td class="border border-slate-400 p-1.5">${s.grade}</td>
-                      <td class="border border-slate-400 p-1.5">${s.phone}</td>
+                      <td class="border border-slate-400 p-1.5">${escapeHTML(s.code)}</td>
+                      <td class="border border-slate-400 p-1.5 font-bold">${escapeHTML(s.name)}</td>
+                      <td class="border border-slate-400 p-1.5">${escapeHTML(s.grade)}</td>
+                      <td class="border border-slate-400 p-1.5">${escapeHTML(s.phone)}</td>
                     </tr>
                   `).join('')}
                 </tbody>
@@ -3220,11 +3681,11 @@
               <tbody class="divide-y divide-slate-100">
                 ${filteredRows.length ? filteredRows.map(f => `
                   <tr class="hover:bg-slate-50">
-                    <td class="p-3 font-mono font-bold text-slate-600">${f['رقم العملية']}</td>
-                    <td class="p-3">${f['التاريخ']}</td>
-                    <td class="p-3 font-bold">${f['البند']}</td>
+                    <td class="p-3 font-mono font-bold text-slate-600">${escapeHTML(f['رقم العملية'])}</td>
+                    <td class="p-3">${escapeHTML(f['التاريخ'])}</td>
+                    <td class="p-3 font-bold">${escapeHTML(f['البند'])}</td>
                     <td class="p-3 font-extrabold ${isRev ? 'text-emerald-700' : 'text-rose-700'}">${Number(f['المبلغ (د.ك)'] || 0).toFixed(3)}</td>
-                    <td class="p-3 text-slate-600">${f['التفاصيل'] || '-'}</td>
+                    <td class="p-3 text-slate-600">${escapeHTML(f['التفاصيل'] || '-')}</td>
                   </tr>
                 `).join('') : `<tr><td colspan="5" class="p-6 text-center text-slate-400">لا توجد حركات مسجلة</td></tr>`}
               </tbody>
@@ -3279,7 +3740,7 @@
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور *</label>
-              <input type="password" name="password" required placeholder="••••••••"
+              <input type="password" name="password" required placeholder="مؤقتة، 8+ أحرف وأرقام" autocomplete="new-password"
                 class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 outline-none" />
             </div>
             <div>
@@ -3308,15 +3769,19 @@
                   <th class="p-3 font-extrabold">الاسم الكامل</th>
                   <th class="p-3 font-extrabold">الدور</th>
                   <th class="p-3 font-extrabold">الحالة</th>
+                  <th class="p-3 font-extrabold">كلمة المرور</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100">
                 ${state.cache.users.map(u => `
                   <tr class="hover:bg-slate-50">
-                    <td class="p-3 font-mono font-bold text-blue-700">${u['اسم المستخدم']}</td>
-                    <td class="p-3 font-bold">${u['الاسم الكامل']}</td>
-                    <td class="p-3"><span class="px-2.5 py-0.5 rounded-md bg-slate-100 font-extrabold">${u['الدور']}</span></td>
-                    <td class="p-3"><span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">${u['الحالة']}</span></td>
+                    <td class="p-3 font-mono font-bold text-blue-700">${escapeHTML(u['اسم المستخدم'])}</td>
+                    <td class="p-3 font-bold">${escapeHTML(u['الاسم الكامل'])}</td>
+                    <td class="p-3"><span class="px-2.5 py-0.5 rounded-md bg-slate-100 font-extrabold">${escapeHTML(u['الدور'])}</span></td>
+                    <td class="p-3"><span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">${escapeHTML(u['الحالة'])}</span></td>
+                    <td class="p-3">
+                      ${u['اسم المستخدم'] === (state.session && state.session.user.username) ? '<span class="text-slate-400">من «تغيير كلمة المرور»</span>' : `<button data-reset-user="${escapeHTML(u['اسم المستخدم'])}" class="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold whitespace-nowrap"><i class="fa-solid fa-key ml-1"></i> إعادة تعيين</button>`}
+                    </td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -3324,6 +3789,10 @@
           </div>
         </div>
       `;
+
+      container.querySelectorAll('[data-reset-user]').forEach(btn => {
+        btn.addEventListener('click', () => openPasswordModal(false, btn.getAttribute('data-reset-user')));
+      });
 
       document.getElementById('add-user-form').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -3358,7 +3827,7 @@
 
           <div class="space-y-3">
             <label class="block text-xs font-bold text-slate-700">رابط Google Apps Script Web App URL</label>
-            <input type="url" id="settings-gas-url" value="${state.gasUrl}" dir="ltr"
+            <input type="url" id="settings-gas-url" value="${escapeHTML(state.gasUrl)}" dir="ltr"
               placeholder="https://script.google.com/macros/s/.../exec"
               class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-mono text-left focus:border-blue-600 outline-none" />
 
@@ -3398,7 +3867,7 @@
       saveSettingsPage();
       setLoading(true, 'جاري تهيئة الجداول في Google Sheets...');
       try {
-        const res = await apiGet({ action: 'setupDatabase' });
+        const res = await apiPost('setupDatabase');
         showToast(res.message || 'تمت التهيئة بنجاح', res.status === 'success' ? 'success' : 'error');
       } catch (err) {
         showToast(err.message, 'error');
@@ -3416,6 +3885,13 @@
     // =========================================================================
     // 7. نقطة الانطلاق عند تحميل الصفحة
     // =========================================================================
+    document.addEventListener('click', (ev) => {
+      const b = ev.target.closest && ev.target.closest('[data-edit-student]');
+      if (b) openEditStudent(b.getAttribute('data-edit-student'));
+      const c = ev.target.closest && ev.target.closest('[data-cert-id]');
+      if (c) openStudentCertificate(c.getAttribute('data-cert-id'), c.getAttribute('data-cert-month'));
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
       initDemoDatabase(false);
       syncConnectionUI();
